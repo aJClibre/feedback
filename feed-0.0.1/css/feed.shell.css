@@ -1,0 +1,25 @@
+/*
+ * feed.shell.css
+ * shell feature style
+ */
+
+.feed-shell-acct {
+    top : 4px;
+    right : 0;
+    width : 210px;
+    height : 32px;
+    line-height : 32px;
+    background : #888;
+    color : #fff;
+    text-align : center;
+    cursor : pointer;
+    overflow : hidden;
+    text-overflow : ellipsis;
+    float : right; /* added */
+}
+
+.feed-shell-nav {
+    width : 400px;
+    background : #eee;
+    z-index : 1;
+}
