@@ -1,3 +1,4 @@
-.feed-0.0.1/libs/
-.doc/
+.feed-0.0.1/libs/*
+.feed-0.0.1/libs/**/*
+.doc/*
 *.zip
