@@ -89,61 +89,60 @@ feed.sidebar = (function () {
                         + '<!-- <p class="help-block">In addition to freeform text, any HTML5 text-based input appears like so.</p> -->'
                       + '</div>'
                       + '<div class="form-group">'
-                        + '<label class="col-md-12 control-label form-label-localisation">Localisation</label>'
-                        + '<input type="text" class="col-md-5 feed-sidebar-content-report-form-x" id="x" placeholder="X" readonly>'
-                        + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-report-form-y" id="y" placeholder="Y" readonly>'
+                        + '<label class="col-md-12 control-label form-label-localisation">Localisation (WGS84)</label>'
+                        + '<input type="text" class="col-md-5 feed-sidebar-content-report-form-x" id="x" placeholder="Longitude" readonly>'
+                        + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-report-form-y" id="y" placeholder="Latitude" readonly>'
                       + '</div>'
-                        + '<div class="form-group">'
-                          + '<label for="report-textarea" class="col-md-12 control-label form-label-description">Description</label>'
-                          + '<textarea id="report-textarea" class="form-control feed-sidebar-content-report-form-textarea" rows="3"></textarea>'
-                        + '</div>'
-                        + '<div class="form-group feed-sidebar-content-report-form-group-doc-create">'
-                          + '<label for="reportInputDoc" class="col-md-12 control-label">Document input</label>'
-                          + '<input type="file" class="filestyle feed-sidebar-content-report-form-file" id="reportInputDoc" data-buttonName="btn-primary" data-placeholder="No file">'
-                        + '</div>'
+                      + '<div class="form-group">'
+                        + '<label for="report-textarea" class="col-md-12 control-label form-label-description">Description</label>'
+                        + '<textarea id="report-textarea" class="form-control feed-sidebar-content-report-form-textarea" rows="3"></textarea>'
+                      + '</div>'
+                      + '<div class="form-group feed-sidebar-content-report-form-group-doc-create">'
+                        + '<label for="reportInputDoc" class="col-md-12 control-label">Document input</label>'
+                        + '<input type="file" class="filestyle feed-sidebar-content-report-form-file" id="reportInputDoc" data-buttonName="btn-primary" data-placeholder="No file">'
+                      + '</div>'
                           // + '<div class="form-group feed-sidebar-content-report-form-group-img-create">'
                             //   + '<label for="reportInputImg" class="col-md-12 control-label feed-sidebar-content-report-form-group-img-label">Image input</label>'
                             //   + '<input type="file" class="filestyle feed-sidebar-content-report-form-file" id="reportInputImg" data-buttonName="btn-primary" data-placeholder="No file">'
                             // + '</div>'
-                        + '<div class="form-group feed-sidebar-content-report-form-group-doc-delete">'
-                          + '<label class="control-label feed-sidebar-content-report-form-doc-label"></label>'
-                          + '<span class="glyphicon glyphicon-remove g-delete" aria-hidden="true"></span>'
-                        + '</div>'
-                        + '<div class="form-group">'
-                          + '<p class="help-block">Example block-level help text here.</p>'
-                          + '<button class="btn btn-primary report-modify">Modify</button>'
-                          + '<button class="btn btn-primary report-cancel">Cancel</button>'
-                        + '</div>'
-                      + '</form>'
+                      + '<div class="form-group feed-sidebar-content-report-form-group-doc-delete">'
+                        + '<label class="control-label feed-sidebar-content-report-form-doc-label"></label>'
+                        + '<span class="glyphicon glyphicon-remove g-delete" aria-hidden="true"></span>'
+                      + '</div>'
+                      + '<div class="form-group">'
+                        + '<p class="help-block">Example block-level help text here.</p>'
+                        + '<button class="btn btn-primary report-modify">Modify</button>'
+                        + '<button class="btn btn-primary report-cancel">Cancel</button>'
+                      + '</div>'
+                    + '</form>'
                   + '</div>'
                   + '<div class="sidebar-pane feed-sidebar-content-create" id="create">'
                     + '<h1>Report creation</h1>'
                     + '<form class="feed-sidebar-content-create-form" id="form_create">'
-                        + '<div class="form-group control-group">'
+                        + '<div class="form-group">'
                           + '<!-- <label for="title" class="col-sm-2 control-label">Titre</label> -->'
-                          + '<div class="col-sm-12 controls">'
-                              + '<input type="text" class="form-control form-title feed-sidebar-content-create-form-title required" id="title" placeholder="Titre" data-validation="required" >'
-                              + '<!-- <p class="help-block">In addition to freeform text, any HTML5 text-based input appears like so.</p> -->'
-                          + '</div>'
-                        + '</div>'
-                        + '<span>Location :</span>'
-                        + '<div class="form-group">'
-                            
-                            + '<!-- <label for="x" class="col-sm-1 control-label">x</label> -->'
-                            + '<div class="col-sm-6">'
-                                + '<input type="text" class="form-control feed-sidebar-content-create-form-x" id="x" placeholder="X" readonly>'
-                            + '</div>'
-                            + '<!-- <label for="y" class="col-sm-1 control-label">y</label> -->'
-                            + '<div class="col-sm-6">'
-                                + '<input type="text" class="form-control feed-sidebar-content-create-form-y" id="y" placeholder="Y" readonly>'
-                            + '</div>'
+                          + '<input type="text" class="form-control form-title feed-sidebar-content-create-form-title required" id="titleCreate" placeholder="Titre" data-validation="required" >'
+                          + '<!-- <p class="help-block">In addition to freeform text, any HTML5 text-based input appears like so.</p> -->'
                         + '</div>'
                         + '<div class="form-group">'
-                          + '<label for="exampleInputFile">File input</label>'
-                          + '<input type="file" id="inputDoc">'
+                          + '<label class="col-md-12 control-label form-label-localisation">Localisation (WGS84)</label>'
+                          + '<input type="text" class="col-md-5 feed-sidebar-content-create-form-x" id="xCreate" placeholder="Longitude" readonly>'
+                          + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-create-form-y" id="yCreate" placeholder="Latitude" readonly>'
+                        + '</div>'
+                        + '<div class="form-group">'
+                          + '<label for="textareaCreate" class="col-md-12 control-label form-label-description">Description</label>'
+                          + '<textarea id="textareaCreate" class="form-control feed-sidebar-content-create-form-textarea" rows="3"></textarea>'
+                        + '</div>'
+                        + '<div class="form-group feed-sidebar-content-create-form-group-doc-create">'
+                          + '<label for="createInputDoc" class="col-md-12 control-label">Document input</label>'
+                          + '<input type="file" class="filestyle feed-sidebar-content-create-form-file" id="createInputDoc" data-buttonName="btn-primary" data-placeholder="No file">'
                           + '<p class="help-block">Example block-level help text here.</p>'
                         + '</div>'
-                        + '<div>'
+                        + '<div class="form-group feed-sidebar-content-create-form-group-doc-delete">'
+                          + '<label class="control-label feed-sidebar-content-create-form-doc-label"></label>'
+                          + '<span class="glyphicon glyphicon-remove g-delete" aria-hidden="true"></span>'
+                        + '</div>'
+                        + '<div class="form-group">'
                             + '<button class="btn btn-primary report-create">Create</button>'
                             + '<button type="reset" class="btn btn-primary reset">Reset</button>'
                         + '</div>'
@@ -151,6 +150,8 @@ feed.sidebar = (function () {
                   + '</div>'
                     + '<div class="sidebar-pane" id="settings">'
                         + '<h1>Settings</h1>'
+                        + '<p>Welcome to the new sidebar which let you create and manage geolocated Information reports.<br/>'
+                        + 'Do not hesitate to contact us with questions or comment! <a href="mailto:#">webmaster@valabre.com</a></p>'
                     + '</div>'
                 + '</div>'
                 + '<div class="modal fade feed-sidebar-modal-img" id="modalImg" tabindex="-1" role="dialog" aria-labelledby="modal-img-title"> '
@@ -244,6 +245,11 @@ feed.sidebar = (function () {
             $form_create        : $slider.find( '.feed-sidebar-content-create-form' ),
             $create_groups      : $slider.find( '.feed-sidebar-content-create-form .form-group' ),
             $create_title       : $slider.find( '.feed-sidebar-content-create-form-title' ),
+            $create_textarea    : $slider.find( '.feed-sidebar-content-create-form-textarea' ),
+            $create_doc_label   : $slider.find( '.feed-sidebar-content-create-form-doc-label' ),
+            $create_doc_create  : $slider.find( '.feed-sidebar-content-create-form-group-doc-create' ),
+            $create_doc_input   : $slider.find( '.feed-sidebar-content-create-form-file' ),
+            $create_doc_delete  : $slider.find( '.feed-sidebar-content-create-form-group-doc-delete' ),
             $create_x           : $slider.find( '.feed-sidebar-content-create-form-x' ),
             $create_y           : $slider.find( '.feed-sidebar-content-create-form-y' ),
             $is_selected        : $slider.find( '.is_selected' ),
@@ -338,9 +344,9 @@ feed.sidebar = (function () {
             .attr("placeholder", 'titre' );
         jqueryMap.$report_textarea.val('');
         jqueryMap.$report_x.val('')
-            .attr("placeholder", 'X' );
+            .attr("placeholder", 'Longitude' );
         jqueryMap.$report_y.val( '' )
-            .attr("placeholder", 'Y' );
+            .attr("placeholder", 'Latitude' );
         jqueryMap.$report_doc_input.val('')
             .attr("placeholder", 'No file' );
         jqueryMap.$is_selected.show();
@@ -349,10 +355,13 @@ feed.sidebar = (function () {
         // create form
         jqueryMap.$create_title.val('')
             .attr("placeholder", 'titre' );
+        jqueryMap.$create_textarea.val('');
         jqueryMap.$create_x.val('')
-            .attr("placeholder", 'Y' );
+            .attr("placeholder", 'Longitude' );
         jqueryMap.$create_y.val('')
-            .attr("placeholder", 'X' );
+            .attr("placeholder", 'Latitude' );
+        jqueryMap.$create_doc_input.val('')
+            .attr("placeholder", 'No file' );
 
         // img modal
         jqueryMap.$modal_img_title.val('');
@@ -489,7 +498,9 @@ feed.sidebar = (function () {
         
       configMap.reports_model.create_({
         locate_map  : { x : jqueryMap.$create_x.val(), y : jqueryMap.$create_y.val() },
-        title       : jqueryMap.$create_title.val()
+        title       : jqueryMap.$create_title.val(),
+        textarea    : jqueryMap.$create_textarea.val(),
+        doc         : jqueryMap.$create_doc_input.val()
       });
     };
 
@@ -585,10 +596,13 @@ feed.sidebar = (function () {
 
         jqueryMap.$create_title.val( '' )
             .attr("placeholder", 'titre' );
+        jqueryMap.$create_textarea.val('');
         jqueryMap.$create_x.val( '' )
-            .attr("placeholder", 'Y' );
+            .attr("placeholder", 'Latitude' );
         jqueryMap.$create_y.val( '' )
-            .attr("placeholder", 'X' );
+            .attr("placeholder", 'Longitude' );
+        jqueryMap.$create_doc_input.val('')
+            .attr("placeholder", 'No file' );
 
         // load values in the img modal
         onClickMarker( null, new_report.id );
@@ -840,6 +854,7 @@ feed.sidebar = (function () {
         jqueryMap.$report_doc_delete.bind( 'click', onTapDeleteDoc );
 
         jqueryMap.$report_doc_delete.hide();
+        jqueryMap.$create_doc_delete.hide();
 
     }; // eo /initModule/
 

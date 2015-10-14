@@ -231,7 +231,7 @@ feed.map = (function () {
         popup_html += '<div><a href="' + configMap.doc_path + popup_map.doc + '" target="_blank">' + popup_map.doc + '</a></div>'
       }
     }
-    popup_html += ' <small>X: ' + popup_map.locate_map.x + ' - Y: ' + popup_map.locate_map.y + '</small></span>';
+    popup_html += ' <small>Lon: ' + popup_map.locate_map.x + ' - Lat: ' + popup_map.locate_map.y + '</small></span>';
 
     return popup_html;
   };
