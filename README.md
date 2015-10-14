@@ -17,16 +17,16 @@ It uses fake server side so it's possible to test it localy with an explorator.
 Actually it is based on a Leaflet map but the goal is to deploy it on OpenLayers too.
 
 It requires :
-- leaflet-0.7.2
-- taffydb
-- jquery-2.1.4
-- jqueryurianchor
-- jquery-gevent
-- jquery-ue
-- bootstrap-3.3.5 (css + modal.js)
-- bootstrap-filestyle-1.2.1
-- sidebar-v2
-- Leaflet.awesome-markers-2.0
+* leaflet-0.7.2
+* taffydb
+* jquery-2.1.4
+* jqueryurianchor
+* jquery-gevent
+* jquery-ue
+* bootstrap-3.3.5 (css + modal.js)
+* bootstrap-filestyle-1.2.1
+* sidebar-v2
+* Leaflet.awesome-markers-2.0
 
 Open the index.html file in a navigator to test it.
 
