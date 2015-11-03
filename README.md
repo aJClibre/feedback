@@ -1,20 +1,17 @@
 #feedback
-========
 
 A client sidebar to create and manage geolocated information reports.
 See the [demo](http://ajclibre.github.io/feedback/index.html).
 
 ##Description
 
-The sidebar could be integrated in a web gis application.
-
-It manages user login.
-
-It is based on [sidebar-v2](http://turbo87.github.io/sidebar-v2/examples/) uses the Single Page Application approach (Mikowski & Powell).
+It is based on [sidebar-v2](http://turbo87.github.io/sidebar-v2/examples/) and uses the Single Page Application approach (Mikowski & Powell).
 
 It uses fake server side so it's possible to test it localy with an explorator.
 
 Actually it is based on a Leaflet map but the goal is to deploy it on OpenLayers too.
+
+It's possible to manage user login.
 
 It requires :
 * leaflet-0.7.2
@@ -28,14 +25,16 @@ It requires :
 * sidebar-v2
 * Leaflet.awesome-markers-2.0
 
-Open the index.html file in a navigator to test it.
-
 ##Install
 
-After extract the zip modify put the feed-x.x.x folder in the web folder.
-Edit your index.html to add the required libs.
-Edit feed-X.X.X/js/feed.fake.js to modify the reports.
-Add files in doc/ to modify images and documents
+1. Extract the zip and put the feed-x.x.x folder in your web application folder.
+2. Edit your index.html to add the required libs.
+3. (option) Edit feed-X.X.X/js/feed.fake.js to modify the reports.
+4. (option) Add files in doc/ to modify image and document reports
+
+##Changelog
+####0.0.1 (2015-10-14)
+* Initial version
 
 ##License
 
