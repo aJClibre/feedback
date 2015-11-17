@@ -213,14 +213,15 @@ feed.shell = (function () {
         // Begin adjust chat component if changed
         s_sidebar_proposed = anchor_map_proposed.sidebar;
 //console.log('anchor_map_proposed.tab: ' + anchor_map_proposed.tab);          
+console.log('feed.shell TODO 2 : restore feed.map');
         switch ( s_sidebar_proposed ) {
             case 'opened' :               
                 is_ok = feed.sidebar.setSliderPosition( 'opened', anchor_map_proposed.tab );
-                feed.map.setMarkerPosition( 'opened', anchor_map_proposed.tab );
+//                feed.map.setMarkerPosition( 'opened', anchor_map_proposed.tab );
             break;
             case 'closed' :
                 is_ok = feed.sidebar.setSliderPosition( 'closed', anchor_map_proposed.tab );
-                feed.map.setMarkerPosition( 'closed', anchor_map_proposed.tab );
+//                feed.map.setMarkerPosition( 'closed', anchor_map_proposed.tab );
             break;
             default : 
                 feed.sidebar.setSliderPosition( 'closed', anchor_map_proposed.tab );
@@ -352,7 +353,9 @@ feed.shell = (function () {
         });
         feed.sidebar.initModule( jqueryMap.$container );
 
-        feed.map.configModule({
+console.log('feed.shell TODO : restore feed.map');	
+/****************************
+	feed.map.configModule({
             set_map_anchor      : setMapAnchor,
             map_model           : feed.model.map,
             // sidebar_model       : feed.model.sidebar,
@@ -360,6 +363,7 @@ feed.shell = (function () {
             reports_model       : feed.model.reports
         });
         feed.map.initModule( map );
+*******************************/
 
         // Handle URI anchor change events.
         // This is done /after/ all feature modules are configured
