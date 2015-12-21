@@ -181,7 +181,7 @@ feed.sidebar = (function () {
               + '<!-- http://formvalidator.net/index.html --> <script>'
                 + '$.validate();'
               + '</script>',
-              doc_path : 'doc/',
+              doc_path : '/media/doc/', // have to be idem to feed.sidebar.js TODO : put outside of this file
 
             settable_map : {
                 sidebar_model       : true,
@@ -675,8 +675,11 @@ feed.sidebar = (function () {
         jqueryMap.$slider.find( '.g-remove' ).bind( 'click', onTapDeleteReport );
         jqueryMap.$slider.find( '.g-edit' ).bind( 'click', onTapEditReport );
         jqueryMap.$list_box.find( 'tr' ).bind( 'mouseover', onHoverList );
-        jqueryMap.$list_box.find( 'tr' ).bind( 'mouseout', onOutList );    
-
+        jqueryMap.$list_box.find( 'tr' ).bind( 'mouseout', onOutList );
+        
+        // stop handling of the event !
+        // same as : event.preventDefault() + event.stopPropagation() + event.preventImmediatPropagation()
+        return false;
     };
 
     // Event handler for mouseover event publish by 
