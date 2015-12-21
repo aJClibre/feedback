@@ -733,8 +733,8 @@ feed.sidebar = (function () {
     // Event handler for feed-login model event
     //
     onLogin = function ( event, login_user ) {
-//console.info('model.onLogin');
-        configMap.set_sidebar_anchor( { sidebar: 'opened' } );
+console.info('model.onLogin');
+//        configMap.set_sidebar_anchor( { sidebar: 'opened' } );
     };
 
     onLogout = function ( event, logout_user ) {
