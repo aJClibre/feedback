@@ -352,7 +352,7 @@ feed.shell = (function () {
         });
         feed.sidebar.initModule( jqueryMap.$container );
 
-        feed.map.configModule({
+	feed.map.configModule({
             set_map_anchor      : setMapAnchor,
             map_model           : feed.model.map,
             // sidebar_model       : feed.model.sidebar,
