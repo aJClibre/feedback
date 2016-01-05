@@ -1,7 +1,7 @@
 libs/
-feed-0.0.1/libs/*.js
-.feed-0.0.1/libs/*.zip
-.feed-0.0.1/libs/**/*
+feed-*/libs/*.js
+.feed-*/libs/*.zip
+.feed-*/libs/**/*
 .doc/*.jpg
 .doc/*.pdf
 .doc/*.jpeg
