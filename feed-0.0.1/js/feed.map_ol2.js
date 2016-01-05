@@ -465,6 +465,9 @@ layer_markers.addFeatures( [marker1, marker2] );
         // the same report is asked so reload it
         if ( arg_map.new_report == arg_map.old_report ) {
             stateMap.current_popup.setContentHTML( setPopup( arg_map.new_report ) );
+            // TODO
+            stateMap.current_popup.lonlat.lon = arg_map.new_report.locate_map.x;
+            stateMap.current_popup.lonlat.lat = arg_map.new_report.locate_map.y;
         }
     }
     return false;
