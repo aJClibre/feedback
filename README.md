@@ -27,14 +27,17 @@ It requires :
 
 ##Install
 
-1. Extract the zip and put the feed-x.x.x folder in your web application folder.
+1. Extract the zip and put the src folder in your web application folder.
 2. Edit your index.html to add the required libs.
-3. (option) Edit feed-X.X.X/js/feed.fake.js to modify the reports.
+3. (option) Edit src/js/feed.fake.js to modify the reports.
 4. (option) Add files in doc/ to modify image and document reports
 
 ##Changelog
 ####0.0.1 (2015-10-14)
 * Initial version
+####0.1.2 (2016-01-06)
+* OL2 version
+* extract the libs folder from src/
 
 ##License
 
