@@ -621,7 +621,7 @@ feed.sidebar = (function () {
             reports_db = configMap.reports_model.get_db(),
             list_html = String()
               + '<div class="table-responsive">'
-                + '<table class="table table-hover">'
+                + '<table id="tableReports" class="table table-hover">'
                     + '<thead>'
                         + '<tr>'
                             + '<th>#</th>'
@@ -677,6 +677,8 @@ feed.sidebar = (function () {
         jqueryMap.$slider.find( '.g-edit' ).bind( 'click', onTapEditReport );
         jqueryMap.$list_box.find( 'tr' ).bind( 'mouseover', onHoverList );
         jqueryMap.$list_box.find( 'tr' ).bind( 'mouseout', onOutList );
+
+        $('#tableReports').DataTable();
         
         // stop handling of the event !
         // same as : event.preventDefault() + event.stopPropagation() + event.preventImmediatPropagation()
