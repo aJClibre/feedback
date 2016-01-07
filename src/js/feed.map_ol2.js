@@ -1,5 +1,5 @@
 /**********************************
- * feed.map.js
+ * feed.map_ol2.js
  *
  * Map feature module for OpenLayers2 lib
  *
@@ -64,12 +64,13 @@ feed.map = (function () {
   //--------------------- MODULE SCOPE VARIABLES ----------------
   var
     configMap   = {
-      doc_path : '/media/doc/', // have to be idem to feed.sidebar.js TODO : put outside of this file
+      //doc_path : '/media/doc/', // have to be idem to feed.sidebar.js TODO : put outside of this file
       settable_map : {
         map_model           : true,
         people_model        : true,
         reports_model       : true,
-        set_map_anchor      : true
+        set_map_anchor      : true,
+        doc_path            : true
       },
       map_model             : null,
       people_model          : null,

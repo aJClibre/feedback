@@ -331,6 +331,8 @@ feed.shell = (function () {
     // Throws  : none
     //
     initModule = function ( $container, map ) {
+        var doc_path = 'doc/';
+
         // load HTML and map jQuery collections
         stateMap.$container = $container;
         //$container.html( configMap.main_html );
@@ -343,21 +345,29 @@ feed.shell = (function () {
             schema_map : configMap.anchor_schema_map
         });
         
+        // Test to know if we are under ll or ol2 so 
+        // it possible to define the doc_path for the sidebar 
+        // and the map
+        if ( !map._leaflet_id ) {
+            doc_path = '/media/doc/';
+        }
+
         // configure and initialize feature modules
         feed.sidebar.configModule({
             set_sidebar_anchor  : setSidebarAnchor,
             sidebar_model       : feed.model.sidebar,
             people_model        : feed.model.people,
-            reports_model       : feed.model.reports
+            reports_model       : feed.model.reports,
+            doc_path            : doc_path
         });
         feed.sidebar.initModule( jqueryMap.$container );
 
 	feed.map.configModule({
             set_map_anchor      : setMapAnchor,
             map_model           : feed.model.map,
-            // sidebar_model       : feed.model.sidebar,
             people_model        : feed.model.people,
-            reports_model       : feed.model.reports
+            reports_model       : feed.model.reports,
+            doc_path            : doc_path
         });
         feed.map.initModule( map );
 

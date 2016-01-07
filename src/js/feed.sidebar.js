@@ -181,13 +181,14 @@ feed.sidebar = (function () {
               + '<!-- http://formvalidator.net/index.html --> <script>'
                 + '$.validate();'
               + '</script>',
-              doc_path : '/media/doc/', // have to be idem to feed.sidebar.js TODO : put outside of this file
+              //doc_path : '/media/doc/', // have to be idem to feed.sidebar.js TODO : put outside of this file
 
             settable_map : {
                 sidebar_model       : true,
                 people_model        : true,
                 reports_model       : true,
-                set_sidebar_anchor  : true
+                set_sidebar_anchor  : true,
+                doc_path            : true
             },
             sidebar_model       : null,
             people_model        : null,
@@ -692,7 +693,6 @@ feed.sidebar = (function () {
       if ( ! $tapped.hasClass( 'feed-sidebar-content-list-name' ) ) { return false; }
 
       report_id = $tapped.attr( 'tr-id' );
-
       if ( ! report_id ) { return false; }
     
       $.gevent.publish( 'feed-listhover', report_id );
@@ -736,7 +736,7 @@ feed.sidebar = (function () {
     // Event handler for feed-login model event
     //
     onLogin = function ( event, login_user ) {
-console.info('model.onLogin');
+console.info('sidebar.onLogin');
 //        configMap.set_sidebar_anchor( { sidebar: 'opened' } );
     };
 
