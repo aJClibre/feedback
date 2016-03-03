@@ -542,13 +542,14 @@ feed.model = (function () {
         // list is received
         //
         _update_reports_list = function( arg_list ) {
+
             var 
               i, report_map, make_report_map,
               reports_list = arg_list[0],
               is_report_exist = false,
               is_report_new = false
             ;
-
+console.log( ' _update_reports_list arg_list[0]: ' + arg_list[0] );
             clearReportsDb();
 
             if ( arg_list.length > 1 ) {
@@ -623,7 +624,7 @@ feed.model = (function () {
             }
         };
         
-        // Publish an feed-listchange global jQuery event wtih
+        // Publish a feed-listchange global jQuery event wtih
         // an updated reports list as its data. Used whenever a
         // listchange message is received from the backend
         //
