@@ -177,42 +177,31 @@ feed.fake = (function () {
             // callback after a 3s delay
             //
             if ( msg_type === 'createreport' && callback_map.listchange ) {
-                setTimeout( function () {
-
-                    report_map = { 
-                        _id         : makeFakeIdR(), // created by the backend
-                        title       : data.title,
-                        textarea    : data.textarea,
-                        locate_map  : data.locate_map
-                    };
-                    reportsList.push( report_map );
-                    callback_map.listchange([ reportsList, report_map ]);
-// console.info('fake.mockSioReport.emit_sio addreport');                    
-                }, 1500 );
+                console.dir(data);
+                $.post('../feed/', data, function(result) {
+                    callback_map.listchange([ result.data ]);
+                }, "json");
             }
 
             // simulate send 'updatereport' message and data to the server
             if ( msg_type === 'updatereport' && callback_map.listchange ) {
 
-                // simulate receipt of 'listchange' message
-                for ( i = 0; i < reportsList.length; i++ ) {
-                    if ( reportsList[ i ]._id === data._id ) {
-                        reportsList[ i ].locate_map     = data.locate_map;
-                        reportsList[ i ].title          = data.title;
-                        reportsList[ i ].textarea       = data.textarea;
-                        reportsList[ i ].doc            = data.doc;
-    // alert('Report Modified!');
-                        break;
-                    }
-                }
-                // execute callback for the 'listchange' message
-                callback_map.listchange([ reportsList ]);
+                console.dir(data);
+                $.post('../feed/', data)
+                    .done(function(result) {
+                    callback_map.listchange([ result.data ]);
+                }, "json");
             }
 
             // simulate send 'deletereport' message and data to the server
             if ( msg_type === 'deletereport' && callback_map.listchange ) {
+                console.dir(data);
+                $.get('../feed/', {id: data.id})
+                    .done(function(result) {
+                    callback_map.listchange([ result.data ]);
+                }, "json");
                 // simulate receipt of 'listchange' message
-                for ( i = 0; i < reportsList.length; i++ ) {
+/*                for ( i = 0; i < reportsList.length; i++ ) {
                     if ( reportsList[ i ]._id === data.id ) {
                         reportsList.splice(i, 1);
                         break;
@@ -220,12 +209,12 @@ feed.fake = (function () {
                 }
                 // execute callback for the 'listchange' message
                 callback_map.listchange([ reportsList ]);
-            }
+*/            }
 
             // 
             if ( msg_type === 'getreports' && callback_map.listchange ) {
                 // http://api.jquery.com/jQuery.get/
-                $.get('http://dev.sig-dfci.org/dj/13/admin/feed/', function(data) {
+                $.get('../feed/', function(data) {
                     console.dir(data);
                     // execute callback for the 'listchange' message
                     callback_map.listchange([ data.data ]);

@@ -160,8 +160,9 @@ feed.map = (function () {
         featureclick    : function(e) {
             var mark_sel = e.feature
             ;
-
+console.log("featureclick e.feature.popup.id: " + e.feature.popup.id);
             if ( stateMap.current_popup ) {
+console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.id);            
                 if ( stateMap.current_popup.id !== e.feature.popup.id ) {
                     hideCurrentPopup();
                 }
@@ -229,7 +230,12 @@ feed.map = (function () {
     
     dragMarkers     = new OpenLayers.Control.DragFeature( layer_markers, {
         onStart         : function( feat, pix ) {
-            hideCurrentPopup();
+            if ( stateMap.drag_enable ) {
+                hideCurrentPopup();
+            }
+            else {
+                return;
+            }
         },
         onDrag          : function( feat, pix ) {
             $.gevent.publish( 'feed-setcoord', { x: feat.geometry.x.toFixed(0), y: feat.geometry.y.toFixed(0) } );
@@ -245,6 +251,7 @@ feed.map = (function () {
             new_map.id              = feat.data.id;
             new_map.locate_map.x    = feat.geometry.x.toFixed(0);
             new_map.locate_map.y    = feat.geometry.y.toFixed(0);
+
             if ( report ) {
                 new_map.title   = report.title;
                 new_map.img     = report.img;
@@ -257,8 +264,8 @@ feed.map = (function () {
             feat.popup.setContentHTML( setPopup( new_map ) );
             feat.popup.lonlat.lon = feat.geometry.x;
             feat.popup.lonlat.lat = feat.geometry.y;
-            feat.popup.show();
-            stateMap.current_popup = feat.popup;
+            //feat.popup.show();
+            //stateMap.current_popup = feat.popup;
         }
     });
     stateMap.map.addControl( dragMarkers );
@@ -373,7 +380,7 @@ layer_markers.addFeatures( [marker1, marker2] );
   // The selected marker becomes the stateMap.current_marker
   setMarker = function( report_id ) {
     var marker, tmp_marker, report, popup, move;
-
+console.log("setMarker ");
     if ( report_id ) {
       marker = getMarker( report_id );
 
@@ -387,7 +394,7 @@ layer_markers.addFeatures( [marker1, marker2] );
 
         popup = ol2Map.$marker_list[ marker.data.id ].popup;
         stateMap.current_popup = popup;
-
+console.log("setMarker stateMap.current_popup.id: " + stateMap.current_popup.id);
         report = configMap.reports_model.get_by_cid( report_id );
 
         if ( report ) {
@@ -400,7 +407,7 @@ layer_markers.addFeatures( [marker1, marker2] );
             stateMap.map.panTo( [ marker.geometry.x, marker.geometry.y ] );
         }
 
-        popup.show();
+        //popup.show();
       }
     }
   };
@@ -440,7 +447,9 @@ layer_markers.addFeatures( [marker1, marker2] );
   };
 
   hideCurrentPopup = function () {
+console.log("hideCurrentPopup ");
     if ( stateMap.current_popup ) {
+console.log("hideCurrentPopup stateMap.current_popup.id: " + stateMap.current_popup.id);    
         stateMap.current_popup.hide();
         stateMap.current_popup = null;
     }
@@ -509,7 +518,10 @@ layer_markers.addFeatures( [marker1, marker2] );
                 setPopup( new_map ),
                 null, 
                 true,
-                function( e ){ hideCurrentPopup(); }
+                function( e ){ 
+//console.dir(e);
+                    hideCurrentPopup(); 
+                }
             );
             popup.panMapIfOutOfView             = false;
             popup.autoSize                      = true;
