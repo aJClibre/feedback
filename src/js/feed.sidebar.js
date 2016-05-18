@@ -68,20 +68,21 @@ feed.sidebar = (function () {
             main_html : String()
               + '<div id="sidebar" class="sidebar collapsed">'
                 + '<ul class="sidebar-tabs" role="tablist">' // Nav tabs
-                  + '<li id="t_home" class="tab" title="home"><a href="#" role="tab"><i class="fa fa-bars"></i></a></li>'
-                  + '<li id="t_report" class="tab" title="report"><a href="#" role="tab"><i class="fa fa-pencil"></i></a></li>'
-                  + '<li id="t_create" class="tab" title="create"><a href="#" role="tab"><i class="fa fa-plus"></i></a></li>'
-                  + '<li id="t_settings" class="tab" title="settings"><a href="#" role="tab"><i class="fa fa-gear"></i></a></li>'
+                  + '<li id="t_home" class="tab" title="Liste"><a href="#" role="tab"><i class="fa fa-bars"></i></a></li>'
+                  + '<li id="t_report" class="tab" title="D&eacute;tail"><a href="#" role="tab"><i class="fa fa-pencil"></i></a></li>'
+                  + '<li id="t_create" class="tab" title="Cr&eacute;ation"><a href="#" role="tab"><i class="fa fa-plus"></i></a></li>'
+                  + '<li id="t_settings" class="tab" title="Param&egrave;tres"><a href="#" role="tab"><i class="fa fa-gear"></i></a></li>'
                 + '</ul>'
                 + '<div class="sidebar-content feed-sidebar-content active">'
                   + '<div class="sidebar-pane feed-sidebar-content-home active" id="home">'
-                    + '<h1>Reports list</h1>'
+                    + '<h1>Liste des rapports</h1>'
                     + '<div class="feed-sidebar-content-home-box"></div>' 
-                    + '<button type="update" class="btn btn-primary list-refresh">Refresh</button>'
+                    + '<button type="update" class="btn btn-primary list-refresh">Rafraichir</button>'
+                    + '<a type="button" class="btn btn-primary list-download" href="../feed/csv/">T&eacute;l&eacute;charger</a>'
                   + '</div>'
                   + '<div class="sidebar-pane feed-sidebar-content-report" id="report">'
-                    + '<h1>Report details</h1>'
-                    + '<h4 class="bg-danger is_selected">Select a report in the list tab</h4>'
+                    + "<h1>D&eacute;tails</h1>"
+                    + '<h4 class="bg-danger is_selected">Veuillez s&eacute;lectionner un rapport</h4>'
                     + '<form class="feed-sidebar-content-report-form" id="form_modify">'
                       + '<div class="form-group">'
                         + '<label class="col-md-12 control-label feed-sidebar-content-report-form-id">ID</label>'
@@ -98,8 +99,8 @@ feed.sidebar = (function () {
                         + '<textarea id="report-textarea" class="form-control feed-sidebar-content-report-form-textarea" rows="3"></textarea>'
                       + '</div>'
                       + '<div class="form-group feed-sidebar-content-report-form-group-doc-create">'
-                        + '<label for="reportInputDoc" class="col-md-12 control-label">Document input</label>'
-                        + '<input type="file" class="filestyle feed-sidebar-content-report-form-file" id="reportInputDoc" data-buttonName="btn-primary" data-placeholder="No file">'
+                        + '<label for="reportInputDoc" class="col-md-12 control-label">Document...</label>'
+                        + '<input type="file" class="filestyle feed-sidebar-content-report-form-file" id="reportInputDoc" data-buttonName="btn-primary" data-placeholder="Aucun fichier">'
                       + '</div>'
                           // + '<div class="form-group feed-sidebar-content-report-form-group-img-create">'
                             //   + '<label for="reportInputImg" class="col-md-12 control-label feed-sidebar-content-report-form-group-img-label">Image input</label>'
@@ -111,18 +112,36 @@ feed.sidebar = (function () {
                       + '</div>'
                       + '<div class="form-group">'
                         + '<p class="help-block">Example block-level help text here.</p>'
-                        + '<button class="btn btn-primary report-modify">Modify</button>'
-                        + '<button class="btn btn-primary report-cancel">Cancel</button>'
+                        + '<button class="btn btn-primary report-modify">Modifier</button>'
+                        + '<button class="btn btn-primary report-cancel">Annuler</button>'
                       + '</div>'
                     + '</form>'
                   + '</div>'
                   + '<div class="sidebar-pane feed-sidebar-content-create" id="create">'
-                    + '<h1>Report creation</h1>'
-                    + '<form class="feed-sidebar-content-create-form" id="form_create">'
+                    + '<h1>Cr&eacute;er un rapport</h1>'
+                    + '<form class="feed-sidebar-content-create-form" id="form_create" name="create_form">'
                         + '<div class="form-group">'
                           + '<!-- <label for="title" class="col-sm-2 control-label">Titre</label> -->'
                           + '<input type="text" class="form-control form-title feed-sidebar-content-create-form-title required" id="titleCreate" placeholder="Titre" data-validation="required" >'
                           + '<!-- <p class="help-block">In addition to freeform text, any HTML5 text-based input appears like so.</p> -->'
+                        + '</div>'
+                        + '<div class="form-group">'
+                          + '<label class="col-md-12 control-label form-label-priority">Priorit&eacute;</label>'
+                          + '<select class="form-control">'
+                            + '<option value="INFO">Information</option>'
+                            + '<option value="UTIL">Utile</option>'
+                            + '<option value="URGE">Urgent</option>'
+                          + '</select>'
+                        + '</div>'
+                        + '<div class="form-group">'
+                          + '<label class="col-md-12 control-label form-label-priority">Statut</label>'
+                          + '<select class="form-control">'
+                            + '<option value="CRE">Cr&eacute;&eacute;</option>'
+                            + '<option value="MOD">Modif&eacute;</option>'
+                            + '<option value="VAL">Valid&eacute;</option>'
+                            + '<option value="TRE">Trait&eacute;</option>'
+                            + '<option value="DEL">Supprim&eacute;</option>'
+                          + '</select>'
                         + '</div>'
                         + '<div class="form-group">'
                           + '<label class="col-md-12 control-label form-label-localisation">Localisation (WGS84)</label>'
@@ -133,23 +152,23 @@ feed.sidebar = (function () {
                           + '<label for="textareaCreate" class="col-md-12 control-label form-label-description">Description</label>'
                           + '<textarea id="textareaCreate" class="form-control feed-sidebar-content-create-form-textarea" rows="3"></textarea>'
                         + '</div>'
-                        + '<div class="form-group feed-sidebar-content-create-form-group-doc-create">'
-                          + '<label for="createInputDoc" class="col-md-12 control-label">Document input</label>'
+                        + '<!--<div class="form-group feed-sidebar-content-create-form-group-doc-create">'
+                          + '<label for="createInputDoc" class="col-md-12 control-label">Document...</label>'
                           + '<input type="file" class="filestyle feed-sidebar-content-create-form-file" id="createInputDoc" data-buttonName="btn-primary" data-placeholder="No file">'
                           + '<p class="help-block">Example block-level help text here.</p>'
                         + '</div>'
                         + '<div class="form-group feed-sidebar-content-create-form-group-doc-delete">'
                           + '<label class="control-label feed-sidebar-content-create-form-doc-label"></label>'
                           + '<span class="glyphicon glyphicon-remove g-delete" aria-hidden="true"></span>'
-                        + '</div>'
+                        + '</div>-->'
                         + '<div class="form-group">'
-                            + '<button class="btn btn-primary report-create">Create</button>'
-                            + '<button type="reset" class="btn btn-primary reset">Reset</button>'
+                            + '<button class="btn btn-primary report-create">Cr&eacute;er</button>'
+                            + '<button type="reset" class="btn btn-primary reset">Annuler</button>'
                         + '</div>'
                       + '</form>'
                   + '</div>'
                     + '<div class="sidebar-pane" id="settings">'
-                        + '<h1>Settings</h1>'
+                        + '<h1>Param&egrave;tres</h1>'
                         + '<p>Welcome to the new sidebar which let you create and manage geolocated Information reports.<br/>'
                         + 'Do not hesitate to contact us with questions or comment! <a href="mailto:#">webmaster@valabre.com</a></p>'
                     + '</div>'
@@ -211,7 +230,7 @@ feed.sidebar = (function () {
         onTapRefreshList,   onSetReport,        onListchange,
         onHoverList,        onOutList,          onHoverMarker,
         onCoordChange,      onSetCoord,         onLogin,
-        onLogout,
+        onLogout,           onTapDownloadList,
         configModule,       initModule,
         removeSlider,   handleResize;
     //--------------------- eo Module scope -----------------------
@@ -255,6 +274,7 @@ feed.sidebar = (function () {
             $create_y           : $slider.find( '.feed-sidebar-content-create-form-y' ),
             $is_selected        : $slider.find( '.is_selected' ),
             $butt_refresh       : $slider.find( '.list-refresh' ),
+            $butt_download      : $slider.find( '.list-download' ),
             $butt_modify        : $slider.find( '.report-modify' ),
             $butt_cancel        : $slider.find( '.report-cancel' ),
             $butt_create        : $slider.find( '.report-create' ),
@@ -334,7 +354,7 @@ feed.sidebar = (function () {
 
         setTimeout( function () {
             jqueryMap.$modal_mess.modal('hide');
-        }, 3000 );
+        }, 3500 );
     };
 
     // Clear the sidebar 
@@ -425,7 +445,7 @@ feed.sidebar = (function () {
             event.preventDefault();
             return;
         }
-
+console.log("onTapModifyReport textarea: " + jqueryMap.$report_textarea.val());        
         if ( stateMap.active_report_id ) {
             configMap.reports_model.update_({
                 _id         : stateMap.active_report_id,
@@ -455,7 +475,7 @@ feed.sidebar = (function () {
 
         configMap.sidebar_model.set_report( report_id );
 
-        if ( confirm( "Do you want to delete it ?" ) ) {
+        if ( confirm( "Voulez-vous supprimer ce rapport ?" ) ) {
             configMap.reports_model.delete_( report_id );
         }
     };
@@ -496,19 +516,26 @@ feed.sidebar = (function () {
     };
 
     onTapCreateReport = function ( event ) {
+        console.dir($( "#form_create" ).serialize());
+        $.post('../feed/', $( "#form_create" ), function( response ) {
+            console.dir(response);
+        });
         
-      configMap.reports_model.create_({
-        locate_map  : { x : jqueryMap.$create_x.val(), y : jqueryMap.$create_y.val() },
-        title       : jqueryMap.$create_title.val(),
-        textarea    : jqueryMap.$create_textarea.val(),
-        doc         : jqueryMap.$create_doc_input.val()
-      });
+
+      /* 
+        configMap.reports_model.create_({
+            locate_map  : { x : jqueryMap.$create_x.val(), y : jqueryMap.$create_y.val() },
+            title       : jqueryMap.$create_title.val(),
+            textarea    : jqueryMap.$create_textarea.val(),
+            doc         : jqueryMap.$create_doc_input[0].files[0]
+        });
+      */
     };
 
     onTapDeleteDoc = function ( event ) {
-      jqueryMap.$report_doc_label.html( '' );
-      jqueryMap.$report_doc_create.show();
-      jqueryMap.$report_doc_delete.hide();
+        jqueryMap.$report_doc_label.html( '' );
+        jqueryMap.$report_doc_create.show();
+        jqueryMap.$report_doc_delete.hide();
     };
 
     // handler for a user generated event when he clicks or tap on
@@ -550,6 +577,10 @@ feed.sidebar = (function () {
 
     onTapRefreshList = function ( event ) {
         configMap.sidebar_model.get_list();
+    };
+
+    onTapDownloadList = function ( event ) {
+        configMap.sidebar_model.down_list();
     };
 
     // event handler for the feed-setreport model event. Selects the
@@ -853,6 +884,7 @@ console.info('sidebar.onLogin');
         jqueryMap.$tabs.bind( 'utap', onTapToggle );
         $list_box.bind( 'utap', onTapList );
         jqueryMap.$butt_refresh.bind( 'click', onTapRefreshList );
+        jqueryMap.$butt_download.bind( 'click', onTapDownloadList );
         jqueryMap.$butt_modify.bind( 'click', onTapModifyReport );
         jqueryMap.$butt_cancel.bind( 'click', onTapCancelReport );
         jqueryMap.$butt_create.bind( 'click', onTapCreateReport );

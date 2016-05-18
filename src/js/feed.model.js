@@ -451,7 +451,8 @@ feed.model = (function () {
                 cid         : makeReportCid(),
                 locate_map  : report_create_map.locate_map,
                 title       : report_create_map.title,
-                textarea    : report_create_map.textarea
+                textarea    : report_create_map.textarea,
+                doc         : report_create_map.doc
             });
         };
 
@@ -509,6 +510,7 @@ feed.model = (function () {
     //    publishers for 'feed-listchange'. If the current user is 
     //    anonymous or his rule doesn't permit, get_list() aborts and
     //    returns false.
+    //  * down_list() - upload the reports list in the csv format  
     //  * get_report() - return the current report. If there is no report
     //    null is returned.
     //  * set_report( <report_id> ) - set the current report to the report
@@ -532,7 +534,7 @@ feed.model = (function () {
           _publish_reports_listchange,  _update_reports_list,
           _leave_list,
           
-          get_report, get_list, set_report,
+          get_report, get_list, down_list, set_report,
         
           report = null;
 
@@ -541,30 +543,36 @@ feed.model = (function () {
         // Refresh the reports object when a new
         // list is received
         //
-        _update_reports_list = function( arg_list ) {
+        _update_reports_list = function( answer ) {
 
             var 
               i, report_map, make_report_map,
-              reports_list = arg_list[0],
-              is_report_exist = false,
-              is_report_new = false
+              arg_list          = answer[0],
+              reports_list      = answer[0].data,
+              error_mess        = answer[0].message ? answer[0].message : null,
+              is_report_exist   = false,
+              is_report_new     = false
             ;
-console.log( ' _update_reports_list arg_list[0]: ' + arg_list[0] );
             clearReportsDb();
 
             if ( arg_list.length > 1 ) {
-                report_map = arg_list[ 1 ];
-                delete stateMap.reports_cid_map[ report_map.cid ];
-                stateMap.report.cid         = report_map._id;
-                stateMap.report.id          = report_map._id;
-                stateMap.report.title       = report_map.title;
-                stateMap.report.textarea    = report_map.textarea;
-                stateMap.report.locate_map  = report_map.locate_map;
-                // stateMap.report.img         = report_map.img;
-                stateMap.report.doc         = report_map.doc;
+                if ( ! error_mess ) {
+                    report_map = arg_list[ 1 ];
+                    delete stateMap.reports_cid_map[ report_map.cid ];
+                    stateMap.report.cid         = report_map._id;
+                    stateMap.report.id          = report_map._id;
+                    stateMap.report.title       = report_map.title;
+                    stateMap.report.textarea    = report_map.textarea;
+                    stateMap.report.locate_map  = report_map.locate_map;
+                    // stateMap.report.img         = report_map.img;
+                    stateMap.report.doc         = report_map.doc;
 
-                is_report_new = true;
-                $.gevent.publish( 'feed-alert', { text: 'The report was created successfully !'} );
+                    is_report_new = true;
+                    $.gevent.publish( 'feed-alert', { text: 'Le rapport a été créé avec succès !'} );
+                }
+                else {
+                    $.gevent.publish( 'feed-alert', { text: error_mess } );
+                }
             }
 
             REPORT:
@@ -574,13 +582,16 @@ console.log( ' _update_reports_list arg_list[0]: ' + arg_list[0] );
                 // udate the selected report and publlish 'feed-setreport'
                 //
                 if ( ! stateMap.report.get_is_empty() && stateMap.report.id === report_map._id ) {
-                    if ( ! is_report_new ) {
-                        $.gevent.publish( 'feed-alert', { text: 'The report was updated successfully !'} );
+                    if ( ! is_report_new && ! error_mess ) {
+                        $.gevent.publish( 'feed-alert', { text: 'Le rapport a été mis à jour avec succès !'} );
                         stateMap.report.title       = report_map.title;
                         stateMap.report.textarea    = report_map.textarea;
                         stateMap.report.locate_map  = report_map.locate_map;
                         // stateMap.report.img         = report_map.img;
                         stateMap.report.doc         = report_map.doc;                        
+                    }
+                    else {
+                        $.gevent.publish( 'feed-alert', { text: error_mess } );
                     }
 
                     // publish setreport event with a map of the old_report
@@ -618,7 +629,7 @@ console.log( ' _update_reports_list arg_list[0]: ' + arg_list[0] );
             // which triggers the 'feed-setreport' global event
             //
             if ( ! stateMap.report.get_is_empty() && ! is_report_exist ) {
-                $.gevent.publish( 'feed-alert', { text: 'The report was deleted successfully !'} );
+                $.gevent.publish( 'feed-alert', { text: 'Le rapport a été supprimé avec succès !'} );
 // console.log('if set_report');                
                 set_report(''); 
             }
@@ -628,10 +639,11 @@ console.log( ' _update_reports_list arg_list[0]: ' + arg_list[0] );
         // an updated reports list as its data. Used whenever a
         // listchange message is received from the backend
         //
-        _publish_reports_listchange = function( arg_list ) {
-            _update_reports_list( arg_list );
+        _publish_reports_listchange = function( answer ) {
+//console.dir(answer[0]);        
+            _update_reports_list( answer );
 
-            $.gevent.publish( 'feed-listchange', [ arg_list ] );
+            $.gevent.publish( 'feed-listchange', [ answer[0].data ] );
         };
         // eo internal methods
 
@@ -672,6 +684,19 @@ console.log( ' _update_reports_list arg_list[0]: ' + arg_list[0] );
             return true;
         };
 
+        // download the reports in csv format by a request to the server
+        down_list = function () {
+            var sio;
+
+            // Checks if the user is not anonymous
+            if ( stateMap.user.get_is_anon() ) {
+                $.gevent.publish( 'feed-alert', { text: "Sorry you have to connect before !" } );
+                return false;
+            }
+
+            return true;
+        };
+
         // Change the report object to one provided. If the 
         // provided report is the same as the current one, return false
         //
@@ -706,6 +731,7 @@ console.log( ' _update_reports_list arg_list[0]: ' + arg_list[0] );
             _leave          : _leave_list,
             get_report      : get_report,
             get_list        : get_list,
+            down_list       : down_list,
             set_report      : set_report
         };
 

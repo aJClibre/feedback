@@ -179,7 +179,7 @@ feed.fake = (function () {
             if ( msg_type === 'createreport' && callback_map.listchange ) {
                 console.dir(data);
                 $.post('../feed/', data, function(result) {
-                    callback_map.listchange([ result.data ]);
+                    callback_map.listchange([ result ]);
                 }, "json");
             }
 
@@ -189,35 +189,27 @@ feed.fake = (function () {
                 console.dir(data);
                 $.post('../feed/', data)
                     .done(function(result) {
-                    callback_map.listchange([ result.data ]);
+                    callback_map.listchange([ result ]);
                 }, "json");
             }
 
             // simulate send 'deletereport' message and data to the server
             if ( msg_type === 'deletereport' && callback_map.listchange ) {
-                console.dir(data);
+                //console.dir(data);
                 $.get('../feed/', {id: data.id})
                     .done(function(result) {
-                    callback_map.listchange([ result.data ]);
-                }, "json");
-                // simulate receipt of 'listchange' message
-/*                for ( i = 0; i < reportsList.length; i++ ) {
-                    if ( reportsList[ i ]._id === data.id ) {
-                        reportsList.splice(i, 1);
-                        break;
-                    }
-                }
-                // execute callback for the 'listchange' message
-                callback_map.listchange([ reportsList ]);
-*/            }
+                        console.dir(result);
+                        callback_map.listchange([ result ]);
+                    }, "json");
+            }
 
             // 
             if ( msg_type === 'getreports' && callback_map.listchange ) {
                 // http://api.jquery.com/jQuery.get/
-                $.get('../feed/', function(data) {
-                    console.dir(data);
+                $.get('../feed/', function(result) {
+                    console.dir(result);
                     // execute callback for the 'listchange' message
-                    callback_map.listchange([ data.data ]);
+                    callback_map.listchange([ result ]);
                 }, "json"); //callListchange(data));
             }
         };
