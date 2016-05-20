@@ -75,6 +75,9 @@ feed.model = (function () {
             empty_id        : 'e0',
             empty_title     : '',
             empty_textarea  : '',
+            empty_statu     : '',
+            empty_created   : '',
+            empty_modified  : '',
             empty_locate_map: { x : 0, y : 0 }
         },
         stateMap    = {
@@ -374,6 +377,9 @@ feed.model = (function () {
           id            = report_map.id,
           title         = report_map.title,
           textarea      = report_map.textarea,
+          statu         = report_map.statu,
+          created       = report_map.created,
+          modified      = report_map.modified,
           locate_map    = report_map.locate_map,
           // img           = report_map.img,
           doc           = report_map.doc;
@@ -386,8 +392,10 @@ feed.model = (function () {
         report.cid          = cid;
         report.title        = title;
         report.textarea     = textarea;
+        report.statu        = statu;
         report.locate_map   = locate_map;
-        // report.img          = img;
+        report.created      = created;
+        report.modified     = modified;
         report.doc          = doc;
 
         if ( id ) { report.id = id; }
@@ -452,6 +460,7 @@ feed.model = (function () {
                 locate_map  : report_create_map.locate_map,
                 title       : report_create_map.title,
                 textarea    : report_create_map.textarea,
+                statu       : report_create_map.statu,
                 doc         : report_create_map.doc
             });
         };
@@ -563,8 +572,10 @@ feed.model = (function () {
                     stateMap.report.id          = report_map._id;
                     stateMap.report.title       = report_map.title;
                     stateMap.report.textarea    = report_map.textarea;
+                    stateMap.report.statu       = report_map.statu;
+                    stateMap.report.created     = report_map.created;
+                    stateMap.report.modified    = report_map.modified;
                     stateMap.report.locate_map  = report_map.locate_map;
-                    // stateMap.report.img         = report_map.img;
                     stateMap.report.doc         = report_map.doc;
 
                     is_report_new = true;
@@ -586,8 +597,10 @@ feed.model = (function () {
                         $.gevent.publish( 'feed-alert', { text: 'Le rapport a été mis à jour avec succès !'} );
                         stateMap.report.title       = report_map.title;
                         stateMap.report.textarea    = report_map.textarea;
+                        stateMap.report.statu       = report_map.statu;
+                        stateMap.report.created     = report_map.created;
+                        stateMap.report.modified    = report_map.modified;
                         stateMap.report.locate_map  = report_map.locate_map;
-                        // stateMap.report.img         = report_map.img;
                         stateMap.report.doc         = report_map.doc;                        
                     }
                     else {
@@ -616,7 +629,9 @@ feed.model = (function () {
                     id          : report_map._id,
                     title       : report_map.title,
                     textarea    : report_map.textarea,
-                    // img         : report_map.img,
+                    statu       : report_map.statu,
+                    created     : report_map.created,
+                    modified    : report_map.modified,
                     doc         : report_map.doc
                 };
 // console.log('makeReport: ' + make_report_map.title );
@@ -764,6 +779,9 @@ feed.model = (function () {
             id          : configMap.empty_id,
             title       : configMap.empty_title,
             textarea    : configMap.empty_textarea,
+            statu       : configMap.empty_statu,
+            created     : configMap.empty_created,
+            modified    : configMap.empty_modified,
             locate_map  : configMap.empty_locate
         });
         stateMap.report = stateMap.empty_report;

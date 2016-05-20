@@ -90,6 +90,32 @@ feed.sidebar = (function () {
                         + '<!-- <p class="help-block">In addition to freeform text, any HTML5 text-based input appears like so.</p> -->'
                       + '</div>'
                       + '<div class="form-group">'
+                        + '<label class="col-md-12 control-label form-label-priority">Priorit&eacute;</label>'
+                        + '<select class="form-control feed-sidebar-content-report-form-priority">'
+                          + '<option value="INFO">Information</option>'
+                          + '<option value="UTIL">Utile</option>'
+                          + '<option value="URGE">Urgent</option>'
+                        + '</select>'
+                      + '</div>'
+                      + '<div class="form-group">'
+                        + '<label class="col-md-12 control-label form-label-priority">Statut</label>'
+                          + '<select class="form-control feed-sidebar-content-report-form-statu" >'
+                          + '<option value="OUV">Ouvert</option>'
+                          + '<option value="VAL">Valid&eacute;</option>'
+                          + '<option value="FER">Ferm&eacute;</option>'
+                        + '</select>'
+                      + '</div>'
+                      + '<div class="form-group">'
+                        + '<label class="col-sm-2 control-label">Création: </label>'
+                        + '<div class="col-sm-4">'
+                          + '<p class="form-control-static feed-sidebar-content-report-form-datecreate"></p>'
+                        + '</div>'
+                        + '<label class="col-sm-2 control-label">Modifié: </label>'
+                        + '<div class="col-sm-4">'
+                          + '<p class="form-control-static feed-sidebar-content-report-form-datemodif"></p>'
+                        + '</div>'
+                      + '</div>'
+                      + '<div class="form-group">'
                         + '<label class="col-md-12 control-label form-label-localisation">Localisation (WGS84)</label>'
                         + '<input type="text" class="col-md-5 feed-sidebar-content-report-form-x" id="x" placeholder="Longitude" readonly>'
                         + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-report-form-y" id="y" placeholder="Latitude" readonly>'
@@ -133,16 +159,14 @@ feed.sidebar = (function () {
                             + '<option value="URGE">Urgent</option>'
                           + '</select>'
                         + '</div>'
-                        + '<div class="form-group">'
-                          + '<label class="col-md-12 control-label form-label-priority">Statut</label>'
+                        + '<!--<div class="form-group">'
+                          + '<label class="col-md-12 control-label form-label-status">Statut</label>'
                           + '<select class="form-control">'
-                            + '<option value="CRE">Cr&eacute;&eacute;</option>'
-                            + '<option value="MOD">Modif&eacute;</option>'
+                            + '<option value="OUV">Ouvert</option>'
                             + '<option value="VAL">Valid&eacute;</option>'
-                            + '<option value="TRE">Trait&eacute;</option>'
-                            + '<option value="DEL">Supprim&eacute;</option>'
+                            + '<option value="FER">Ferm&eacute;</option>'
                           + '</select>'
-                        + '</div>'
+                        + '</div>-->'
                         + '<div class="form-group">'
                           + '<label class="col-md-12 control-label form-label-localisation">Localisation (WGS84)</label>'
                           + '<input type="text" class="col-md-5 feed-sidebar-content-create-form-x" id="xCreate" placeholder="Longitude" readonly>'
@@ -152,7 +176,7 @@ feed.sidebar = (function () {
                           + '<label for="textareaCreate" class="col-md-12 control-label form-label-description">Description</label>'
                           + '<textarea id="textareaCreate" class="form-control feed-sidebar-content-create-form-textarea" rows="3"></textarea>'
                         + '</div>'
-                        + '<!--<div class="form-group feed-sidebar-content-create-form-group-doc-create">'
+                        + '<div class="form-group feed-sidebar-content-create-form-group-doc-create">'
                           + '<label for="createInputDoc" class="col-md-12 control-label">Document...</label>'
                           + '<input type="file" class="filestyle feed-sidebar-content-create-form-file" id="createInputDoc" data-buttonName="btn-primary" data-placeholder="No file">'
                           + '<p class="help-block">Example block-level help text here.</p>'
@@ -160,7 +184,7 @@ feed.sidebar = (function () {
                         + '<div class="form-group feed-sidebar-content-create-form-group-doc-delete">'
                           + '<label class="control-label feed-sidebar-content-create-form-doc-label"></label>'
                           + '<span class="glyphicon glyphicon-remove g-delete" aria-hidden="true"></span>'
-                        + '</div>-->'
+                        + '</div>'
                         + '<div class="form-group">'
                             + '<button class="btn btn-primary report-create">Cr&eacute;er</button>'
                             + '<button type="reset" class="btn btn-primary reset">Annuler</button>'
@@ -226,7 +250,7 @@ feed.sidebar = (function () {
         clearSidebar,       clearList,          clearFormsError,
         onTapToggle,        onTapModifyReport,  onTapEditReport,
         onTapDeleteReport,  onTapCancelReport,  onTapCreateReport,
-        onTapDeleteDoc,     onTapList,          onClickMarker,
+        onTapDeleteDoc,     onTapList,          onSelectStatu, onClickMarker,
         onTapRefreshList,   onSetReport,        onListchange,
         onHoverList,        onOutList,          onHoverMarker,
         onCoordChange,      onSetCoord,         onLogin,
@@ -256,6 +280,9 @@ feed.sidebar = (function () {
             $report_id          : $slider.find( '.feed-sidebar-content-report-form-id' ),
             $report_title       : $slider.find( '.feed-sidebar-content-report-form-title' ),
             $report_textarea    : $slider.find( '.feed-sidebar-content-report-form-textarea' ),
+            $report_statu       : $slider.find( '.feed-sidebar-content-report-form-statu' ),
+            $report_datecreate  : $slider.find( '.feed-sidebar-content-report-form-datecreate' ),
+            $report_datemodif   : $slider.find( '.feed-sidebar-content-report-form-datemodif' ),
             $report_x           : $slider.find( '.feed-sidebar-content-report-form-x' ),
             $report_y           : $slider.find( '.feed-sidebar-content-report-form-y' ),
             $report_doc_label   : $slider.find( '.feed-sidebar-content-report-form-doc-label' ),
@@ -364,6 +391,9 @@ feed.sidebar = (function () {
         jqueryMap.$report_title.val('')
             .attr("placeholder", 'titre' );
         jqueryMap.$report_textarea.val('');
+        jqueryMap.$report_statu.val('OUV');
+        jqueryMap.$report_datecreate.html(' - ');
+        jqueryMap.$report_datemodif.html(' - ');
         jqueryMap.$report_x.val('')
             .attr("placeholder", 'Longitude' );
         jqueryMap.$report_y.val( '' )
@@ -434,29 +464,30 @@ feed.sidebar = (function () {
     onTapModifyReport = function ( event ) {
 
         if ( configMap.people_model.get_user().get_is_anon() ) {
-            writeAlert( null, { text: 'Please connect before update !' } );
+            writeAlert( null, { text: 'Veuillez vous logger !' } );
             clearSidebar();
             clearList();
             return;
         }
 
         if ( jqueryMap.$report_groups.children(".has-error").length ) {
-            writeAlert( null, { text: 'Please complete the form before submit !' } );
+            writeAlert( null, { text: 'Veuillez compl&eacute;ter le formulaire !' } );
             event.preventDefault();
             return;
         }
-console.log("onTapModifyReport textarea: " + jqueryMap.$report_textarea.val());        
+//console.log("onTapModifyReport textarea: " + jqueryMap.$report_textarea.val());        
         if ( stateMap.active_report_id ) {
             configMap.reports_model.update_({
                 _id         : stateMap.active_report_id,
                 locate_map  : { x : jqueryMap.$report_x.val(), y : jqueryMap.$report_y.val() },
                 title       : jqueryMap.$report_title.val(),
                 textarea    : jqueryMap.$report_textarea.val(),
+                statu       : jqueryMap.$report_statu.val(),
                 doc         : jqueryMap.$report_doc_input.val()
             });
         }
         else {
-            writeAlert( null, { text: 'Please select a report before submit !' } );
+            writeAlert( null, { text: 'Veuillez s&eacute;lectionner un rapport dans la liste !' } );
             event.preventDefault();
             return;
         }
@@ -516,26 +547,29 @@ console.log("onTapModifyReport textarea: " + jqueryMap.$report_textarea.val());
     };
 
     onTapCreateReport = function ( event ) {
-        console.dir($( "#form_create" ).serialize());
+        /*console.dir($( "#form_create" ).serialize());
         $.post('../feed/', $( "#form_create" ), function( response ) {
             console.dir(response);
         });
-        
+        */
 
-      /* 
         configMap.reports_model.create_({
             locate_map  : { x : jqueryMap.$create_x.val(), y : jqueryMap.$create_y.val() },
             title       : jqueryMap.$create_title.val(),
             textarea    : jqueryMap.$create_textarea.val(),
             doc         : jqueryMap.$create_doc_input[0].files[0]
         });
-      */
     };
 
     onTapDeleteDoc = function ( event ) {
         jqueryMap.$report_doc_label.html( '' );
         jqueryMap.$report_doc_create.show();
         jqueryMap.$report_doc_delete.hide();
+    };
+
+    onSelectStatu = function ( event ) {
+        console.log('onSelectStatu value: ' + $(event).val());
+        $.gevent.publish( 'feed-selectstatu', $(event).val() );
     };
 
     // handler for a user generated event when he clicks or tap on
@@ -606,12 +640,15 @@ console.log("onTapModifyReport textarea: " + jqueryMap.$report_textarea.val());
             .addClass( 'feed-x-select' );
 
         clearFormsError();
-// console.log('onSetReport 2: ' + new_report.title );        
+ console.log('onSetReport: ' + new_report.created );        
         jqueryMap.$is_selected.hide();
         stateMap.active_report_id = new_report.id;
         jqueryMap.$report_id.html( arg_map.new_report.id );
         jqueryMap.$report_title.val( new_report.title );
         jqueryMap.$report_textarea.val( new_report.textarea );
+        jqueryMap.$report_statu.val( new_report.statu );
+        jqueryMap.$report_datecreate.html( new_report.created );
+        jqueryMap.$report_datemodif.html( new_report.modified );
         jqueryMap.$report_x.val( new_report.locate_map.x );
         jqueryMap.$report_y.val( new_report.locate_map.y );
         
@@ -889,6 +926,12 @@ console.info('sidebar.onLogin');
         jqueryMap.$butt_cancel.bind( 'click', onTapCancelReport );
         jqueryMap.$butt_create.bind( 'click', onTapCreateReport );
         jqueryMap.$report_doc_delete.bind( 'click', onTapDeleteDoc );
+        
+        // the element use jqueryDropDown.js file to detect the value 
+        // selected
+        jqueryMap.$report_statu.selected(function (e) {
+            onSelectStatu( e );
+        });
 
         jqueryMap.$report_doc_delete.hide();
         jqueryMap.$create_doc_delete.hide();
