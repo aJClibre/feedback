@@ -179,7 +179,7 @@ feed.fake = (function () {
             if ( msg_type === 'createreport' && callback_map.listchange ) {
                 console.dir(data);
                 $.post('../feed/', data, function(result) {
-                    callback_map.listchange([ result ]);
+                    callback_map.listchange([ result, data ]);
                 }, "json");
             }
 

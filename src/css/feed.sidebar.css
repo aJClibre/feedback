@@ -2,12 +2,14 @@
  * feed.sidebar.css
  * sidebar feature style
  */
-
-/*rewrite bootstrap*/
-.form-horizontal .control-label {
-	text-align: left;
+h1 {
+    font-size: 20px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+    margin-bottom: 20px;
+    margin-top: 3px;
+    padding-left: 14px;
 }
-
 .modal-header {
 	padding: 7px 15px;
 }
@@ -20,7 +22,7 @@
 /*eo bootstrap*/
 
 .feed-sidebar-content-home-box {
-	color: #DDD;
+	color: #333;
 }
 
 .feed-sidebar-content-list-name {
@@ -38,11 +40,24 @@
 	background-color: #FFF;
 	color: #444;
 }
-
-.feed-sidebar-content-report-form-id {
-	padding-top: 13px;
+#tableReports {
+    margin-left: -10px;
 }
-
+#tableReports tbody {
+    color: #b3b3b3;
+}
+#feed-sidebar-content-report-statushistory {
+    width:inherit !important;
+}
+#feed-sidebar-content-report-statushistory tbody {
+    color: #333333;
+}
+#feed-sidebar-content-report-statushistory thead tr th:first-child {
+    padding-left: 15px;
+}
+#feed-sidebar-content-report-statushistory tbody tr td:first-child {
+    padding-left: 15px;
+}
 .feed-sidebar-content-report-form-group-img-delete {
 	display: none;
 }
@@ -50,7 +65,18 @@
 .feed-sidebar-content-report-form-img-label {
 	padding-right: 5px;
 }
-
+.form-control {
+    font-size: 12px;
+    height: 26px;
+    padding-top: 4px;
+}
+.form-control-static {
+    padding-top: 0px;
+}
+/*rewrite bootstrap*/
+.form-horizontal .control-label {
+    text-align: left;
+}
 .form-title {
 	margin-top: 25px;
 }
@@ -66,6 +92,8 @@
 .is_selected {
 	line-height: 2;
 	padding-left: 3px;
+    font-size: 12px;
+    line-height: 1.5;
 
 }
 
@@ -74,7 +102,7 @@
 }
 
 .glyphicon {
-	margin-left: 3px;
+	margin-left: 7px;
 }
 
 .g-remove:hover {

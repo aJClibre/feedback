@@ -76,8 +76,10 @@ feed.model = (function () {
             empty_title     : '',
             empty_textarea  : '',
             empty_statu     : '',
+            empty_priority  : '',
             empty_created   : '',
             empty_modified  : '',
+            empty_history   : '',
             empty_locate_map: { x : 0, y : 0 }
         },
         stateMap    = {
@@ -378,6 +380,8 @@ feed.model = (function () {
           title         = report_map.title,
           textarea      = report_map.textarea,
           statu         = report_map.statu,
+          priority      = report_map.priority,
+          history_status = report_map.history_status,
           created       = report_map.created,
           modified      = report_map.modified,
           locate_map    = report_map.locate_map,
@@ -393,6 +397,8 @@ feed.model = (function () {
         report.title        = title;
         report.textarea     = textarea;
         report.statu        = statu;
+        report.priority     = priority;
+        report.history_status = history_status;
         report.locate_map   = locate_map;
         report.created      = created;
         report.modified     = modified;
@@ -461,6 +467,8 @@ feed.model = (function () {
                 title       : report_create_map.title,
                 textarea    : report_create_map.textarea,
                 statu       : report_create_map.statu,
+                priority    : report_create_map.priority,
+                history_status : report_create_map.history_status,
                 doc         : report_create_map.doc
             });
         };
@@ -563,22 +571,27 @@ feed.model = (function () {
               is_report_new     = false
             ;
             clearReportsDb();
-
-            if ( arg_list.length > 1 ) {
+console.dir(answer);
+            if ( answer.length > 1 ) {
                 if ( ! error_mess ) {
-                    report_map = arg_list[ 1 ];
+                    report_map = answer[1];
                     delete stateMap.reports_cid_map[ report_map.cid ];
                     stateMap.report.cid         = report_map._id;
                     stateMap.report.id          = report_map._id;
                     stateMap.report.title       = report_map.title;
                     stateMap.report.textarea    = report_map.textarea;
                     stateMap.report.statu       = report_map.statu;
+                    stateMap.report.priority    = report_map.priority;
                     stateMap.report.created     = report_map.created;
                     stateMap.report.modified    = report_map.modified;
+                    stateMap.report.history_status = report_map.history_status;
                     stateMap.report.locate_map  = report_map.locate_map;
                     stateMap.report.doc         = report_map.doc;
 
                     is_report_new = true;
+                    is_report_exist   = true;
+
+                    console.log('_update_reports_list before publish');
                     $.gevent.publish( 'feed-alert', { text: 'Le rapport a été créé avec succès !'} );
                 }
                 else {
@@ -589,7 +602,7 @@ feed.model = (function () {
             REPORT:
             for ( i=0; i < reports_list.length; i++ ) {
                 report_map = reports_list[ i ];
-// // console.log('is_empty :' + stateMap.report.get_is_empty() + ' *** stateMap.report.id : ' + stateMap.report.id + ' === ' + report_map._id );
+// console.log('is_empty :' + stateMap.report.get_is_empty() + ' *** stateMap.report.id : ' + stateMap.report.id + ' === ' + report_map._id );
                 // udate the selected report and publlish 'feed-setreport'
                 //
                 if ( ! stateMap.report.get_is_empty() && stateMap.report.id === report_map._id ) {
@@ -598,8 +611,10 @@ feed.model = (function () {
                         stateMap.report.title       = report_map.title;
                         stateMap.report.textarea    = report_map.textarea;
                         stateMap.report.statu       = report_map.statu;
+                        stateMap.report.priority    = report_map.priority;
                         stateMap.report.created     = report_map.created;
                         stateMap.report.modified    = report_map.modified;
+                        stateMap.report.history_status = report_map.history_status;
                         stateMap.report.locate_map  = report_map.locate_map;
                         stateMap.report.doc         = report_map.doc;                        
                     }
@@ -613,8 +628,8 @@ feed.model = (function () {
                     // reports.cancel_( report_map._id );
 // console.log('feed-setreport : ' + stateMap.report.title );
                     $.gevent.publish( 'feed-setreport',
-                    { old_report : stateMap.report, new_report : stateMap.report }
-                );
+                        { old_report : stateMap.report, new_report : stateMap.report }
+                    );
                     is_report_exist = true;
                  
                     //continue REPORT;
@@ -630,8 +645,10 @@ feed.model = (function () {
                     title       : report_map.title,
                     textarea    : report_map.textarea,
                     statu       : report_map.statu,
+                    priority    : report_map.priority,
                     created     : report_map.created,
                     modified    : report_map.modified,
+                    history_status : report_map.history_status,
                     doc         : report_map.doc
                 };
 // console.log('makeReport: ' + make_report_map.title );
@@ -780,9 +797,11 @@ feed.model = (function () {
             title       : configMap.empty_title,
             textarea    : configMap.empty_textarea,
             statu       : configMap.empty_statu,
+            priority    : configMap.empty_priority,
             created     : configMap.empty_created,
             modified    : configMap.empty_modified,
-            locate_map  : configMap.empty_locate
+            locate_map  : configMap.empty_locate,
+            history_status : configMap.empty_history
         });
         stateMap.report = stateMap.empty_report;
     };
