@@ -69,6 +69,7 @@ feed.model = (function () {
                                 read_   : false,
                                 create_ : false,
                                 update_ : false,
+                                upload  : false,
                                 delete_ : false
                               },
             anon_name       : 'anonymous',
@@ -320,6 +321,8 @@ feed.model = (function () {
     //    backend. This results in an 'updatereport' event which publishes the
     //    updated reports list. The update_report_map must have the form : 
     //    { report_id : 'id_03', locate_map : {} }
+    //  * upload_( <jQuery-File-Upload-master> ) - upload to the server the document 
+    //    from the report details
     //    If the user is anonymous or the report is null, it aborts and returns false.
     //  * delete_( <report_id> ) - remove a report identified by report_id. It 
     //    publishes a 'feed-updatereport' and a 'deletereport' global custom event. 
@@ -431,7 +434,8 @@ feed.model = (function () {
     reports = (function () {
         var 
             get_by_cid,     get_db,     get_current, create_, 
-            delete_,        update_,    cancel_
+            delete_,        update_,    upload_,
+            cancel_
         ;
 
         get_by_cid = function ( cid ) {
@@ -484,6 +488,15 @@ feed.model = (function () {
                 sio.emit( 'updatereport', report_update_map );
             }
         };
+        
+        // data : jQuery-File-Upload-master object received from sidebar.onTapSubmitDoc
+        upload_ = function ( data ) {
+            var sio = isFakeData ? feed.fake.mockSioReport : feed.data.getSioReport();
+
+            if ( sio ) {
+                sio.emit( 'uploadreport', data );
+            }
+        };
 
         delete_ = function ( report_delete_id ) {
             var 
@@ -512,6 +525,7 @@ feed.model = (function () {
             create_     : create_,
             delete_     : delete_,
             update_     : update_,
+            upload_     : upload_,
             cancel_     : cancel_
         };
     }());
@@ -527,6 +541,9 @@ feed.model = (function () {
     //    publishers for 'feed-listchange'. If the current user is 
     //    anonymous or his rule doesn't permit, get_list() aborts and
     //    returns false.
+    //  * update_list() - pubilc method to call when you have the list 
+    //    by another way than *_request.js, sidebar.js for example. call 
+    //    _publish_reports_listchange()
     //  * down_list() - upload the reports list in the csv format  
     //  * get_report() - return the current report. If there is no report
     //    null is returned.
@@ -551,7 +568,7 @@ feed.model = (function () {
           _publish_reports_listchange,  _update_reports_list,
           _leave_list,
           
-          get_report, get_list, down_list, set_report,
+          get_report, get_list, update_list, down_list, set_report,
         
           report = null;
 
@@ -607,7 +624,7 @@ console.dir(answer);
                 //
                 if ( ! stateMap.report.get_is_empty() && stateMap.report.id === report_map._id ) {
                     if ( ! is_report_new && ! error_mess ) {
-                        $.gevent.publish( 'feed-alert', { text: 'Le rapport a été mis à jour avec succès !'} );
+                        $.gevent.publish( 'feed-alert', { text: 'La mise à jour a été réalisé avec succès !'} );
                         stateMap.report.title       = report_map.title;
                         stateMap.report.textarea    = report_map.textarea;
                         stateMap.report.statu       = report_map.statu;
@@ -704,7 +721,7 @@ console.dir(answer);
 
             // Checks if the user is not anonymous
             if ( stateMap.user.get_is_anon() ) {
-                $.gevent.publish( 'feed-alert', { text: "Sorry you have to connect before !" } );
+                $.gevent.publish( 'feed-alert', { text: "Désolé, vous devez vous connecter avant !" } );
                 return false;
             }
             
@@ -716,13 +733,17 @@ console.dir(answer);
             return true;
         };
 
+        update_list = function ( data_list ) {
+            _publish_reports_listchange( data_list );
+        };
+
         // download the reports in csv format by a request to the server
         down_list = function () {
             var sio;
 
             // Checks if the user is not anonymous
             if ( stateMap.user.get_is_anon() ) {
-                $.gevent.publish( 'feed-alert', { text: "Sorry you have to connect before !" } );
+                $.gevent.publish( 'feed-alert', { text: "Désolé, vous devez vous connecter avant !" } );
                 return false;
             }
 
@@ -763,6 +784,7 @@ console.dir(answer);
             _leave          : _leave_list,
             get_report      : get_report,
             get_list        : get_list,
+            update_list     : update_list,
             down_list       : down_list,
             set_report      : set_report
         };

@@ -136,24 +136,29 @@ feed.sidebar = (function () {
                         + '<label for="report-textarea" class="col-md-12 control-label form-label-description">Description</label>'
                         + '<textarea id="report-textarea" class="form-control feed-sidebar-content-report-form-textarea" rows="3"></textarea>'
                       + '</div>'
-                      + '<div class="form-group feed-sidebar-content-report-form-group-doc-create">'
-                        + '<label for="reportInputDoc" class="col-md-12 control-label">Document...</label>'
-                        + '<input type="file" class="filestyle feed-sidebar-content-report-form-file" id="reportInputDoc" data-buttonName="btn-primary" data-placeholder="Aucun fichier">'
-                      + '</div>'
-                          // + '<div class="form-group feed-sidebar-content-report-form-group-img-create">'
-                            //   + '<label for="reportInputImg" class="col-md-12 control-label feed-sidebar-content-report-form-group-img-label">Image input</label>'
-                            //   + '<input type="file" class="filestyle feed-sidebar-content-report-form-file" id="reportInputImg" data-buttonName="btn-primary" data-placeholder="No file">'
-                            // + '</div>'
                       + '<div class="form-group feed-sidebar-content-report-form-group-doc-delete">'
                         + '<label class="control-label feed-sidebar-content-report-form-doc-label"></label>'
                         + '<span class="glyphicon glyphicon-remove g-delete" aria-hidden="true"></span>'
                       + '</div>'
                       + '<div class="form-group">'
-                        + '<p class="help-block">Example block-level help text here.</p>'
                         + '<button class="btn btn-primary btn-sm report-modify">Modifier</button>'
                         + '<button class="btn btn-primary btn-sm report-cancel">Annuler</button>'
                       + '</div>'
                     + '</form>'
+                    + '<div class="form-group feed-sidebar-content-report-form-group-doc-create">'
+                      + '<p class="help-block">Ajouter un fichier: </p>'
+                      + '<span class="btn btn-primary btn-sm fileinput-button">'
+                        + '<i class="glyphicon glyphicon-plus">'
+                        + '</i>'
+                        + '<span>S&eacute;lectionnez un fichier...</span>'
+                        + '<input id="fileupload" type="file" name="files[]" data-url="../feed/" multiple></input>'
+                      + '</span>'
+                      + '<div id="result"></div>'
+                      + '<button class="btn btn-primary btn-sm fileinput-upload" />'
+                      + '<div id="progress">'
+                        + '<div class="bar" style="width: 0%;"></div>'
+                      + '</div>'
+                    + '</div>'
                   + '</div>'
                   + '<div class="sidebar-pane feed-sidebar-content-create" id="create">'
                     + '<h1>Cr&eacute;er un rapport</h1>'
@@ -171,14 +176,6 @@ feed.sidebar = (function () {
                             + '<option value="URGE">Urgent</option>'
                           + '</select>'
                         + '</div>'
-                        + '<!--<div class="form-group">'
-                          + '<label class="col-md-12 control-label form-label-status">Statut</label>'
-                          + '<select class="form-control">'
-                            + '<option value="OUV">Ouvert</option>'
-                            + '<option value="VAL">Valid&eacute;</option>'
-                            + '<option value="FER">Ferm&eacute;</option>'
-                          + '</select>'
-                        + '</div>-->'
                         + '<div class="form-group">'
                           + '<label class="col-md-12 control-label form-label-localisation">Localisation (WGS84)</label>'
                           + '<input type="text" class="col-md-5 feed-sidebar-content-create-form-x" id="xCreate" placeholder="Longitude" readonly>'
@@ -188,15 +185,6 @@ feed.sidebar = (function () {
                           + '<label for="textareaCreate" class="col-md-12 control-label form-label-description">Description</label>'
                           + '<textarea id="textareaCreate" class="form-control feed-sidebar-content-create-form-textarea" rows="3"></textarea>'
                         + '</div>'
-                        + '<!--<div class="form-group feed-sidebar-content-create-form-group-doc-create">'
-                          + '<label for="createInputDoc" class="col-md-12 control-label">Document...</label>'
-                          + '<input type="file" class="filestyle feed-sidebar-content-create-form-file" id="createInputDoc" data-buttonName="btn-primary" data-placeholder="No file">'
-                          + '<p class="help-block">Example block-level help text here.</p>'
-                        + '</div>'
-                        + '<div class="form-group feed-sidebar-content-create-form-group-doc-delete">'
-                          + '<label class="control-label feed-sidebar-content-create-form-doc-label"></label>'
-                          + '<span class="glyphicon glyphicon-remove g-delete" aria-hidden="true"></span>'
-                        + '</div>-->'
                         + '<div class="form-group">'
                             + '<button class="btn btn-primary btn-sm report-create">Cr&eacute;er</button>'
                             + '<button type="reset" class="btn btn-primary btn-sm reset">Annuler</button>'
@@ -260,14 +248,15 @@ feed.sidebar = (function () {
 
         setJqueryMap,       setSliderPosition,  writeAlert,
         clearSidebar,       clearList,          clearFormsError,
+        displayFileupload,
         onTapToggle,        onTapModifyReport,  onTapEditReport,
         onTapDeleteReport,  onTapCancelReport,  onTapCreateReport,
         onTapDeleteDoc,     onTapList,          onSelectStatu, onClickMarker,
         onTapRefreshList,   onSetReport,        onListchange,
         onHoverList,        onOutList,          onHoverMarker,
-        onCoordChange,      onSetCoord,         onLogin,
-        onLogout,           onTapDownloadList,
-        configModule,       initModule,
+        onCoordChange,      onSetCoord,         onTapSubmitDoc,
+        onSubmitDocEnd,     onLogin,            onLogout,
+        onTapDownloadList,  configModule,       initModule,
         removeSlider,   handleResize;
     //--------------------- eo Module scope -----------------------
     
@@ -304,6 +293,9 @@ feed.sidebar = (function () {
             $report_doc_create  : $slider.find( '.feed-sidebar-content-report-form-group-doc-create' ),
             $report_doc_input   : $slider.find( '.feed-sidebar-content-report-form-file' ),
             $report_doc_delete  : $slider.find( '.feed-sidebar-content-report-form-group-doc-delete' ),
+            $fileupload         : $slider.find( '#fileupload'),
+            $button_upload      : $slider.find( '.fileinput-upload'),
+            $progress_bar       : $slider.find( '#progress .bar'),
             $form_create        : $slider.find( '.feed-sidebar-content-create-form' ),
             $create_groups      : $slider.find( '.feed-sidebar-content-create-form .form-group' ),
             $create_title       : $slider.find( '.feed-sidebar-content-create-form-title' ),
@@ -327,9 +319,9 @@ feed.sidebar = (function () {
             $modal_mess_title   : $slider.find( '.feed-sidebar-modal-message-title' ),
             $modal_mess_p       : $slider.find( '.feed-sidebar-modal-message-body-p' )
         };
+
     };
 
-    // Public method /setSliderPosition/
     // Example      : feed.sidebar.setSliderPosition( 'closed' );
     // Purpose      : ensure sidebar is in the requested state
     // Arguments    :
@@ -450,6 +442,26 @@ feed.sidebar = (function () {
         jqueryMap.$form_create.get(0).reset();
     };
 
+    displayFileupload = function ( report_id ) {
+        // jQuery-File-Upload-master object
+        // https://github.com/blueimp/jQuery-File-Upload/wiki/Basic-plugin
+        jqueryMap.$button_upload.hide();
+
+        jqueryMap.$fileupload.fileupload({
+            dataType    : 'json',
+            formData    : { report_id: report_id },
+            add         : onTapSubmitDoc,
+            progress    : function ( e, data ) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                jqueryMap.$progress_bar.css(
+                    'width',
+                    progress + '%'
+                );
+            },
+            done        : onSubmitDocEnd
+        });
+    };
+
     //--------------------- eo dom methods ------------------------
    
     //--------------------- EVENT HANDLERS ------------------------
@@ -478,7 +490,6 @@ feed.sidebar = (function () {
         });
         return false;
     };
-
    
     //
     onTapModifyReport = function ( event ) {
@@ -504,7 +515,7 @@ feed.sidebar = (function () {
                 textarea    : jqueryMap.$report_textarea.val(),
                 statu       : jqueryMap.$report_statu.val(),
                 priority    : jqueryMap.$report_priority.val(),
-                doc         : jqueryMap.$report_doc_input.val()
+                doc         : jqueryMap.$report_doc_label.html()
             });
         }
         else {
@@ -514,7 +525,31 @@ feed.sidebar = (function () {
         }
     };
 
-    
+    onTapSubmitDoc = function (e, data) {
+        jqueryMap.$button_upload.show();
+        data.context = jqueryMap.$button_upload.text( 'Upload ' + data.originalFiles[0].name )
+            .replaceAll('#result')
+            .click(function () {
+                //data.context = $('<p/>').text('Uploading...').replaceAll($(this));
+                //data.submit();
+                // remove modifications
+                configMap.reports_model.upload_(data);
+            });
+    };
+
+    onSubmitDocEnd = function (e, data) {
+        console.dir(data);
+        jqueryMap.$button_upload.hide();
+        //data.context.text('Upload finished.');
+        //$.gevent.publish( 'feed-alert', { text: 'Le fichier a été téléchargé avec succès !'} );
+        data.context = jqueryMap.$button_upload.text( '' ).replaceAll('#result');
+        jqueryMap.$progress_bar.css(
+            'width',
+            '0%'
+        );
+        configMap.sidebar_model.update_list( [ data._response.result ] );
+    };
+
     onTapDeleteReport = function ( event ) {
         var report_id, 
             $tapped = $( event.target );
@@ -585,12 +620,13 @@ feed.sidebar = (function () {
 
     onTapDeleteDoc = function ( event ) {
         jqueryMap.$report_doc_label.html( '' );
-        jqueryMap.$report_doc_create.show();
         jqueryMap.$report_doc_delete.hide();
+        jqueryMap.$report_doc_create.show();
+        displayFileupload( jqueryMap.$report_id.html() );
     };
 
     onSelectStatu = function ( event ) {
-        console.log('onSelectStatu value: ' + $(event).val());
+        //console.log('onSelectStatu value: ' + $(event).val());
         $.gevent.publish( 'feed-selectstatu', $(event).val() );
     };
 
@@ -647,7 +683,7 @@ feed.sidebar = (function () {
             form_html   = String(),
             new_report  = arg_map.new_report,
             old_report  = arg_map.old_report;
-// console.log('onSetReport : ' + new_report.title );
+console.dir( new_report );
         if ( new_report.get_is_empty() ) {
             clearSidebar();
             // TODO : modify the jqueryMap.$form-group to erase the error messages
@@ -664,14 +700,14 @@ feed.sidebar = (function () {
         clearFormsError();
         jqueryMap.$is_selected.hide();
         stateMap.active_report_id = new_report.id;
-        jqueryMap.$report_id.html( arg_map.new_report.id );
+        jqueryMap.$report_id.html( new_report.id );
         jqueryMap.$report_title.val( new_report.title );
         jqueryMap.$report_textarea.val( new_report.textarea );
         jqueryMap.$report_statu.val( new_report.statu );
         jqueryMap.$report_priority.val( new_report.priority );
         jqueryMap.$report_datecreate.html( new_report.created );
         jqueryMap.$report_datemodif.html( new_report.modified );
-        console.dir(new_report);
+        //console.dir(new_report);
         if ( new_report.history_status.length > 0 ) {
             jqueryMap.$report_statushistory.DataTable({
                 data            : new_report.history_status,
@@ -705,11 +741,15 @@ feed.sidebar = (function () {
             jqueryMap.$report_doc_label.html( new_report.doc );
             jqueryMap.$report_doc_create.hide();
             jqueryMap.$report_doc_delete.show();
+console.log('onSetReport if fileupload!');
+            displayFileupload( null );
         }
         else {
             jqueryMap.$report_doc_label.html( '' );
-            jqueryMap.$report_doc_create.show();
             jqueryMap.$report_doc_delete.hide();
+console.log('onSetReport else fileupload!');
+            displayFileupload( new_report.id ); 
+            jqueryMap.$report_doc_create.show();
         }
 
         jqueryMap.$create_title.val( '' )
@@ -994,13 +1034,14 @@ console.info('sidebar.onLogin');
         jqueryMap.$report_doc_delete.bind( 'click', onTapDeleteDoc );
         
         // the element use jqueryDropDown.js file to detect the value 
-        // selected
+        // selected in the dropdown list
         jqueryMap.$report_statu.selected(function (e) {
             onSelectStatu( e );
         });
 
         jqueryMap.$report_doc_delete.hide();
         jqueryMap.$create_doc_delete.hide();
+        jqueryMap.$report_doc_create.hide();
         jqueryMap.$report_statusdiv.hide();
 
     }; // eo /initModule/

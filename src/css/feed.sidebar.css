@@ -65,18 +65,22 @@ h1 {
 .feed-sidebar-content-report-form-img-label {
 	padding-right: 5px;
 }
+
 .form-control {
     font-size: 12px;
     height: 26px;
     padding-top: 4px;
 }
+
 .form-control-static {
     padding-top: 0px;
 }
+
 /*rewrite bootstrap*/
 .form-horizontal .control-label {
     text-align: left;
 }
+
 .form-title {
 	margin-top: 25px;
 }
@@ -97,8 +101,36 @@ h1 {
 
 }
 
+.fileinput-button {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.fileinput-button input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    opacity: 0;
+    direction: ltr;
+    cursor: pointer;
+}
+
+.fileinput-button .glyphicon {
+    margin-left: 0;
+    margin-right: 10px;
+}
+
+.bar {
+    height: 12px;
+    background: #337ab7;
+}
+
 .btn {
 	margin-right: 10px;
+    margin-bottom: 10px;
 }
 
 .glyphicon {
@@ -109,7 +141,6 @@ h1 {
 	color: red;
 	font-size: 120%;
 	cursor: pointer;
-
 }
 
 .g-edit:hover {

@@ -184,7 +184,7 @@ feed.fake = (function () {
             }
 
             // simulate send 'updatereport' message and data to the server
-            if ( msg_type === 'updatereport' && callback_map.listchange ) {
+            else if ( msg_type === 'updatereport' && callback_map.listchange ) {
 
                 console.dir(data);
                 $.post('../feed/', data)
@@ -193,8 +193,15 @@ feed.fake = (function () {
                 }, "json");
             }
 
+            // data come from jqueryMap.$fileupload in sidebar.js. It is a 
+            // https://github.com/blueimp/jQuery-File-Upload/wiki/Basic-plugin object
+            // the callback is onSubmitDocEnd in sidebar.js
+            else if ( msg_type === 'uploadreport' && callback_map.listchange ) {
+                data.submit();                
+            }
+
             // simulate send 'deletereport' message and data to the server
-            if ( msg_type === 'deletereport' && callback_map.listchange ) {
+            else if ( msg_type === 'deletereport' && callback_map.listchange ) {
                 //console.dir(data);
                 $.get('../feed/', {id: data.id})
                     .done(function(result) {
@@ -204,7 +211,7 @@ feed.fake = (function () {
             }
 
             // 
-            if ( msg_type === 'getreports' && callback_map.listchange ) {
+            else if ( msg_type === 'getreports' && callback_map.listchange ) {
                 // http://api.jquery.com/jQuery.get/
                 $.get('../feed/', function(result) {
                     console.dir(result);

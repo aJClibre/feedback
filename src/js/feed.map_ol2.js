@@ -473,7 +473,7 @@ console.log("hideCurrentPopup stateMap.current_popup.id: " + stateMap.current_po
         }
 
         // the same report is asked so reload it
-        if ( arg_map.new_report == arg_map.old_report ) {
+        if ( arg_map.new_report == arg_map.old_report && stateMap.current_popup ) {
             stateMap.current_popup.setContentHTML( setPopup( arg_map.new_report ) );
             // TODO
             stateMap.current_popup.lonlat.lon = arg_map.new_report.locate_map.x;
