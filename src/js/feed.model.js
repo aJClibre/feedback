@@ -500,11 +500,11 @@ feed.model = (function () {
 
         delete_ = function ( report_delete_id ) {
             var 
-                sio = isFakeData ? feed.fake.mockSioReport : feed.data.getSioReport(),
-                report = reports.get_by_cid( report_delete_id );
+                sio = isFakeData ? feed.fake.mockSioReport : feed.data.getSioReport();
+                //report = reports.get_by_cid( report_delete_id );
 
             if ( sio ) {
-                sio.emit( 'deletereport', report );
+                sio.emit( 'deletereport', report_delete_id );
             }
         };
 
@@ -582,7 +582,7 @@ feed.model = (function () {
             var 
               i, report_map, make_report_map,
               arg_list          = answer[0],
-              reports_list      = answer[0].data,
+              reports_list      = answer[0].data ? answer[0].data : [],
               error_mess        = answer[0].message ? answer[0].message : null,
               is_report_exist   = false,
               is_report_new     = false

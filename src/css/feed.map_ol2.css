@@ -9,3 +9,41 @@ circle {
     cursor: pointer;
     cursor: hand;
 }
+
+.olControlScaleLine {
+    margin-left: 50px;
+}
+
+.olControlPanNorth {
+    margin-left: 50px;
+}
+.olControlPanSouth {
+    margin-left: 50px;
+}
+.olControlPanEast {
+    margin-left: 50px;
+}
+.olControlPanWest {
+    margin-left: 50px;
+}
+.olControlPanPanel {
+    margin-left: 50px;
+}
+.olControlZoomIn {
+    margin-left: 50px;
+}
+.olControlZoomToMaxExtent {
+    margin-left: 50px;
+}
+.olControlZoomOut {
+    margin-left: 50px;
+}
+.olControlZoomPanel {
+    margin-left: 50px;
+}
+.olControlScaleLine {
+    margin-left: 50px;
+}
+#slider {
+    margin-left: 50px;
+}

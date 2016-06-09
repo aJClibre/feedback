@@ -830,8 +830,8 @@ console.log('onSetReport else fileupload!');
 
         if ( ! is_reports ) {
             list_html = String()
-                + '<div class="spa-chat-list-note">'
-                    + ' No report to display !'
+                + '<div class="spa-chat-list-note text-right">'
+                    + '<h5>Aucun rapport &agrave; afficher !</h5>'
                 + '</div>';
             clearSidebar();
             clearList();

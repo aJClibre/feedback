@@ -203,7 +203,7 @@ feed.fake = (function () {
             // simulate send 'deletereport' message and data to the server
             else if ( msg_type === 'deletereport' && callback_map.listchange ) {
                 //console.dir(data);
-                $.get('../feed/', {id: data.id})
+                $.get('../feed/', {id: data})
                     .done(function(result) {
                         console.dir(result);
                         callback_map.listchange([ result ]);
