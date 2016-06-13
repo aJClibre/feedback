@@ -82,7 +82,7 @@ feed.sidebar = (function () {
                   + '</div>'
                   + '<div class="sidebar-pane feed-sidebar-content-report" id="report">'
                     + "<h1>D&eacute;tails</h1>"
-                    + '<h4 class="bg-danger is_selected">Veuillez s&eacute;lectionner un rapport dans la liste</h4>'
+                    + '<h4 class="bg-danger is_selected">Veuillez sélectionner un rapport dans la liste</h4>'
                     + '<form class="feed-sidebar-content-report-form" id="form_modify">'
                       + '<div class="form-group">'
                         + '<label class="col-md-12 control-label feed-sidebar-content-report-form-id">ID</label>'
@@ -128,7 +128,7 @@ feed.sidebar = (function () {
                         + '</tbody>'
                         + '</table></div>'
                       + '<div class="form-group">'
-                        + '<label class="col-md-12 control-label form-label-localisation">Localisation (WGS84)</label>'
+                        + '<label class="col-md-12 control-label form-label-localisation">Localisation (WGS 84-Pseudo-Mercator)</label>'
                         + '<input type="text" class="col-md-5 feed-sidebar-content-report-form-x" id="x" placeholder="Longitude" readonly>'
                         + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-report-form-y" id="y" placeholder="Latitude" readonly>'
                       + '</div>'
@@ -136,22 +136,22 @@ feed.sidebar = (function () {
                         + '<label for="report-textarea" class="col-md-12 control-label form-label-description">Description</label>'
                         + '<textarea id="report-textarea" class="form-control feed-sidebar-content-report-form-textarea" rows="3"></textarea>'
                       + '</div>'
-                      + '<div class="form-group feed-sidebar-content-report-form-group-doc-delete">'
-                        + '<label class="control-label feed-sidebar-content-report-form-doc-label"></label>'
-                        + '<span class="glyphicon glyphicon-remove g-delete" aria-hidden="true"></span>'
-                      + '</div>'
                       + '<div class="form-group">'
                         + '<button class="btn btn-primary btn-sm report-modify">Modifier</button>'
                         + '<button class="btn btn-primary btn-sm report-cancel">Annuler</button>'
                       + '</div>'
                     + '</form>'
+                    + '<div class="form-group feed-sidebar-content-report-form-group-doc-delete">'
+                      + '<label class="control-label feed-sidebar-content-report-form-doc-label"></label>'
+                      + '<span class="glyphicon glyphicon-remove g-delete" aria-hidden="true"></span>'
+                    + '</div>'
                     + '<div class="form-group feed-sidebar-content-report-form-group-doc-create">'
                       + '<p class="help-block">Ajouter un fichier: </p>'
                       + '<span class="btn btn-primary btn-sm fileinput-button">'
                         + '<i class="glyphicon glyphicon-plus">'
                         + '</i>'
                         + '<span>S&eacute;lectionnez un fichier...</span>'
-                        + '<input id="fileupload" type="file" name="files[]" data-url="../feed/" multiple></input>'
+                        + '<input id="fileupload" type="file" name="files[]" data-url="../feed/"></input>'
                       + '</span>'
                       + '<div id="result"></div>'
                       + '<button class="btn btn-primary btn-sm fileinput-upload" />'
@@ -224,7 +224,7 @@ feed.sidebar = (function () {
               + '<!-- http://formvalidator.net/index.html --> <script>'
                 + '$.validate();'
               + '</script>',
-              //doc_path : '/media/doc/', // have to be idem to feed.sidebar.js TODO : put outside of this file
+              doc_path : '/media/', // have to be idem to feed.sidebar.js TODO : put outside of this file
 
             settable_map : {
                 sidebar_model       : true,
@@ -247,8 +247,8 @@ feed.sidebar = (function () {
         jqueryMap   = {},
 
         setJqueryMap,       setSliderPosition,  writeAlert,
-        clearSidebar,       clearList,          clearFormsError,
-        displayFileupload,
+        clearSidebar,       clearCreateForm,    clearList,
+        clearFormsError,    displayFileupload,
         onTapToggle,        onTapModifyReport,  onTapEditReport,
         onTapDeleteReport,  onTapCancelReport,  onTapCreateReport,
         onTapDeleteDoc,     onTapList,          onSelectStatu, onClickMarker,
@@ -414,7 +414,16 @@ feed.sidebar = (function () {
         jqueryMap.$is_selected.show();
         stateMap.active_report_id = null;
 
-        // create form
+        clearCreateForm();
+
+        // img modal
+        jqueryMap.$modal_img_title.val('');
+        jqueryMap.$modal_img_img.attr("src", '' );
+
+        clearFormsError();
+    };
+
+    clearCreateForm = function () {
         jqueryMap.$create_title.val('')
             .attr("placeholder", 'titre' );
         jqueryMap.$create_textarea.val('');
@@ -425,17 +434,11 @@ feed.sidebar = (function () {
             .attr("placeholder", 'Latitude' );
         jqueryMap.$create_doc_input.val('')
             .attr("placeholder", 'No file' );
-
-        // img modal
-        jqueryMap.$modal_img_title.val('');
-        jqueryMap.$modal_img_img.attr("src", '' );
-
-        clearFormsError();
     };
 
     clearList = function () {
       jqueryMap.$list_box.html('No report to display');
-    }
+    };
 
     clearFormsError = function () {
         jqueryMap.$form_report.get(0).reset();
@@ -446,10 +449,9 @@ feed.sidebar = (function () {
         // jQuery-File-Upload-master object
         // https://github.com/blueimp/jQuery-File-Upload/wiki/Basic-plugin
         jqueryMap.$button_upload.hide();
-
         jqueryMap.$fileupload.fileupload({
             dataType    : 'json',
-            formData    : { report_id: report_id },
+            //formData    : { report_id: report_id },
             add         : onTapSubmitDoc,
             progress    : function ( e, data ) {
                 var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -502,7 +504,7 @@ feed.sidebar = (function () {
         }
 
         if ( jqueryMap.$report_groups.children(".has-error").length ) {
-            writeAlert( null, { text: 'Veuillez compl&eacute;ter le formulaire !' } );
+            writeAlert( null, { text: 'Veuillez compléter le formulaire !' } );
             event.preventDefault();
             return;
         }
@@ -514,27 +516,25 @@ feed.sidebar = (function () {
                 title       : jqueryMap.$report_title.val(),
                 textarea    : jqueryMap.$report_textarea.val(),
                 statu       : jqueryMap.$report_statu.val(),
-                priority    : jqueryMap.$report_priority.val(),
-                doc         : jqueryMap.$report_doc_label.html()
+                priority    : jqueryMap.$report_priority.val()
             });
         }
         else {
-            writeAlert( null, { text: 'Veuillez s&eacute;lectionner un rapport dans la liste !' } );
+            writeAlert( null, { text: 'Veuillez sélectionner un rapport dans la liste !' } );
             event.preventDefault();
             return;
         }
     };
 
     onTapSubmitDoc = function (e, data) {
-        jqueryMap.$button_upload.show();
-        data.context = jqueryMap.$button_upload.text( 'Upload ' + data.originalFiles[0].name )
-            .replaceAll('#result')
-            .click(function () {
-                //data.context = $('<p/>').text('Uploading...').replaceAll($(this));
-                //data.submit();
-                // remove modifications
+        //jqueryMap.$button_upload.show();
+        //jqueryMap.$button_upload.text( 'Upload ' + data.files[0].name )
+        //    .replaceAll('#result')
+        //    .click(function () {
+                data.formData = { report_id: stateMap.active_report_id };
+                console.dir(data);
                 configMap.reports_model.upload_(data);
-            });
+        //    });
     };
 
     onSubmitDocEnd = function (e, data) {
@@ -619,10 +619,15 @@ feed.sidebar = (function () {
     };
 
     onTapDeleteDoc = function ( event ) {
-        jqueryMap.$report_doc_label.html( '' );
-        jqueryMap.$report_doc_delete.hide();
-        jqueryMap.$report_doc_create.show();
-        displayFileupload( jqueryMap.$report_id.html() );
+        if ( confirm( "Voulez-vous supprimer ce document ?" ) ) {
+            //configMap.reports_model.delete_( report_id );
+            configMap.reports_model.delete_doc_( stateMap.active_report_id );
+            jqueryMap.$report_doc_label.html( '' );
+            jqueryMap.$report_doc_delete.hide();
+            jqueryMap.$report_doc_create.show();
+console.log("############################### onTapDeleteDoc " + stateMap.active_report_id );            
+            displayFileupload( stateMap.active_report_id );
+        }
     };
 
     onSelectStatu = function ( event ) {
@@ -708,7 +713,7 @@ console.dir( new_report );
         jqueryMap.$report_datecreate.html( new_report.created );
         jqueryMap.$report_datemodif.html( new_report.modified );
         //console.dir(new_report);
-        if ( new_report.history_status.length > 0 ) {
+        if ( new_report.history_status && new_report.history_status.length > 0 ) {
             jqueryMap.$report_statushistory.DataTable({
                 data            : new_report.history_status,
                 paging          : false,
@@ -741,27 +746,18 @@ console.dir( new_report );
             jqueryMap.$report_doc_label.html( new_report.doc );
             jqueryMap.$report_doc_create.hide();
             jqueryMap.$report_doc_delete.show();
-console.log('onSetReport if fileupload!');
+console.log("############################### 1 " + new_report.id );
             displayFileupload( null );
         }
         else {
             jqueryMap.$report_doc_label.html( '' );
             jqueryMap.$report_doc_delete.hide();
-console.log('onSetReport else fileupload!');
+console.log("############################### 2 " + new_report.id );
             displayFileupload( new_report.id ); 
             jqueryMap.$report_doc_create.show();
         }
 
-        jqueryMap.$create_title.val( '' )
-            .attr("placeholder", 'titre' );
-        jqueryMap.$create_textarea.val('');
-        jqueryMap.$create_priority.val('INFO');
-        jqueryMap.$create_x.val( '' )
-            .attr("placeholder", 'Latitude' );
-        jqueryMap.$create_y.val( '' )
-            .attr("placeholder", 'Longitude' );
-        jqueryMap.$create_doc_input.val('')
-            .attr("placeholder", 'No file' );
+        clearCreateForm();
 
         // load values in the img modal
         onClickMarker( null, new_report.id );
@@ -786,7 +782,8 @@ console.log('onSetReport else fileupload!');
                             + '<th>Titre</th>'
                             + '<th>Priorité</th>'
                             + '<th>Statut</th>'
-                            + '<th class="pull-right">Action</th>'
+                            + '<th></th>'
+                            + '<th></th>'
                         + '</tr>'
                     + '</thead>'
                     + '<tbody>';
@@ -816,8 +813,10 @@ console.log('onSetReport else fileupload!');
                         + jqueryMap.$report_statu.find( "option[value=" + report.statu + "]").html()
                     + '</th>'
                     + '<th>'
-                        + '<span class="glyphicon glyphicon-remove pull-right g-remove" gly-id="' + report.id + '" aria-hidden="true"></span>'
-                        + '<span class="glyphicon glyphicon-pencil pull-right g-edit" gly-id="' + report.id + '" aria-hidden="true"></span>'
+                        + '<span class="glyphicon glyphicon-pencil g-edit" gly-id="' + report.id + '" aria-hidden="true"></span>'
+                    + '</th>'
+                    + '<th>'
+                        + '<span class="glyphicon glyphicon-remove g-remove" gly-id="' + report.id + '" aria-hidden="true"></span>'
                     + '</th>'
                 + '</tr>';
             is_reports = true;
@@ -834,7 +833,6 @@ console.log('onSetReport else fileupload!');
                     + '<h5>Aucun rapport &agrave; afficher !</h5>'
                 + '</div>';
             clearSidebar();
-            clearList();
         }
 
         jqueryMap.$list_box.html( list_html );
@@ -845,15 +843,18 @@ console.log('onSetReport else fileupload!');
         jqueryMap.$list_box.find( 'tr' ).bind( 'mouseout', onOutList );
 
         $('#tableReports').DataTable({
-            "dom": '<"top"f>rt<"bottom"ip><"clear">',
-            "scrollX": true,
-            "scrollY": true,
+            "dom"       : '<"top"f>rt<"bottom"ip><"clear">',
+            "scrollX"   : true,
+            "scrollY"   : true,
             "pageLength": 15,
-            "language": {
-                "url" : "//cdn.datatables.net/plug-ins/1.10.11/i18n/French.json"
-            }
+            "language"  : {
+                "url"       : "//cdn.datatables.net/plug-ins/1.10.11/i18n/French.json"
+            },
+            "columns"   : [null, null, null, null, { "orderable": false }, { "orderable": false }]
         });
-        
+
+        clearCreateForm(); 
+
         // stop handling of the event !
         // same as : event.preventDefault() + event.stopPropagation() + event.preventImmediatPropagation()
         return false;

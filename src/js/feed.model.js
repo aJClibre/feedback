@@ -65,12 +65,13 @@ feed.model = (function () {
         configMap   = { 
             anon_id         : 'a0', 
             anon_profil     : 'p0',
-            anon_rules_map  : { list_   : true,
-                                read_   : false,
-                                create_ : false,
-                                update_ : false,
-                                upload  : false,
-                                delete_ : false
+            anon_rules_map  : { list_       : true,
+                                read_       : false,
+                                create_     : false,
+                                update_     : false,
+                                upload      : false,
+                                delete_doc_ : false,
+                                delete_     : false
                               },
             anon_name       : 'anonymous',
             empty_id        : 'e0',
@@ -324,6 +325,7 @@ feed.model = (function () {
     //  * upload_( <jQuery-File-Upload-master> ) - upload to the server the document 
     //    from the report details
     //    If the user is anonymous or the report is null, it aborts and returns false.
+    //  * delete_doc_( <report_id> ) - remove the doc associated with the report in a get request.
     //  * delete_( <report_id> ) - remove a report identified by report_id. It 
     //    publishes a 'feed-updatereport' and a 'deletereport' global custom event. 
     //    If the report_id does not exist in the reports list remove_report() aborts and
@@ -433,8 +435,8 @@ feed.model = (function () {
 
     reports = (function () {
         var 
-            get_by_cid,     get_db,     get_current, create_, 
-            delete_,        update_,    upload_,
+            get_by_cid,     get_db,     get_current,    create_,
+            delete_,        update_,    upload_,        delete_doc_,
             cancel_
         ;
 
@@ -455,7 +457,7 @@ feed.model = (function () {
             
             // Checks if the user is not anonymous
             if ( stateMap.user.get_is_anon() ) {
-                console.warn( "Sorry you have to connect before !" );
+                console.warn( "Désolé, vous devez vous connecter !" );
                 return false;
             }
 
@@ -498,6 +500,15 @@ feed.model = (function () {
             }
         };
 
+        delete_doc_ = function( report_id ) {
+            var
+                sio = isFakeData ? feed.fake.mockSioReport : feed.data.getSioReport();
+
+            if ( sio ) {
+                sio.emit( 'deletedoc', report_id );
+            }
+        };
+
         delete_ = function ( report_delete_id ) {
             var 
                 sio = isFakeData ? feed.fake.mockSioReport : feed.data.getSioReport();
@@ -526,6 +537,7 @@ feed.model = (function () {
             delete_     : delete_,
             update_     : update_,
             upload_     : upload_,
+            delete_doc_ : delete_doc_,
             cancel_     : cancel_
         };
     }());

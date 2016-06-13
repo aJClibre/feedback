@@ -64,7 +64,7 @@ feed.map = (function () {
   //--------------------- MODULE SCOPE VARIABLES ----------------
   var
     configMap   = {
-      //doc_path : '/media/doc/', // have to be idem to feed.sidebar.js TODO : put outside of this file
+      doc_path : '/media/', // have to be idem to feed.sidebar.js TODO : put outside of this file
       settable_map : {
         map_model           : true,
         people_model        : true,
@@ -380,7 +380,7 @@ layer_markers.addFeatures( [marker1, marker2] );
   // The selected marker becomes the stateMap.current_marker
   setMarker = function( report_id ) {
     var marker, tmp_marker, report, popup, move;
-console.log("setMarker ");
+//console.log("setMarker ");
     if ( report_id ) {
       marker = getMarker( report_id );
 
@@ -394,7 +394,7 @@ console.log("setMarker ");
 
         popup = ol2Map.$marker_list[ marker.data.id ].popup;
         stateMap.current_popup = popup;
-console.log("setMarker stateMap.current_popup.id: " + stateMap.current_popup.id);
+//console.log("setMarker stateMap.current_popup.id: " + stateMap.current_popup.id);
         report = configMap.reports_model.get_by_cid( report_id );
 
         if ( report ) {
@@ -430,15 +430,15 @@ console.log("setMarker stateMap.current_popup.id: " + stateMap.current_popup.id)
       popup_html = String()
         + '<span id="marker-popup">'
         + ' <strong>' + popup_map.id + '</strong><br/>'
-        + ' <em>' + feed.util_b.encodeHtml( popup_map.title ) + '</em><br/>';
+        + ' <em>' + popup_map.title + '</em><br/>';
 
     if ( popup_map.doc ) {
       
       if ( (/\.(gif|jpg|jpeg|tiff|png)$/i).test(popup_map.doc) ) {
-        popup_html += '<a data-toggle="modal"><img class="feed-map-popup-img img-responsive img-thumbnail center-block" alt="No image" src="' + configMap.doc_path + popup_map.doc + '"></a>'
+        popup_html += '<a data-toggle="modal"><img class="feed-map-popup-img img-responsive img-thumbnail center-block" alt="No image" src="/media/' + popup_map.doc + '"></a>' // + configMap.doc_path
       }
       else {
-        popup_html += '<div><a href="' + configMap.doc_path + popup_map.doc + '" target="_blank">' + popup_map.doc + '</a></div>'
+        popup_html += '<div><a href="/media/' + popup_map.doc + '" target="_blank">' + popup_map.doc + '</a></div>'
       }
     }
     popup_html += ' <small>Lon: ' + popup_map.locate_map.x + ' - Lat: ' + popup_map.locate_map.y + '</small></span>';
@@ -447,9 +447,9 @@ console.log("setMarker stateMap.current_popup.id: " + stateMap.current_popup.id)
   };
 
   hideCurrentPopup = function () {
-console.log("hideCurrentPopup ");
+//console.log("hideCurrentPopup ");
     if ( stateMap.current_popup ) {
-console.log("hideCurrentPopup stateMap.current_popup.id: " + stateMap.current_popup.id);    
+//console.log("hideCurrentPopup stateMap.current_popup.id: " + stateMap.current_popup.id);    
         stateMap.current_popup.hide();
         stateMap.current_popup = null;
     }
@@ -503,10 +503,9 @@ console.log("hideCurrentPopup stateMap.current_popup.id: " + stateMap.current_po
             new_map.id              = report.id;
             new_map.locate_map.x    = report.locate_map.x;
             new_map.locate_map.y    = report.locate_map.y;
-            new_map.title           = feed.util_b.encodeHtml( report.title );
+            new_map.title           = report.title;
             new_map.img             = report.img;
             new_map.doc             = report.doc;
-
             marker                  = new OpenLayers.Feature.Vector(
                 new OpenLayers.Geometry.Point( report.locate_map.x, report.locate_map.y ),
                 { id : report.id, tooltip : report.id } // tooltip is used by the layer style

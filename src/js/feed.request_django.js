@@ -200,12 +200,20 @@ feed.fake = (function () {
                 data.submit();                
             }
 
+            else if ( msg_type === 'deletedoc' && callback_map.listchange ) {
+                // add doc: true to make the difference with 'deletereport' get request
+                $.get( '../feed/', { id: data, doc: true })
+                    .done( function( result ) {
+                        callback_map.listchange([ result ]);
+                     }, "json");
+            }
+
             // simulate send 'deletereport' message and data to the server
             else if ( msg_type === 'deletereport' && callback_map.listchange ) {
                 //console.dir(data);
-                $.get('../feed/', {id: data})
-                    .done(function(result) {
-                        console.dir(result);
+                $.get( '../feed/', { id: data })
+                    .done( function( result ) {
+                        console.dir( result );
                         callback_map.listchange([ result ]);
                     }, "json");
             }
@@ -213,8 +221,8 @@ feed.fake = (function () {
             // 
             else if ( msg_type === 'getreports' && callback_map.listchange ) {
                 // http://api.jquery.com/jQuery.get/
-                $.get('../feed/', function(result) {
-                    console.dir(result);
+                $.get( '../feed/', function( result ) {
+                    console.dir( result );
                     // execute callback for the 'listchange' message
                     callback_map.listchange([ result ]);
                 }, "json"); //callListchange(data));

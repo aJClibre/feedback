@@ -98,7 +98,6 @@ h1 {
 	padding-left: 3px;
     font-size: 12px;
     line-height: 1.5;
-
 }
 
 .fileinput-button {
@@ -137,20 +136,20 @@ h1 {
 	margin-left: 7px;
 }
 
-.g-remove:hover {
-	color: red;
+.g-remove {
+	color: #b73338;
 	font-size: 120%;
 	cursor: pointer;
 }
 
-.g-edit:hover {
-	color: blue;
+.g-edit {
+	color: #337ab7;
 	font-size: 120%;
 	cursor: pointer;
 }
 
 .g-delete {
-	color: red;
+	color: #b73338;
 	font-size: 120%;
 	cursor: pointer;
 }
