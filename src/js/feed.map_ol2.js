@@ -64,7 +64,7 @@ feed.map = (function () {
   //--------------------- MODULE SCOPE VARIABLES ----------------
   var
     configMap   = {
-      doc_path : '/media/', // have to be idem to feed.sidebar.js TODO : put outside of this file
+      //doc_path : '/media/', // have to be idem to feed.sidebar.js TODO : put outside of this file
       settable_map : {
         map_model           : true,
         people_model        : true,
@@ -244,7 +244,8 @@ console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.
             var 
                 tmp_marker,
                 new_map = { locate_map: {} },
-                report = configMap.reports_model.get_by_cid( feat.data.id );
+                report = configMap.reports_model.get_by_cid( feat.data.id ),
+                point93 = feed.util_b.coordWgs84ToL93( feat.geometry.x, feat.geometry.y );
             
             ol2Map.$layer_select.destroyFeatures();
 
@@ -262,8 +263,8 @@ console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.
             ol2Map.$layer_select.addFeatures( [ tmp_marker ] );
 
             feat.popup.setContentHTML( setPopup( new_map ) );
-            feat.popup.lonlat.lon = feat.geometry.x;
-            feat.popup.lonlat.lat = feat.geometry.y;
+            feat.popup.lonlat.lon = point93.x.toFixed(0);
+            feat.popup.lonlat.lat = point93.y.toFixed(0);
             //feat.popup.show();
             //stateMap.current_popup = feat.popup;
         }

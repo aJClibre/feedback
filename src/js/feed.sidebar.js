@@ -128,7 +128,7 @@ feed.sidebar = (function () {
                         + '</tbody>'
                         + '</table></div>'
                       + '<div class="form-group">'
-                        + '<label class="col-md-12 control-label form-label-localisation">Localisation (WGS 84-Pseudo-Mercator)</label>'
+                        + '<label class="col-md-12 control-label form-label-localisation">Localisation (Lambert 93)</label>'
                         + '<input type="text" class="col-md-5 feed-sidebar-content-report-form-x" id="x" placeholder="Longitude" readonly>'
                         + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-report-form-y" id="y" placeholder="Latitude" readonly>'
                       + '</div>'
@@ -177,7 +177,7 @@ feed.sidebar = (function () {
                           + '</select>'
                         + '</div>'
                         + '<div class="form-group">'
-                          + '<label class="col-md-12 control-label form-label-localisation">Localisation (WGS84)</label>'
+                          + '<label class="col-md-12 control-label form-label-localisation">Localisation (Lambert 93)</label>'
                           + '<input type="text" class="col-md-5 feed-sidebar-content-create-form-x" id="xCreate" placeholder="Longitude" readonly>'
                           + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-create-form-y" id="yCreate" placeholder="Latitude" readonly>'
                         + '</div>'
@@ -224,7 +224,7 @@ feed.sidebar = (function () {
               + '<!-- http://formvalidator.net/index.html --> <script>'
                 + '$.validate();'
               + '</script>',
-              doc_path : '/media/', // have to be idem to feed.sidebar.js TODO : put outside of this file
+              //doc_path : '/media/', // have to be idem to feed.sidebar.js TODO : put outside of this file
 
             settable_map : {
                 sidebar_model       : true,
@@ -495,6 +495,7 @@ feed.sidebar = (function () {
    
     //
     onTapModifyReport = function ( event ) {
+        var point84;
 
         if ( configMap.people_model.get_user().get_is_anon() ) {
             writeAlert( null, { text: 'Veuillez vous logger !' } );
@@ -510,9 +511,10 @@ feed.sidebar = (function () {
         }
 //console.log("onTapModifyReport textarea: " + jqueryMap.$report_textarea.val());        
         if ( stateMap.active_report_id ) {
+            point84 = feed.util_b.coordL93ToWgs84( jqueryMap.$report_x.val(), jqueryMap.$report_y.val() );
             configMap.reports_model.update_({
                 _id         : stateMap.active_report_id,
-                locate_map  : { x : jqueryMap.$report_x.val(), y : jqueryMap.$report_y.val() },
+                locate_map  : { x : point84.x.toFixed(0), y : point84.y.toFixed(0) },
                 title       : jqueryMap.$report_title.val(),
                 textarea    : jqueryMap.$report_textarea.val(),
                 statu       : jqueryMap.$report_statu.val(),
@@ -603,18 +605,22 @@ feed.sidebar = (function () {
     };
 
     onTapCreateReport = function ( event ) {
-        /*console.dir($( "#form_create" ).serialize());
-        $.post('../feed/', $( "#form_create" ), function( response ) {
-            console.dir(response);
-        });
-        */
+        var point84;
+        point84 = feed.util_b.coordL93ToWgs84( jqueryMap.$create_x.val(), jqueryMap.$create_y.val() );
+        //console.log("point84.x: " + point84.x + " / point84.y: " + point84.y);
 
         configMap.reports_model.create_({
-            locate_map  : { x : jqueryMap.$create_x.val(), y : jqueryMap.$create_y.val() },
+            locate_map  : { x : point84.x.toFixed(0), y : point84.y.toFixed(0) },
             title       : jqueryMap.$create_title.val(),
             textarea    : jqueryMap.$create_textarea.val(),
             priority    : jqueryMap.$create_priority.val()
             //doc         : jqueryMap.$create_doc_input[0].files[0]
+        });
+
+        // return to the list reports
+        configMap.set_sidebar_anchor({
+            sidebar : 'opened',
+            tab     : 'home'
         });
     };
 
@@ -685,6 +691,7 @@ console.log("############################### onTapDeleteDoc " + stateMap.active_
     //
     onSetReport = function ( event, arg_map ) {
         var 
+            point93, 
             form_html   = String(),
             new_report  = arg_map.new_report,
             old_report  = arg_map.old_report;
@@ -739,8 +746,9 @@ console.dir( new_report );
         else {
             jqueryMap.$report_statusdiv.hide();
         }
-        jqueryMap.$report_x.val( new_report.locate_map.x );
-        jqueryMap.$report_y.val( new_report.locate_map.y );
+        point93 = feed.util_b.coordWgs84ToL93( new_report.locate_map.x, new_report.locate_map.y );
+        jqueryMap.$report_x.val( point93.x.toFixed(0) );
+        jqueryMap.$report_y.val( point93.y.toFixed(0) );
         
         if ( new_report.doc ) {
             jqueryMap.$report_doc_label.html( new_report.doc );
@@ -898,16 +906,18 @@ console.log("############################### 2 " + new_report.id );
     // during create a new report
     //
     onCoordChange = function ( event, coord_map ) {
-      jqueryMap.$create_x.val( coord_map.x );
-      jqueryMap.$create_y.val( coord_map.y );
+        var point93 = feed.util_b.coordWgs84ToL93( coord_map.x, coord_map.y );
+        jqueryMap.$create_x.val( point93.x.toFixed(0) );
+        jqueryMap.$create_y.val( point93.y.toFixed(0) );
     };
 
     // Event handler for feed-setcoord map event publish
     // during modify a report
     //
     onSetCoord = function ( event, coord_map ) {
-      jqueryMap.$report_x.val( coord_map.x );
-      jqueryMap.$report_y.val( coord_map.y );
+        var point93 = feed.util_b.coordWgs84ToL93( coord_map.x, coord_map.y );
+        jqueryMap.$report_x.val( point93.x.toFixed(0) );
+        jqueryMap.$report_y.val( point93.y.toFixed(0) );
     };
 
     // Event handler for feed-login model event

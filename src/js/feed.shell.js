@@ -72,8 +72,8 @@ feed.shell = (function () {
                 tab     : {home : true, report: true, create: true, settings: true}
             },
             main_html : String()
-                + '<div class="feed-shell-acct">TOTOT</div>'
-                + '<div class="feed-shell-nav">TATATA</div>'
+                + '<div class="feed-shell-acct"></div>'
+                + '<div class="feed-shell-nav"></div>'
         },
         stateMap    = { 
             anchor_map  : {},

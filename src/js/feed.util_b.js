@@ -76,7 +76,8 @@ feed.util_b = (function () {
             }
         },
 
-        decodeHtml,  encodeHtml, getEmSize;
+        decodeHtml,         encodeHtml, coordWgs84ToL93,
+        coordL93ToWgs84,    getEmSize;
 
         configMap.encode_noamp_map = $.extend(
             {}, configMap.html_encode_map
@@ -122,6 +123,28 @@ feed.util_b = (function () {
     };
     // End encodeHtml
 
+    // Begin coordWgs84ToL93
+    // Transform wgs84-Pseudo-Mercator to L93 coordonnates
+    coordWgs84ToL93 = function ( x, y ) {
+        var 
+            source  = new OpenLayers.Projection("EPSG:900913"),
+            dest    = new OpenLayers.Projection("EPSG:2154"),
+            point   = new OpenLayers.Geometry.Point(x, y);
+
+        point.transform(source, dest);
+        return point;
+    };
+
+    coordL93ToWgs84 = function ( x, y ) {
+        var 
+            source  = new OpenLayers.Projection("EPSG:2154"),
+            dest    = new OpenLayers.Projection("EPSG:900913"),
+            point   = new OpenLayers.Geometry.Point(x, y);
+
+        point.transform(source, dest);
+        return point;
+    };
+    
     // Begin getEmSize
     // returns size of ems in pixels
     //
@@ -134,9 +157,11 @@ feed.util_b = (function () {
 
     // export methods
     return {
-        decodeHtml : decodeHtml,
-        encodeHtml : encodeHtml,
-        getEmSize  : getEmSize
+        decodeHtml      : decodeHtml,
+        encodeHtml      : encodeHtml,
+        coordWgs84ToL93 : coordWgs84ToL93,
+        coordL93ToWgs84 : coordL93ToWgs84,
+        getEmSize       : getEmSize
     };
     //------------------- END PUBLIC METHODS ---------------------
 }());
