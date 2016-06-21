@@ -356,6 +356,8 @@ feed.sidebar = (function () {
                     .end()
                     .find( '#' + tab_name )
                     .addClass( 'active' );
+                // redraw the reports list because of misdraw header line
+                $('#tableReports').DataTable().draw();
             break;
             case 'hidden' : 
                 // console.log( 'setSliderPosition case: ' + position_type );
@@ -855,6 +857,7 @@ console.log("############################### 2 " + new_report.id );
             "dom"       : '<"top"f>rt<"bottom"ip><"clear">',
             "scrollX"   : true,
             "scrollY"   : true,
+            "autoWidth" : true,
             "pageLength": 15,
             "language"  : {
                 "url"       : "//cdn.datatables.net/plug-ins/1.10.11/i18n/French.json"
