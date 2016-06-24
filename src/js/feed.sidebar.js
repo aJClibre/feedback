@@ -142,9 +142,9 @@ feed.sidebar = (function () {
                         + '<button class="btn btn-primary btn-sm report-cancel">Annuler</button>'
                       + '</div>'
                     + '</form>'
-                    + '<div class="form-group feed-sidebar-content-report-form-group-doc-delete">'
+                    + '<div class="form-group">'
                       + '<label class="control-label feed-sidebar-content-report-form-doc-label"></label>'
-                      + '<span class="glyphicon glyphicon-remove g-delete" aria-hidden="true"></span>'
+                      + '<span class="glyphicon glyphicon-remove g-delete feed-sidebar-content-report-form-group-doc-delete" aria-hidden="true"></span>'
                     + '</div>'
                     + '<div class="form-group feed-sidebar-content-report-form-group-doc-create">'
                       + '<p class="help-block">Ajouter un fichier: </p>'
@@ -754,7 +754,7 @@ console.dir( new_report );
         jqueryMap.$report_y.val( point93.y.toFixed(0) );
         
         if ( new_report.doc ) {
-            jqueryMap.$report_doc_label.html( new_report.doc );
+            jqueryMap.$report_doc_label.html( '<a href="/media/' + new_report.doc + '" target="_blank">' + new_report.doc + '</a>' );
             jqueryMap.$report_doc_create.hide();
             jqueryMap.$report_doc_delete.show();
 console.log("############################### 1 " + new_report.id );
