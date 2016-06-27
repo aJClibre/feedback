@@ -192,9 +192,11 @@ console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.
             }
 
             if ( stateMap.drag_enable && stateMap.current_marker && stateMap.current_marker.attributes.id === id ) {
+                console.log("feed.map_ol2 featureover dragMarkers.activate()");
                 dragMarkers.activate();
             }
             else {
+                console.log("feed.map_ol2 featureover dragMarkers.deactivate()");
                 dragMarkers.deactivate();
             }
             $.gevent.publish( 'feed-hover', id );
@@ -229,6 +231,7 @@ console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.
      });
     
     dragMarkers     = new OpenLayers.Control.DragFeature( layer_markers, {
+        id              : 'dragmarkers',
         onStart         : function( feat, pix ) {
             if ( stateMap.drag_enable ) {
                 hideCurrentPopup();
@@ -267,6 +270,7 @@ console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.
             feat.popup.lonlat.lat = point93.y.toFixed(0);
             //feat.popup.show();
             //stateMap.current_popup = feat.popup;
+            this.deactivate();
         }
     });
     stateMap.map.addControl( dragMarkers );
@@ -465,6 +469,9 @@ layer_markers.addFeatures( [marker1, marker2] );
     var marker;
 
     clearMarkers();
+    
+    console.log("feed.map_ol2 onSetReport dragMarkers.deactivate()");
+    stateMap.map.getControl( 'dragmarkers' ).deactivate();
 
     if ( arg_map.new_report ) {
         marker = getMarker( arg_map.new_report.id );
@@ -495,6 +502,9 @@ layer_markers.addFeatures( [marker1, marker2] );
 
 
         ol2Map.$layer_markers.removeAllFeatures();
+        
+        console.log("feed.map_ol2 onListchange dragMarkers.deactivate()");
+        stateMap.map.getControl( 'dragmarkers' ).deactivate();
 
         reports_db().each( function ( report, idx ) {
             var 
