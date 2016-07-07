@@ -588,6 +588,8 @@ feed.model = (function () {
 
         // Refresh the reports object when a new
         // list is received
+        // answer : response from the server
+        // answer.length > 1 only if it's a report creation
         //
         _update_reports_list = function( answer ) {
 
@@ -597,10 +599,11 @@ feed.model = (function () {
               reports_list      = answer[0].data ? answer[0].data : [],
               error_mess        = answer[0].message ? answer[0].message : null,
               is_report_exist   = false,
-              is_report_new     = false
+              is_report_new     = false // true if answer.length > 1
             ;
             clearReportsDb();
 console.dir(answer);
+            
             if ( answer.length > 1 ) {
                 if ( ! error_mess ) {
                     report_map = answer[1];
@@ -617,11 +620,12 @@ console.dir(answer);
                     stateMap.report.locate_map  = report_map.locate_map;
                     stateMap.report.doc         = report_map.doc;
 
-                    is_report_new = true;
-                    is_report_exist   = true;
+                    is_report_new   = true;
+                    is_report_exist = true;
 
                     console.log('_update_reports_list before publish');
                     $.gevent.publish( 'feed-alert', { text: 'Le rapport a été créé avec succès !'} );
+                    console.log('_update_reports_list after publish');
                 }
                 else {
                     $.gevent.publish( 'feed-alert', { text: error_mess } );
@@ -636,7 +640,7 @@ console.dir(answer);
                 //
                 if ( ! stateMap.report.get_is_empty() && stateMap.report.id === report_map._id ) {
                     if ( ! is_report_new && ! error_mess ) {
-                        $.gevent.publish( 'feed-alert', { text: 'La mise à jour a été réalisé avec succès !'} );
+                        $.gevent.publish( 'feed-alert', { text: 'La mise à jour a été réalisée avec succès !'} );
                         stateMap.report.title       = report_map.title;
                         stateMap.report.textarea    = report_map.textarea;
                         stateMap.report.statu       = report_map.statu;
@@ -689,10 +693,15 @@ console.dir(answer);
             // if the selected report doesn't exist anymore, unset the report 
             // which triggers the 'feed-setreport' global event
             //
-            if ( ! stateMap.report.get_is_empty() && ! is_report_exist ) {
-                $.gevent.publish( 'feed-alert', { text: 'Le rapport a été supprimé avec succès !'} );
+            if ( ! is_report_exist ) {
+                if ( ! stateMap.report.get_is_empty() ) {
+                    $.gevent.publish( 'feed-alert', { text: 'Le rapport a été supprimé avec succès !'} );
 // console.log('if set_report');                
-                set_report(''); 
+                    set_report(''); 
+                }
+                else {
+                    $.gevent.publish( 'feed-alert', { text: 'La mise à jour a été réalisée avec succès !'} );
+                }
             }
         };
         

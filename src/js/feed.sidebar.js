@@ -179,8 +179,8 @@ feed.sidebar = (function () {
                         + '</div>'
                         + '<div class="form-group">'
                           + '<label class="col-md-12 control-label form-label-localisation">Localisation (Lambert 93)</label>'
-                          + '<input type="text" class="col-md-5 feed-sidebar-content-create-form-x" id="xCreate" placeholder="Longitude" readonly>'
-                          + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-create-form-y" id="yCreate" placeholder="Latitude" readonly>'
+                          + '<input type="text" class="col-md-5 feed-sidebar-content-create-form-x" id="xCreate" placeholder="Longitude" readonly data-validation="required" >'
+                          + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-create-form-y" id="yCreate" placeholder="Latitude" readonly data-validation="required" >'
                         + '</div>'
                         + '<div class="form-group">'
                           + '<label for="textareaCreate" class="col-md-12 control-label form-label-description">Description</label>'
@@ -223,7 +223,11 @@ feed.sidebar = (function () {
                 + '</div>'
               + '</div>'
               + '<!-- http://formvalidator.net/index.html --> <script>'
-                + '$.validate();'
+                + '$.validate({'
+                    + 'language : {'
+                        + 'requiredFields: "Champ obligatoire."'
+                    + '}'
+                + '});'
               + '</script>',
               //doc_path : '/media/', // have to be idem to feed.sidebar.js TODO : put outside of this file
 
@@ -512,6 +516,11 @@ feed.sidebar = (function () {
             event.preventDefault();
             return;
         }
+
+        if ( !jqueryMap.$report_x.val() || !jqueryMap.$report_title.val() ) {
+            return;
+        }
+
 //console.log("onTapModifyReport textarea: " + jqueryMap.$report_textarea.val());        
         if ( stateMap.active_report_id ) {
             point84 = feed.util_b.coordL93ToWgs84( jqueryMap.$report_x.val(), jqueryMap.$report_y.val() );
@@ -609,9 +618,13 @@ feed.sidebar = (function () {
 
     onTapCreateReport = function ( event ) {
         var point84;
+
+        if ( !jqueryMap.$create_x.val() || !jqueryMap.$create_title.val() )
+            return;
+        
         point84 = feed.util_b.coordL93ToWgs84( jqueryMap.$create_x.val(), jqueryMap.$create_y.val() );
         //console.log("point84.x: " + point84.x + " / point84.y: " + point84.y);
-
+        
         configMap.reports_model.create_({
             locate_map  : { x : point84.x.toFixed(0), y : point84.y.toFixed(0) },
             title       : jqueryMap.$create_title.val(),
@@ -948,11 +961,20 @@ console.info('sidebar.onLogin');
     // Returns    : true
     // Throws     : none
     //
-    removeSlider = function () {
+    removeSlider = function ( hide ) {
         // unwind initialization and state
         // remove DOM container; this removes event bindings too
         if ( jqueryMap.$slider ) {
-            jqueryMap.$slider.remove();
+            if ( hide ) {
+                jqueryMap.$slider.hide();
+                $.gevent.publish( 'feed-removeslider', true );
+            }
+            else {
+                jqueryMap.$slider.show();
+                $.gevent.publish( 'feed-removeslider', false );
+            }
+        }
+/*            jqueryMap.$slider.remove();
             jqueryMap = {};
         }
         stateMap.$append_target = null;
@@ -963,7 +985,7 @@ console.info('sidebar.onLogin');
         configMap.people_model      = null;
         configMap.reports_model     = null;
         configMap.set_sidebar_anchor= null;
-
+*/
         return true;
     }; // End public method /removeSlider/
 

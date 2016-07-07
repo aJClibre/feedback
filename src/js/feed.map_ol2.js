@@ -91,7 +91,7 @@ feed.map = (function () {
 
     setOl2Map,      setMarkerPosition,  getMarker,          setMarker,
     clearMarkers,   setPopup,           hideCurrentPopup,   onSetReport,
-    onListchange,   onHoverList,        onLogout,
+    onListchange,   onHoverList,        onLogout,           onRemoveSlider,
     configModule,   initModule;
   //--------------------- eo Module scope -----------------------
   
@@ -220,13 +220,16 @@ console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.
     };
 
     layer_markers   = new OpenLayers.Layer.Vector("layer_markers", {
+        //id              : 'lmarkers',
         styleMap        : styleMarker,
         eventListeners  : layerListeners
     });
     layer_new       = new OpenLayers.Layer.Vector("layer_new", { 
+        //id              : 'lnew',
         styleMap        : styleNew
     });
     layer_select    =  new OpenLayers.Layer.Vector("layer_select", {
+        //id              : 'lselect',
         styleMap        : styleSelect
      });
     
@@ -609,10 +612,31 @@ layer_markers.addFeatures( [marker1, marker2] );
   };
 
   onLogout = function ( event, logout_user ) {
-    leafletMap.$layer_markers.clearLayers();
+    ol2Map.$layer_markers.clearLayers();
+  };
+  
+  // Purpose :
+  //    * hide all feedback layers if presents
+  //    * show all layers if hidden
+  // Arguments  : boolean
+  // Return     : true
+  // throws     : none
+  //
+  onRemoveSlider = function ( event, hide ) {
+      if ( hide ) {
+          stateMap.map.removeLayer( ol2Map.$layer_markers );
+          stateMap.map.removeLayer( ol2Map.$layer_new );
+          stateMap.map.removeLayer( ol2Map.$layer_select );
+      }
+      else {
+          stateMap.map.addLayer( ol2Map.$layer_markers );
+          stateMap.map.addLayer( ol2Map.$layer_new );
+          stateMap.map.addLayer( ol2Map.$layer_select );
+      }
+      return true;
   };
   //--------------------- eo event handlers ---------------------
-
+  //
   //--------------------- PUBLIC METHODS ------------------------
   // Public method /configModule/
   // Example   : feed.map.configModule({  });
@@ -675,6 +699,7 @@ layer_markers.addFeatures( [marker1, marker2] );
     $.gevent.subscribe( $map, 'feed-setreport', onSetReport );
     $.gevent.subscribe( $map, 'feed-logout', onLogout );
     $.gevent.subscribe( $map, 'feed-listhover', onHoverList );
+    $.gevent.subscribe( $map, 'feed-removeslider', onRemoveSlider );
 
   }; // eo /initModule/
   return {
