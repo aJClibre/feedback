@@ -103,45 +103,60 @@ feed.map = (function () {
   //
   setOl2Map = function () {
     var
-        styleMarker, styleNew, styleSelect, layer_markers, layer_new, layer_select, 
+        styleMarker, styleMap, styleNew, styleOver, styleSelected, styleSelect, layer_markers, layer_new, layer_select, 
         layerListeners, dragMarkers, dragNew, clickFeature,
-	    $map 	    = stateMap.map,
-	    $map_div    = stateMap.$mapdiv,
-	    size	    = new OpenLayers.Size(21,25),
-	    offset 	    = new OpenLayers.Pixel(-(size.w/2), -size.h)
+        $map        = stateMap.map,
+        $map_div    = stateMap.$mapdiv,
+        size        = new OpenLayers.Size(21,25),
+        offset      = new OpenLayers.Pixel(-(size.w/2), -size.h),
+        renderer    = OpenLayers.Util.getParameters(window.location.href).renderer
     ;
+    renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
 
-    styleMarker     = new OpenLayers.StyleMap({
-        'default'   : {
-            //externalGraphic:markerInfo.icon,
-            fillColor       : '#ff0',
-            fillOpacity     : 0.9,
-            graphicWidth    : 24,
-            graphicHeight   : 24,
-            strokeColor     : "#ee9900",
-            strokeOpacity   : 1,
-            strokeWidth     : 1,
-            pointRadius     : 7,
-            title           : '${tooltip}'
+    var symbol_markers = {
+        'VAL' : {
+            externalGraphic : "/static/libs/feedback/src/img/marker-gold.png"
+        }, 
+        'FER': {
+            externalGraphic : "/static/libs/feedback/src/img/marker.png"
         },
-        'over'      : {
-            fillColor       : '#ff0',
-            fillOpacity     : 0.9,
-            graphicWidth    : 24,
-            graphicHeight   : 24,
-            strokeColor     : "#ee9900",
-            strokeOpacity   : 1,
-            strokeWidth     : 3,
-            pointRadius     : 7,
-            graphicZIndex   : 200,
-            title           : '${tooltip}'
-        },
-        'selected'  : OpenLayers.Util.applyDefaults(
-            { pointRadius     : 5 },
-            OpenLayers.Feature.Vector.style.default
-        )
+        'OUV': {
+            externalGraphic : "/static/libs/feedback/src/img/marker-green.png"
+        }
+    };
+
+
+    styleOver = new OpenLayers.Style({
+        graphicWidth    : 24,
+        graphicHeight   : 24,
+        pointRadius     : 10,
+        graphicZIndex   : 100,
+        title           : '${tooltip}'
     });
 
+    styleSelected = new OpenLayers.Style(
+        OpenLayers.Util.applyDefaults(
+            { pointRadius     : 5, graphicZIndex   : 50 },
+            OpenLayers.Feature.Vector.style.default
+        )
+    );
+
+    styleMap = new OpenLayers.StyleMap({
+        'default'   : {
+            backgroundGraphic: "/static/libs/feedback/src/img/marker_shadow.png",
+            backgroundXOffset: 0,
+            backgroundYOffset: -7,
+            backgroundGraphicZIndex: 10,
+            graphicZIndex   : 11,
+            pointRadius     : 10,
+            cursor          : 'pointer',
+            title           : '${tooltip}'
+        },
+        'over'      : styleOver,
+        'selected'  : styleSelected
+    });
+    
+    // red point 
     styleNew        = new OpenLayers.StyleMap({
         'default'   : OpenLayers.Util.applyDefaults(
             { fillColor : '#ff0000', fillOpacity : 1, graphicZIndex : 2000 },
@@ -149,6 +164,7 @@ feed.map = (function () {
         )
     });
 
+    // red point with a blue line around
     styleSelect     = new OpenLayers.StyleMap({
         'default'   : OpenLayers.Util.applyDefaults(
             { fillColor : '#ff0000', fillOpacity : 1, pointRadius : 8, graphicZIndex : 2000 },
@@ -220,16 +236,15 @@ console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.
     };
 
     layer_markers   = new OpenLayers.Layer.Vector("layer_markers", {
-        //id              : 'lmarkers',
-        styleMap        : styleMarker,
+        renderers       : renderer,
         eventListeners  : layerListeners
     });
     layer_new       = new OpenLayers.Layer.Vector("layer_new", { 
-        //id              : 'lnew',
+        renderers       : renderer,
         styleMap        : styleNew
     });
     layer_select    =  new OpenLayers.Layer.Vector("layer_select", {
-        //id              : 'lselect',
+        renderers       : renderer,
         styleMap        : styleSelect
      });
     
@@ -306,6 +321,9 @@ console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.
     stateMap.map.addLayer( layer_select );
     stateMap.map.addLayer( layer_new );
     stateMap.map.addLayer( layer_markers );
+    
+    styleMap.addUniqueValueRules( 'default', 'statu', symbol_markers );
+    layer_markers.styleMap = styleMap;
 
 /* Test values *
     var marker1 = new OpenLayers.Feature.Vector(
@@ -320,58 +338,59 @@ layer_markers.addFeatures( [marker1, marker2] );
 /* eo test */
 
     ol2Map = {
-	    $layer_markers	: layer_markers,
-    	$layer_new	    : layer_new,
+        $layer_markers  : layer_markers,
+        $layer_new      : layer_new,
         $layer_select   : layer_select,
-	    $map_div	    : $map_div,
-    	$marker_list    : [],
+        $map_div        : $map_div,
+        $marker_list    : [],
         $click_feature  : clickFeature,
-        $styleMarker    : styleMarker
+        $styleMarker    : styleMarker,
+
   //      $report_list    : { "type": "FeatureCollection", "features": [] },
-  //  	$icon_red       : new OpenLayers.Icon('http://dev.openlayers.org/releases/OpenLayers-2.6/img/marker.png',size,offset),
-//	    $icon_green     : new OpenLayers.Icon('http://dev.openlayers.org/releases/OpenLayers-2.6/img/marker-green.png',size,offset),
-  //  	$icon_blue      : new OpenLayers.Icon('http://dev.openlayers.org/releases/OpenLayers-2.6/img/marker-blue.png',size,offset)
+  //    $icon_red       : new OpenLayers.Icon('http://dev.openlayers.org/releases/OpenLayers-2.6/img/marker.png',size,offset),
+//      $icon_green     : new OpenLayers.Icon('http://dev.openlayers.org/releases/OpenLayers-2.6/img/marker-green.png',size,offset),
+  //    $icon_blue      : new OpenLayers.Icon('http://dev.openlayers.org/releases/OpenLayers-2.6/img/marker-blue.png',size,offset)
     }
   };
 
   // call by the shell when the tab change
   //
   setMarkerPosition = function ( position_type, tab_name, callback ) {
-  	var marker, center;
-	switch ( position_type ) {
-		case 'opened' :
-			if ( tab_name === 'create' ) {
+    var marker, center;
+    switch ( position_type ) {
+        case 'opened' :
+            if ( tab_name === 'create' ) {
                 center = stateMap.map.getCenter();
-			
+            
                 stateMap.new_marker = new OpenLayers.Feature.Vector( new OpenLayers.Geometry.Point( center.lon, center.lat ) );
-				ol2Map.$layer_new.addFeatures( [ stateMap.new_marker ] );
+                ol2Map.$layer_new.addFeatures( [ stateMap.new_marker ] );
                 
                 
-				$.gevent.publish( 'feed-coord', { x: stateMap.new_marker.geometry.x.toFixed(0), y: stateMap.new_marker.geometry.y.toFixed(0) } );
-			}
-			else {
-				ol2Map.$layer_new.removeAllFeatures();
-				stateMap.new_marker = null;
-			}
-			if ( tab_name === 'report' ) {
-				stateMap.drag_enable = true;
-			}
-			else {
-				stateMap.drag_enable = false;
-			}
-		break;
-		case 'hidden' : 
-			if ( stateMap.new_marker ) {
-				ol2Map.$layer_new.removeMarker( stateMap.new_marker );
-			}
-		break;
-		case 'closed' :
-			if ( stateMap.new_marker ) {
-				ol2Map.$layer_new.removeMarker( stateMap.new_marker );
-			}
-		break;
-		default : return false;
-	}
+                $.gevent.publish( 'feed-coord', { x: stateMap.new_marker.geometry.x.toFixed(0), y: stateMap.new_marker.geometry.y.toFixed(0) } );
+            }
+            else {
+                ol2Map.$layer_new.removeAllFeatures();
+                stateMap.new_marker = null;
+            }
+            if ( tab_name === 'report' ) {
+                stateMap.drag_enable = true;
+            }
+            else {
+                stateMap.drag_enable = false;
+            }
+        break;
+        /*case 'hidden' : 
+            if ( stateMap.new_marker ) {
+                ol2Map.$layer_new.removeMarker( stateMap.new_marker );
+            }
+        break;
+        case 'closed' :
+            if ( stateMap.new_marker ) {
+                ol2Map.$layer_new.removeMarker( stateMap.new_marker );
+            }
+        break;
+        */default : return false;
+    }
   };
 
   getMarker = function( report_id ) {
@@ -513,17 +532,18 @@ layer_markers.addFeatures( [marker1, marker2] );
             var 
                 marker, popup, 
                 new_map = { locate_map: {} };
-
             new_map.id              = report.id;
             new_map.locate_map.x    = report.locate_map.x;
             new_map.locate_map.y    = report.locate_map.y;
             new_map.title           = report.title;
             new_map.img             = report.img;
             new_map.doc             = report.doc;
+            new_map.statu           = report.statu;
             marker                  = new OpenLayers.Feature.Vector(
                 new OpenLayers.Geometry.Point( report.locate_map.x, report.locate_map.y ),
-                { id : report.id, tooltip : report.id } // tooltip is used by the layer style
+                { id : report.id, tooltip : report.id, statu : report.statu } // tooltip is used by the layer style
             );
+           console.dir(marker);
 
             popup                   = new OpenLayers.Popup.FramedCloud(report.id,
                 OpenLayers.LonLat.fromString(marker.geometry.toShortString()),
@@ -548,7 +568,19 @@ layer_markers.addFeatures( [marker1, marker2] );
             features.push( marker );
             ol2Map.$marker_list[ report.id ] = marker;
         });
+
+        /*var test = new OpenLayers.Feature.Vector(
+                new OpenLayers.Geometry.Point(609678, 5383499)
+                ,{
+              statu: 'FER',
+              id : '1607083',
+              tooltip: '1607083'
+           }
+        );*/
+
         ol2Map.$layer_markers.addFeatures( features );
+
+        ol2Map.$layer_markers.redraw();
         
         if ( current_report ) {
             setMarker( current_report.id );
