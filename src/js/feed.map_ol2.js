@@ -659,6 +659,7 @@ layer_markers.addFeatures( [marker1, marker2] );
           stateMap.map.removeLayer( ol2Map.$layer_markers );
           stateMap.map.removeLayer( ol2Map.$layer_new );
           stateMap.map.removeLayer( ol2Map.$layer_select );
+          hideCurrentPopup();
       }
       else {
           stateMap.map.addLayer( ol2Map.$layer_markers );
