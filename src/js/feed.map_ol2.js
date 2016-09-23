@@ -176,7 +176,7 @@ feed.map = (function () {
         featureclick    : function(e) {
             var mark_sel = e.feature
             ;
-console.log("featureclick e.feature.popup.id: " + e.feature.popup.id);
+            console.log("featureclick e.feature.popup.id: " + e.feature.popup.id);
             if ( stateMap.current_popup ) {
 console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.id);            
                 if ( stateMap.current_popup.id !== e.feature.popup.id ) {
@@ -346,12 +346,12 @@ layer_markers.addFeatures( [marker1, marker2] );
         $click_feature  : clickFeature,
         $styleMarker    : styleMarker,
 
-  //      $report_list    : { "type": "FeatureCollection", "features": [] },
-  //    $icon_red       : new OpenLayers.Icon('http://dev.openlayers.org/releases/OpenLayers-2.6/img/marker.png',size,offset),
+//      $report_list    : { "type": "FeatureCollection", "features": [] },
+//      $icon_red       : new OpenLayers.Icon('http://dev.openlayers.org/releases/OpenLayers-2.6/img/marker.png',size,offset),
 //      $icon_green     : new OpenLayers.Icon('http://dev.openlayers.org/releases/OpenLayers-2.6/img/marker-green.png',size,offset),
-  //    $icon_blue      : new OpenLayers.Icon('http://dev.openlayers.org/releases/OpenLayers-2.6/img/marker-blue.png',size,offset)
+//      $icon_blue      : new OpenLayers.Icon('http://dev.openlayers.org/releases/OpenLayers-2.6/img/marker-blue.png',size,offset)
     }
-  };
+  }; // eo setOl2Map
 
   // call by the shell when the tab change
   //

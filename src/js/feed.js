@@ -70,11 +70,13 @@ var feed = (function () {
   // Public method /initModule/
   // sets initial state and provide features
   //
-  var initModule = function ( $div, mapLl ) {
-    var $container = $('#'+$div); // or $(document.body) to add the sidebar directly
+  var initModule = function ( $div, mapLl, rule ) {
+    var user_rule,
+        $container = $('#'+$div); // or $(document.body) to add the sidebar directly
     
+    user_rule = rule ? rule : null;
     feed.model.initModule();
-    feed.shell.initModule( $container, mapLl ); // mapLl = map Leaflet
+    feed.shell.initModule( $container, mapLl, user_rule ); // mapLl = map Leaflet
   };
 
   return { initModule : initModule };

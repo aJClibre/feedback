@@ -64,7 +64,6 @@ feed.model = (function () {
     var
         configMap   = { 
             anon_id         : 'a0', 
-            anon_profil     : 'p0',
             anon_rules_map  : { list_       : true,
                                 read_       : false,
                                 create_     : false,
@@ -73,7 +72,7 @@ feed.model = (function () {
                                 delete_doc_ : false,
                                 delete_     : false
                               },
-            anon_name       : 'anonymous',
+            anon_rule       : 'anonymous',
             empty_id        : 'e0',
             empty_title     : '',
             empty_textarea  : '',
@@ -181,7 +180,7 @@ feed.model = (function () {
         delete stateMap.people_cid_map[ user_map.cid ];
         stateMap.user.cid       = user_map._id;
         stateMap.user.id        = user_map._id;
-        stateMap.user.id_profil = user_map.id_profil;
+        stateMap.user.rule      = user_map.rule;
         stateMap.user.rules_map = user_map.rules_map;
         stateMap.people_cid_map[ user_map._id ] = stateMap.user;
 
@@ -197,19 +196,17 @@ feed.model = (function () {
         var person,
         cid         = person_map.cid,
         id          = person_map.id,
-        id_profil   = person_map.id_profil,
         rules_map   = person_map.rules_map,
-        name        = person_map.name;
+        rule        = person_map.rule;
 
-        if ( cid === undefined || ! name ) {
-            throw 'client id and name required';
+        if ( cid === undefined || ! rule ) {
+            throw 'makePerson exception : client id required';
         }
         
         // Creates an object from the prototype personProto
         person              = Object.create( personProto );
         person.cid          = cid;
-        person.name         = name;
-        person.id_profil    = id_profil;
+        person.rule         = rule;
         person.rules_map    = rules_map;
 
         if ( id ) { person.id = id; }
@@ -259,24 +256,22 @@ feed.model = (function () {
             return stateMap.user; 
         };
 
-        login = function ( name ) {
+        login = function ( rule ) {
             var sio = isFakeData ? feed.fake.mockSio : feed.data.getSio();
 
             stateMap.user = makePerson({
-                cid         : makeUserCid(),
-                id_profil   : 'pro_01', // admin profil
-                name        : name
+                cid     : makeUserCid(),
+                rule    : rule
             });
 
             // Register a callback to complete sign-in when
             // backend publishes a userupdate message
             sio.on( 'userupdate', completeLogin );
-//console.info('model.login before emit adduser');
+            
             // Send an adduser message to the backend
             sio.emit( 'adduser', {
                 cid         : stateMap.user.cid,
-                //id_profil   : stateMap.user.id_profil,
-                name        : stateMap.user.name
+                rule        : stateMap.user.rule
             });
         };
 
@@ -827,9 +822,8 @@ console.dir(answer);
         stateMap.anon_user = makePerson({
             cid         : configMap.anon_id,
             id          : configMap.anon_id,
-            id_profil   : configMap.anon_profil,
             rules_map   : configMap.anon_rules_map,
-            name        : configMap.anon_name
+            rule        : configMap.anon_rule
         });
         stateMap.user = stateMap.anon_user;
 

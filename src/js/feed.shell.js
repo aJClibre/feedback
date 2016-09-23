@@ -322,6 +322,8 @@ feed.shell = (function () {
     //   * $container (example: $('#app_div_id')).
     //     A jQuery collection that should represent
     //     a single DOM container
+    //   * A OpenLayers map
+    //   * The rule of the user to log into the model
     // Action :
     //   Populates $container with the shell of the UI
     //   and then configures and initializes feature modules.
@@ -330,7 +332,7 @@ feed.shell = (function () {
     // Returns : none
     // Throws  : none
     //
-    initModule = function ( $container, map ) {
+    initModule = function ( $container, map, rule ) {
         var doc_path = 'doc/';
 
         // load HTML and map jQuery collections
@@ -390,7 +392,9 @@ feed.shell = (function () {
             .bind( 'utap', onTapAcct );
 
         console.log('Direct login into the application!');
-        feed.model.people.login( 'Alfred' );
+        if ( rule ) {
+            feed.model.people.login( rule );
+        }
 
     };// End PUBLIC method /initModule/
 

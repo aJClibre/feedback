@@ -61,35 +61,21 @@
 
 feed.fake = (function () {
     'use strict';
-    var peopleList,  fakeIdSerial,   makeFakeId,    mockSio, 
-        reportsList, fakeIdSerialR,  makeFakeIdR,   mockSioReport;
+    var peopleList,  rulesMapList, fakeIdSerial,   makeFakeId,    mockSio, 
+        reportsList, mockSioReport;
 
     fakeIdSerial    = 5;
-    fakeIdSerialR   = 4;
 
     makeFakeId = function () {
         return 'id_' + String( fakeIdSerial++ );
     };
 
-    makeFakeIdR = function () {
-        return '150914_0' + String( fakeIdSerialR++ );
-    };
+    peopleList = [];
 
-    peopleList = [
-        { 
-            name : 'toto', _id : 'id_01',
-            id_profil : 'pro_01',
-            rules_map : { list_ : true, create_ : true, read_ : true, update_ : true, delete_ : true }
-        },{
-            name : 'tata', _id : 'id_02',
-            id_profil : 'pro_01',
-            rules_map : { list_ : true, create_ : true, read_ : true, update_ : false, delete_ : false }
-        },{
-            name : 'titi', _id : 'id_03',
-            id_profil : 'pro_02',
-            rules_map : { list_ : true, create_ : false, read_ : false, update_ : false, delete_ : false }
-        }
-        ];
+    rulesMapList = {
+        'admin'     : { list_ : true, create_ : true, read_ : true, update_ : true, delete_ : true },
+        'anonymous' : { list_ : true, create_ : false, read_ : false, update_ : false, delete_ : false }
+    };
 /*
     reportsList = [
         {
@@ -141,14 +127,14 @@ feed.fake = (function () {
             if ( msg_type === 'adduser' && callback_map.userupdate ) {
                 setTimeout( function () {
                     person_map = {
-                        _id         : makeFakeId(),
-                        name        : data.name,
-                        rules_map   : data.rules_map
+                        _id         : data.cid,
+                        rule        : data.rule,
+                        rules_map   : rulesMapList[data.rule] 
                     };
                     peopleList.push( person_map );
                     callback_map.userupdate( [ person_map ] );
 // console.info('fake.mockSioReport.emit_sio adduser');
-                }, 1000 );
+                }, 10 );
             }
         };
 
@@ -228,29 +214,6 @@ feed.fake = (function () {
                 }, "json"); //callListchange(data));
             }
         };
-
-        // NOT USED car simule l'attente du serveur 
-        // remplace par : if ( msg_type === 'getreports' && callback_map.listchange )
-        // try once per second to use listchange callback
-        // Stop trying after first success.
-        // Emulates the receipt of a listchange message from the backend
-        // Once per second, it looks for the listchange callback.
-        // If the callback is found, it's executed using the mock
-        // reportsList as its argument, and send_listchange stops polling.
-        //
-        send_listchange = function () {
-            listchange_idto = setTimeout( function () {
-    console.log('send_listchange');
-                if ( callback_map.listchange ) {
-                    callback_map.listchange([ reportsList ]);
-                    listchange_idto = undefined;
-                }
-                else { send_listchange(); }
-            }, 1000 );
-        };
-
-        // start the process
-        //send_listchange();
 
         return { emit : emit_sio, on : on_sio };
     }());

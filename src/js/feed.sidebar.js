@@ -99,7 +99,7 @@ feed.sidebar = (function () {
                       + '</div>'
                       + '<div class="form-group">'
                         + '<label class="col-md-12 control-label form-label-priority">Statut</label>'
-                          + '<select class="form-control feed-sidebar-content-report-form-statu" >'
+                          + '<select class="form-control feed-sidebar-content-report-form-statu">'
                           + '<option value="OUV">Ouvert</option>'
                           + '<option value="VAL">Valid&eacute;</option>'
                           + '<option value="FER">Ferm&eacute;</option>'
@@ -688,7 +688,7 @@ console.log("############################### onTapDeleteDoc " + stateMap.active_
         jqueryMap.$modal_img_title.html( id );
         report = configMap.reports_model.get_by_cid( id );
         if ( report && (/\.(gif|jpg|jpeg|tiff|png)$/i).test(report.doc) ) {
-            jqueryMap.$modal_img_img.attr("src", configMap.doc_path + report.doc );
+            jqueryMap.$modal_img_img.attr("src", report.doc );
         }
 
       return false;
@@ -780,7 +780,13 @@ console.log("############################### 2 " + new_report.id );
             displayFileupload( new_report.id ); 
             jqueryMap.$report_doc_create.show();
         }
-
+        
+        // can modify a report only if admin or statu not at VAL or FER
+        if ( ! configMap.people_model.get_user().rules_map.update_ && jqueryMap.$report_statu.val() != 'OUV' ) {
+            jqueryMap.$butt_modify.prop( 'disabled', true );
+            jqueryMap.$butt_modify.attr( 'title', 'Seul l\'administrateur a les droits de modification' );
+        }
+        
         clearCreateForm();
 
         // load values in the img modal
@@ -940,8 +946,10 @@ console.log("############################### 2 " + new_report.id );
     // Event handler for feed-login model event
     //
     onLogin = function ( event, login_user ) {
-console.info('sidebar.onLogin');
-//        configMap.set_sidebar_anchor( { sidebar: 'opened' } );
+         // can update statu value only if admin
+         if ( ! configMap.people_model.get_user().rules_map.update_ ) {
+            jqueryMap.$report_statu.prop( 'disabled', true );
+         }
     };
 
     onLogout = function ( event, logout_user ) {
