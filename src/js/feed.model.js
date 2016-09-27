@@ -597,7 +597,7 @@ feed.model = (function () {
               is_report_new     = false // true if answer.length > 1
             ;
             clearReportsDb();
-console.dir(answer);
+//console.dir(answer);
             
             if ( answer.length > 1 ) {
                 if ( ! error_mess ) {
@@ -754,7 +754,9 @@ console.dir(answer);
         };
 
         // download the reports in csv format by a request to the server
-        down_list = function () {
+        // with the list of the requested reports
+        //
+        down_list = function ( list_reports_id ) {
             var sio;
 
             // Checks if the user is not anonymous
@@ -762,6 +764,11 @@ console.dir(answer);
                 $.gevent.publish( 'feed-alert', { text: "Désolé, vous devez vous connecter avant !" } );
                 return false;
             }
+
+            sio = isFakeData ? feed.fake.mockSioReport : feed.data.getSioReport();
+            sio.emit('downloadreports', {
+                list : list_reports_id
+            });
 
             return true;
         };

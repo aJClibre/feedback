@@ -543,7 +543,7 @@ layer_markers.addFeatures( [marker1, marker2] );
                 new OpenLayers.Geometry.Point( report.locate_map.x, report.locate_map.y ),
                 { id : report.id, tooltip : report.id, statu : report.statu } // tooltip is used by the layer style
             );
-           console.dir(marker);
+           //console.dir(marker);
 
             popup                   = new OpenLayers.Popup.FramedCloud(report.id,
                 OpenLayers.LonLat.fromString(marker.geometry.toShortString()),

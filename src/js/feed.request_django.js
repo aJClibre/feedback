@@ -213,6 +213,10 @@ feed.fake = (function () {
                     callback_map.listchange([ result ]);
                 }, "json"); //callListchange(data));
             }
+
+            else if ( msg_type === 'downloadreports' ) {
+                window.location.href = '../feed/csv/?ids=' + data.list.toString();
+            }
         };
 
         return { emit : emit_sio, on : on_sio };

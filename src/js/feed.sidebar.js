@@ -78,7 +78,7 @@ feed.sidebar = (function () {
                     + '<h1>Liste des rapports</h1>'
                     + '<div class="feed-sidebar-content-home-box"></div>' 
                     + '<button type="update" class="btn btn-primary btn-sm list-refresh">Rafraichir</button>'
-                    + '<a type="button" class="btn btn-primary btn-sm list-download" href="../feed/csv/">T&eacute;l&eacute;charger</a>'
+                    + '<a type="button" class="btn btn-primary btn-sm list-download">T&eacute;l&eacute;charger</a>'
                   + '</div>'
                   + '<div class="sidebar-pane feed-sidebar-content-report" id="report">'
                     + "<h1>D&eacute;tails</h1>"
@@ -698,8 +698,27 @@ console.log("############################### onTapDeleteDoc " + stateMap.active_
         configMap.sidebar_model.get_list();
     };
 
+    // select the reports id of the actual state of the table and
+    // send to the server
+    //
     onTapDownloadList = function ( event ) {
-        configMap.sidebar_model.down_list();
+        var tab_ids = [],
+            selected_rep = $( '#tableReports' ).find( 'tr' ),
+            dt_length = $( '#tableReports' ).DataTable().rows().ids().length;
+        
+        selected_rep.each( function(index) {
+            if( $(this).attr( 'tr-id' ) ) {
+                tab_ids.push( $(this).attr( 'tr-id' ) );
+            }
+        });
+        
+        if ( dt_length ) {
+            if ( ( dt_length === tab_ids.length ) ) {
+                tab_ids = [];
+            }
+            configMap.sidebar_model.down_list( tab_ids );
+        }
+        //tab_ids = [$( '#tableReports' ).DataTable().rows().ids().length, tab_ids.length];
     };
 
     // event handler for the feed-setreport model event. Selects the
@@ -711,7 +730,7 @@ console.log("############################### onTapDeleteDoc " + stateMap.active_
             form_html   = String(),
             new_report  = arg_map.new_report,
             old_report  = arg_map.old_report;
-console.dir( new_report );
+
         if ( new_report.get_is_empty() ) {
             clearSidebar();
             // TODO : modify the jqueryMap.$form-group to erase the error messages
@@ -801,6 +820,7 @@ console.log("############################### 2 " + new_report.id );
     onListchange = function( event ) {
   
         var 
+            table_reports,
             is_reports = false,
             reports_db = configMap.reports_model.get_db(),
             list_html = String()
@@ -872,7 +892,7 @@ console.log("############################### 2 " + new_report.id );
         jqueryMap.$list_box.find( 'tr' ).bind( 'mouseover', onHoverList );
         jqueryMap.$list_box.find( 'tr' ).bind( 'mouseout', onOutList );
 
-        $('#tableReports').DataTable({
+        table_reports = $('#tableReports').DataTable({
             "dom"       : '<"top"f>rt<"bottom"ip><"clear">',
             "scrollX"   : true,
             "scrollY"   : true,
@@ -883,7 +903,7 @@ console.log("############################### 2 " + new_report.id );
             },
             "columns"   : [null, null, null, null, { "orderable": false }, { "orderable": false }]
         });
-
+        
         clearCreateForm(); 
 
         // stop handling of the event !
