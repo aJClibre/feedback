@@ -74,7 +74,7 @@ feed.fake = (function () {
 
     rulesMapList = {
         'admin'     : { list_ : true, create_ : true, read_ : true, update_ : true, delete_ : true },
-        'anonymous' : { list_ : true, create_ : false, read_ : false, update_ : false, delete_ : false }
+        'view'      : { list_ : true, create_ : false, read_ : false, update_ : false, delete_ : false }
     };
 /*
     reportsList = [

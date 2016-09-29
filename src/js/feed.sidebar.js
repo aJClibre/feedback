@@ -68,10 +68,10 @@ feed.sidebar = (function () {
             main_html : String()
               + '<div id="sidebar" class="sidebar collapsed" style="font-size:12px;">'
                 + '<ul class="sidebar-tabs" role="tablist">' // Nav tabs
-                  + '<li id="t_home" class="tab" title="Liste"><a href="#" role="tab"><i class="fa fa-bars"></i></a></li>'
-                  + '<li id="t_report" class="tab" title="D&eacute;tail"><a href="#" role="tab"><i class="fa fa-pencil"></i></a></li>'
-                  + '<li id="t_create" class="tab" title="Cr&eacute;ation"><a href="#" role="tab"><i class="fa fa-plus"></i></a></li>'
-                  + '<li id="t_settings" class="tab" title="Param&egrave;tres"><a href="#" role="tab"><i class="fa fa-gear"></i></a></li>'
+                  + '<li id="t_home" class="tab" title="Liste"><a href="#" role="tab"><i class="fa fa-bars" aria-hidden="true"></i></a></li>'
+                  + '<li id="t_report" class="tab" title="D&eacute;tail"><a href="#" role="tab"><i class="fa fa-gear" aria-hidden="true"></i></a></li>'
+                  + '<li id="t_create" class="tab" title="Cr&eacute;ation"><a href="#" role="tab"><i class="fa fa-plus" aria-hidden="true"></i></a></li>'
+                  + '<li id="t_settings" class="tab" title="Param&egrave;tres"><a href="#" role="tab"><i class="fa fa-info" aria-hidden="true"></i></a></li>'
                 + '</ul>'
                 + '<div class="sidebar-content feed-sidebar-content active">'
                   + '<div class="sidebar-pane feed-sidebar-content-home active" id="home">'
@@ -862,8 +862,11 @@ console.log("############################### 2 " + new_report.id );
                     + '<th>'
                         + jqueryMap.$report_statu.find( "option[value=" + report.statu + "]").html()
                     + '</th>'
+                    //+ '<td class="text-center">'
+                    //    + '<a href="mailto:a.jean-charles@valabre.com" title="a.jean-charles@valabre.com" class="fa fa-envelope tltip" data-toggle="tooltip" data-placement="left"></a>'
+                    //+ '</td>'
                     + '<th>'
-                        + '<span class="glyphicon glyphicon-pencil g-edit" gly-id="' + report.id + '" aria-hidden="true"></span>'
+                        + '<span class="glyphicon glyphicon-cog g-edit" gly-id="' + report.id + '" aria-hidden="true"></span>'
                     + '</th>'
                     + '<th>'
                         + '<span class="glyphicon glyphicon-remove g-remove" gly-id="' + report.id + '" aria-hidden="true"></span>'
@@ -966,6 +969,7 @@ console.log("############################### 2 " + new_report.id );
     // Event handler for feed-login model event
     //
     onLogin = function ( event, login_user ) {
+    console.dir(configMap.people_model.get_user());
          // can update statu value only if admin
          if ( ! configMap.people_model.get_user().rules_map.update_ ) {
             jqueryMap.$report_statu.prop( 'disabled', true );
