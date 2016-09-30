@@ -251,9 +251,9 @@ feed.sidebar = (function () {
         },
         jqueryMap   = {},
 
-        setJqueryMap,       setSliderPosition,  writeAlert,
-        clearSidebar,       clearCreateForm,    clearList,
-        clearFormsError,    displayFileupload,
+        getIdReportsSelected,setJqueryMap,      setSliderPosition,
+        writeAlert,         clearSidebar,       clearCreateForm,
+        clearList,          clearFormsError,    displayFileupload,
         onTapToggle,        onTapModifyReport,  onTapEditReport,
         onTapDeleteReport,  onTapCancelReport,  onTapCreateReport,
         onTapDeleteDoc,     onTapList,          onSelectStatu, onClickMarker,
@@ -266,6 +266,27 @@ feed.sidebar = (function () {
     //--------------------- eo Module scope -----------------------
     
     //--------------------- UTILITY METHODS -----------------------
+    // Example      : var tab = getIdReportsSelected()
+    // Purpose      : return the id list of the selected reports with
+    // the search tool
+    // Arguments    : None
+    // Returns      :
+    //  * list - ids list, empty list if nothing
+    // Throws       : none
+    //
+    getIdReportsSelected = function () {
+        var tab_ids = [],
+            selected_rep = $( '#tableReports' ).find( 'tr' )
+        ;
+
+        selected_rep.each( function(index) {
+            if( $(this).attr( 'tr-id' ) ) {
+                tab_ids.push( $(this).attr( 'tr-id' ) );
+            }
+        });
+        return tab_ids; 
+    };
+
     //--------------------- eo utility methods --------------------
 
     //--------------------- DOM METHODS ---------------------------
@@ -702,15 +723,9 @@ console.log("############################### onTapDeleteDoc " + stateMap.active_
     // send to the server
     //
     onTapDownloadList = function ( event ) {
-        var tab_ids = [],
-            selected_rep = $( '#tableReports' ).find( 'tr' ),
-            dt_length = $( '#tableReports' ).DataTable().rows().ids().length;
-        
-        selected_rep.each( function(index) {
-            if( $(this).attr( 'tr-id' ) ) {
-                tab_ids.push( $(this).attr( 'tr-id' ) );
-            }
-        });
+        var
+            tab_ids     = getIdReportsSelected(),
+            dt_length   = $( '#tableReports' ).DataTable().rows().ids().length;
         
         if ( dt_length ) {
             if ( ( dt_length === tab_ids.length ) ) {
@@ -718,7 +733,6 @@ console.log("############################### onTapDeleteDoc " + stateMap.active_
             }
             configMap.sidebar_model.down_list( tab_ids );
         }
-        //tab_ids = [$( '#tableReports' ).DataTable().rows().ids().length, tab_ids.length];
     };
 
     // event handler for the feed-setreport model event. Selects the
@@ -905,6 +919,19 @@ console.log("############################### 2 " + new_report.id );
                 "url"       : "//cdn.datatables.net/plug-ins/1.10.11/i18n/French.json"
             },
             "columns"   : [null, null, null, null, { "orderable": false }, { "orderable": false }]
+        }).on( 'search.dt', function(e, settings) {
+            // wait for 1s before the array rendered
+            setTimeout( function() {
+                var 
+                    tab = getIdReportsSelected(),
+                    dt_length = $( '#tableReports' ).DataTable().rows().ids().length;
+
+                if ( ( dt_length === tab.length ) ) {
+                    tab = [];
+                }
+                console.log('dt_length: ' + dt_length + ' / tab.length: ' + tab.length);
+                $.gevent.publish( 'feed-search', [tab] );                
+            }, 1000);
         });
         
         clearCreateForm(); 
@@ -969,7 +996,6 @@ console.log("############################### 2 " + new_report.id );
     // Event handler for feed-login model event
     //
     onLogin = function ( event, login_user ) {
-    console.dir(configMap.people_model.get_user());
          // can update statu value only if admin
          if ( ! configMap.people_model.get_user().rules_map.update_ ) {
             jqueryMap.$report_statu.prop( 'disabled', true );

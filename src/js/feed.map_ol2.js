@@ -90,9 +90,10 @@ feed.map = (function () {
     ol2Map  = {},
 
     setOl2Map,      setMarkerPosition,  getMarker,          setMarker,
-    clearMarkers,   setPopup,           hideCurrentPopup,   onSetReport,
-    onListchange,   onHoverList,        onLogout,           onRemoveSlider,
-    configModule,   initModule;
+    clearMarkers,   setPopup,           hideCurrentPopup,   hideFeatures, 
+    showFeatures,   onSetReport,        onListchange,       onHoverList,
+    onLogout,       onRemoveSlider,     onSearchSelect,     configModule,
+    initModule;
   //--------------------- eo Module scope -----------------------
   
   //--------------------- UTILITY METHODS -----------------------
@@ -103,8 +104,9 @@ feed.map = (function () {
   //
   setOl2Map = function () {
     var
-        styleMarker, styleMap, styleNew, styleOver, styleSelected, styleSelect, layer_markers, layer_new, layer_select, 
-        layerListeners, dragMarkers, dragNew, clickFeature,
+        styleMarker, styleMap, styleNew, styleOver, styleSelected, styleSelect, 
+        layer_markers, layer_new, layer_select, layerListeners, dragMarkers, 
+        dragNew, clickFeature,
         $map        = stateMap.map,
         $map_div    = stateMap.$mapdiv,
         size        = new OpenLayers.Size(21,25),
@@ -482,6 +484,44 @@ layer_markers.addFeatures( [marker1, marker2] );
     }
   };
 
+  // Example    : hideFeatures(["1607083", "1607081", "1607211"])
+  // Purpose    : Hide layer_markers features depending list size
+  // Arguments  : 
+  //    * list_ids - ids list of features to show, hide the others
+  // Returns    : None
+  // Throws     : None
+  //
+  hideFeatures = function ( list_ids ) {
+    var feats = ol2Map.$layer_markers.features;
+    console.dir(feats);
+    
+    for (var i = 0; i < feats.length; i++) {
+        var feat = feats[i];
+        if ( list_ids.indexOf( feat.attributes.id ) === -1 ) {
+            feat.style = { visibility : 'hidden' };
+        }
+    }
+    ol2Map.$layer_markers.redraw();
+  };
+
+  // Example    : showFeatures()
+  // Purpose    : Show all layer_markers features
+  // Arguments  : None
+  // Returns    : None
+  // Throws     : None
+  //
+  showFeatures = function () {
+    var feats = ol2Map.$layer_markers.features;
+    console.dir(feats);
+
+    for (var i = 0; i < feats.length; i++) {
+        var feat = feats[i];
+        if ( feat.style ) {
+            feat.style = null;
+        }
+    }
+    ol2Map.$layer_markers.redraw();
+  };
   //--------------------- eo dom methods ------------------------
   //--------------------- EVENT HANDLERS ------------------------
   // event handler for the feed-setreport model event. Selects the
@@ -552,7 +592,6 @@ layer_markers.addFeatures( [marker1, marker2] );
                 null, 
                 true,
                 function( e ){ 
-//console.dir(e);
                     hideCurrentPopup(); 
                 }
             );
@@ -668,6 +707,21 @@ layer_markers.addFeatures( [marker1, marker2] );
       }
       return true;
   };
+
+  // Purpose :
+  //    * Display only the reports selected with the search tool 
+  // Arguments  : list of ids
+  // Return     : true
+  // throws     : none
+  //
+  onSearchSelect = function ( event, list_ids ) {
+    if ( list_ids.length ) {
+        hideFeatures( list_ids );
+    }
+    else {
+        showFeatures();
+    }
+  };
   //--------------------- eo event handlers ---------------------
   //
   //--------------------- PUBLIC METHODS ------------------------
@@ -733,6 +787,7 @@ layer_markers.addFeatures( [marker1, marker2] );
     $.gevent.subscribe( $map, 'feed-logout', onLogout );
     $.gevent.subscribe( $map, 'feed-listhover', onHoverList );
     $.gevent.subscribe( $map, 'feed-removeslider', onRemoveSlider );
+    $.gevent.subscribe( $map, 'feed-search', onSearchSelect );
 
   }; // eo /initModule/
   return {
