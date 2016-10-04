@@ -46,7 +46,19 @@ h1 {
 #tableReports tbody {
     color: #b3b3b3;
 }
-#feed-sidebar-content-report-statushistory {
+.feed-sidebar-content-list-td-statu-ouv {
+    color: #A94442; /* rouge */
+}
+.feed-sidebar-content-list-td-statu-cou {
+    color: #C4873B; /* orange */
+}
+.feed-sidebar-content-list-td-statu-val {
+    color: #3C763D; /* vert */
+}
+.feed-sidebar-content-list-td-statu-fer {
+    color: #555555; /* gris */
+}
+.feed-sidebar-content-report-statushistory {
     width:inherit !important;
 }
 #feed-sidebar-content-report-statushistory tbody {

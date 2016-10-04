@@ -117,13 +117,16 @@ feed.map = (function () {
 
     var symbol_markers = {
         'VAL' : {
-            externalGraphic : "/static/libs/feedback/src/img/marker-gold.png"
+            externalGraphic : "/static/libs/feedback/src/img/marker-green.png"
         }, 
+        'COU' : {
+            externalGraphic : "/static/libs/feedback/src/img/marker-gold.png"
+        },
         'FER': {
-            externalGraphic : "/static/libs/feedback/src/img/marker.png"
+            externalGraphic : "/static/libs/feedback/src/img/marker-gray.png"
         },
         'OUV': {
-            externalGraphic : "/static/libs/feedback/src/img/marker-green.png"
+            externalGraphic : "/static/libs/feedback/src/img/marker.png"
         }
     };
 
@@ -347,11 +350,6 @@ layer_markers.addFeatures( [marker1, marker2] );
         $marker_list    : [],
         $click_feature  : clickFeature,
         $styleMarker    : styleMarker,
-
-//      $report_list    : { "type": "FeatureCollection", "features": [] },
-//      $icon_red       : new OpenLayers.Icon('http://dev.openlayers.org/releases/OpenLayers-2.6/img/marker.png',size,offset),
-//      $icon_green     : new OpenLayers.Icon('http://dev.openlayers.org/releases/OpenLayers-2.6/img/marker-green.png',size,offset),
-//      $icon_blue      : new OpenLayers.Icon('http://dev.openlayers.org/releases/OpenLayers-2.6/img/marker-blue.png',size,offset)
     }
   }; // eo setOl2Map
 

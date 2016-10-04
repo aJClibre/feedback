@@ -100,9 +100,10 @@ feed.sidebar = (function () {
                       + '<div class="form-group">'
                         + '<label class="col-md-12 control-label form-label-priority">Statut</label>'
                           + '<select class="form-control feed-sidebar-content-report-form-statu">'
-                          + '<option value="OUV">Ouvert</option>'
-                          + '<option value="VAL">Valid&eacute;</option>'
-                          + '<option value="FER">Ferm&eacute;</option>'
+                          + '<option value="OUV">En attente</option>'
+                          + '<option value="COU">En cours</option>'
+                          + '<option value="VAL">Trait&eacute;</option>'
+                          + '<option value="FER">Rejet&eacute;</option>'
                         + '</select>'
                       + '</div>'
                       + '<div class="form-group">'
@@ -854,7 +855,8 @@ console.log("############################### 2 " + new_report.id );
 
         reports_db().each( function ( report, idx ) {
 // console.log('reports_db.each : ' + report.id );            
-            var select_class = '';
+            var select_class = '',
+                statu = jqueryMap.$report_statu.find( "option[value=" + report.statu + "]");
 
             if ( report.get_is_empty() ) { // || report.get_is_report()
                 return true;
@@ -864,28 +866,29 @@ console.log("############################### 2 " + new_report.id );
             }
             list_html
                 += '<tr class="feed-sidebar-content-list-name' + select_class + '" tr-id="' + report.id + '">'
-                    + '<th data-id="' + report.id + '">'
+                    + '<td data-id="' + report.id + '">'
                         + feed.util_b.encodeHtml( report.id )
-                    + '</th>'
-                    + '<th scope="row">'
+                    + '</td>'
+                    + '<td scope="row">'
                         + feed.util_b.encodeHtml( report.title ) 
-                    + '</th>'
-                    + '<th>'
-                        + jqueryMap.$create_priority.find( "option[value=" + report.priority + "]").html()
-                    + '</th>'
-                    + '<th>'
-                        + jqueryMap.$report_statu.find( "option[value=" + report.statu + "]").html()
-                    + '</th>'
+                    + '</td>'
+                    + '<td>'
+                        + jqueryMap.$create_priority.find( "option[value=" + report.priority + "]").html() 
+                    + '</td>'
+                    + '<td class="feed-sidebar-content-list-td-statu-' + report.statu.toLowerCase() + '">'
+                        + '<strong>' + statu.html() + '</strong>'
+                    + '</td>'
                     //+ '<td class="text-center">'
                     //    + '<a href="mailto:a.jean-charles@valabre.com" title="a.jean-charles@valabre.com" class="fa fa-envelope tltip" data-toggle="tooltip" data-placement="left"></a>'
                     //+ '</td>'
-                    + '<th>'
-                        + '<span class="glyphicon glyphicon-cog g-edit" gly-id="' + report.id + '" aria-hidden="true"></span>'
-                    + '</th>'
-                    + '<th>'
-                        + '<span class="glyphicon glyphicon-remove g-remove" gly-id="' + report.id + '" aria-hidden="true"></span>'
-                    + '</th>'
+                    + '<td>'
+                        + '<span class="glyphicon glyphicon-cog g-edit" gly-id="' + report.id + '" aria-hidden="true" title="modifier"></span>'
+                    + '</td>'
+                    + '<td>'
+                        + '<span class="glyphicon glyphicon-remove g-remove" gly-id="' + report.id + '" aria-hidden="true" title="supprimer"></span>'
+                    + '</td>'
                 + '</tr>';
+
             is_reports = true;
         });
 
