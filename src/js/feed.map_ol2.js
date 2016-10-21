@@ -92,8 +92,8 @@ feed.map = (function () {
     setOl2Map,      setMarkerPosition,  getMarker,          setMarker,
     clearMarkers,   setPopup,           hideCurrentPopup,   hideFeatures, 
     showFeatures,   onSetReport,        onListchange,       onHoverList,
-    onLogout,       onRemoveSlider,     onSearchSelect,     configModule,
-    initModule;
+    onLogout,       onRemoveSlider,     onSearchSelect,     onDisplayPopup,
+    configModule,   initModule;
   //--------------------- eo Module scope -----------------------
   
   //--------------------- UTILITY METHODS -----------------------
@@ -116,16 +116,16 @@ feed.map = (function () {
     renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
 
     var symbol_markers = {
-        'VAL' : {
+        'TRAITE' : {
             externalGraphic : "/static/libs/feedback/src/img/marker-green.png"
         }, 
-        'COU' : {
+        'COURS' : {
             externalGraphic : "/static/libs/feedback/src/img/marker-gold.png"
         },
-        'FER': {
+        'REJETE': {
             externalGraphic : "/static/libs/feedback/src/img/marker-gray.png"
         },
-        'OUV': {
+        'ATTENTE': {
             externalGraphic : "/static/libs/feedback/src/img/marker.png"
         }
     };
@@ -280,7 +280,14 @@ console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.
             new_map.locate_map.y    = feat.geometry.y.toFixed(0);
 
             if ( report ) {
-                new_map.title   = report.title;
+                new_map.id_equi = report.title;
+                new_map.textarea= report.textarea;
+                new_map.statu   = report.statu;
+                new_map.type_r  = report.type_r;
+                new_map.type_e  = report.type_e;
+                new_map.created = report.datecreate;
+                new_map.modified= report.modified;
+                new_map.owner   = report.owner;
                 new_map.img     = report.img;
                 new_map.doc     = report.doc;
             }
@@ -454,13 +461,59 @@ layer_markers.addFeatures( [marker1, marker2] );
 
   setPopup = function ( popup_map ) {
     var
-      popup_html = String()
-        + '<span id="marker-popup">'
-        + ' <strong>' + popup_map.id + '</strong><br/>'
-        + ' <em>' + popup_map.title + '</em><br/>';
+        up_rule,
+        user        = configMap.people_model.get_user(),
+        popup_html  = String();
+
+    up_rule = user.rules_map.update_;
+
+    popup_html  += 
+'<label>Rapport ' + popup_map.id + '</label>'
++ '<table class="table table-condensed feed-popup-content-head"><tbody>'
+    + '<tr>'
+        + '<td><label>Création</label></td>'
+        + '<td>' + popup_map.created + '</td>'
+    + '</tr>'
+    + '<tr>'
+        + '<td><label>Modification</label></td>'
+        + '<td>' + popup_map.modified + '</td>'
+    + '</tr>'
+    + '<tr>'
+        + '<td><label>Auteur</label></td>'
+        + '<td>' + popup_map.owner + '</td>'
+    + '</tr>'
+    + '<tr>'
+        + '<td><label>Statut</label></td>'
+        + '<td class="feed-popup-content-statu-' + popup_map.statu.toLowerCase() + '"><b>' + feed.util_b.toLiterary( popup_map.statu ) + '</b></td>'
+    + '</tr>'
++ '</tbody></table>'
++ '<table class="table table-condensed feed-popup-content-body"><tbody>'
+    + '<tr>'
+        + '<td><label>Type de rapport:</label></td>'
+    + '</tr>'
+    + '<tr>'
+        + '<td class="feed-popup-content-body-td-text">' + feed.util_b.toLiterary( popup_map.type_r )  + '</td>'
+    + '</tr>'
+    + '<tr>'
+        + '<td><label>Type d\'équipement:</label></td>'
+    + '</tr>'
+    + '<tr>'
+        + '<td class="feed-popup-content-body-td-text">' + popup_map.type_e  + '</td>'
+    + '</tr>'
+    + '<tr>'
+        + '<td><label>Identifiant de l\'équipement:</label></td>'
+    + '</tr>'
+    + '<tr>'
+        + '<td class="feed-popup-content-body-td-text">' + popup_map.id_equi  + '</td>'
+    + '</tr>'
+    + '<tr>'
+        + '<td class="feed-popup-content-body-td-label"><label>Description:</label></td>'
+    + '</tr>'
++ '</tbody></table>'
++ '<p class="feed-popup-content-desc">' + popup_map.textarea  + '</p>';
 
     if ( popup_map.doc ) {
-      
+
       if ( (/\.(gif|jpg|jpeg|tiff|png)$/i).test(popup_map.doc) ) {
         popup_html += '<a data-toggle="modal"><img class="feed-map-popup-img img-responsive img-thumbnail center-block" alt="No image" src="/media/' + popup_map.doc + '"></a>' // + configMap.doc_path
       }
@@ -468,7 +521,35 @@ layer_markers.addFeatures( [marker1, marker2] );
         popup_html += '<div><a href="/media/' + popup_map.doc + '" target="_blank">' + popup_map.doc + '</a></div>'
       }
     }
-    popup_html += ' <small>Lon: ' + popup_map.locate_map.x + ' - Lat: ' + popup_map.locate_map.y + '</small></span>';
+
+    if ( up_rule ) {
+        popup_html += 
+'<table class="table table-condensed feed-popup-content-coord"><tbody>'
+    + '<tr colspan="2">'
+        + '<td class="feed-popup-content-body-td-label"><label>Coordonnées en Lambert 93</label></td>'
+    + '</tr>'
+    + '<tr>'
+        + '<td>Lattitude</td>'
+        + '<td>' + popup_map.locate_map.y + '</td>'
+    + '</tr>'
+    + '<tr>'
+        + '<td>Longitude</td>' 
+        + '<td>' + popup_map.locate_map.x + '</td>'
+    + '</tr>'
++ '</tbody></table>';
+
+        popup_html +=
+'<table class="table table-condensed feed-popup-content-footer"><tbody>'
+    + '<tr>'
+        + '<td><label>Action</label></td>'
+        + '<td>' + feed.util_b.toLiterary( popup_map.action ) + '</td>'
+    + '</tr>'
+    + '<tr>'
+        + '<td><label>Cible</label></td>' 
+        + '<td>' + feed.util_b.toLiterary( popup_map.cible ) + '</td>'
+    + '</tr>'
++ '</tbody></table>';
+    }
 
     return popup_html;
   };
@@ -510,7 +591,7 @@ layer_markers.addFeatures( [marker1, marker2] );
   //
   showFeatures = function () {
     var feats = ol2Map.$layer_markers.features;
-    console.dir(feats);
+    //console.dir(feats);
 
     for (var i = 0; i < feats.length; i++) {
         var feat = feats[i];
@@ -573,7 +654,15 @@ layer_markers.addFeatures( [marker1, marker2] );
             new_map.id              = report.id;
             new_map.locate_map.x    = report.locate_map.x;
             new_map.locate_map.y    = report.locate_map.y;
-            new_map.title           = report.title;
+            new_map.id_equi         = report.id_equi;
+            new_map.textarea        = report.textarea;
+            new_map.type_r          = report.type_r;
+            new_map.type_e          = report.type_e;
+            new_map.action          = report.action;
+            new_map.cible           = report.cible;
+            new_map.created         = report.created;
+            new_map.modified        = report.modified;
+            new_map.owner           = report.owner;
             new_map.img             = report.img;
             new_map.doc             = report.doc;
             new_map.statu           = report.statu;
@@ -594,7 +683,8 @@ layer_markers.addFeatures( [marker1, marker2] );
                 }
             );
             popup.panMapIfOutOfView             = false;
-            popup.autoSize                      = true;
+            //popup.autoSize                      = true;
+            popup.maxSize                       = new OpenLayers.Size(450,600);
             popup.keepInMap                     = true;
             popup.disableFirefoxOverflowHack    = true;
             marker.popup                        = popup;
@@ -720,6 +810,25 @@ layer_markers.addFeatures( [marker1, marker2] );
         showFeatures();
     }
   };
+
+  // Purpose :
+  //    * Display the popup of a feature
+  //    * Close the popup if one is open
+  // Arguments  : feature id
+  // Return     : none
+  // throws     : none
+  onDisplayPopup = function ( event, feat_id ) {
+    var popup = ol2Map.$marker_list[ feat_id ].popup; 
+
+    hideCurrentPopup();
+
+    if ( popup ) {
+        popup.toggle();
+        popup.panIntoView();
+        stateMap.current_popup = popup;
+    }
+  };
+  //
   //--------------------- eo event handlers ---------------------
   //
   //--------------------- PUBLIC METHODS ------------------------
@@ -786,6 +895,7 @@ layer_markers.addFeatures( [marker1, marker2] );
     $.gevent.subscribe( $map, 'feed-listhover', onHoverList );
     $.gevent.subscribe( $map, 'feed-removeslider', onRemoveSlider );
     $.gevent.subscribe( $map, 'feed-search', onSearchSelect );
+    $.gevent.subscribe( $map, 'feed-displayinfo', onDisplayPopup );
 
   }; // eo /initModule/
   return {

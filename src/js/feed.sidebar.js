@@ -69,55 +69,73 @@ feed.sidebar = (function () {
               + '<div id="sidebar" class="sidebar collapsed" style="font-size:12px;">'
                 + '<ul class="sidebar-tabs" role="tablist">' // Nav tabs
                   + '<li id="t_home" class="tab" title="Liste"><a href="#" role="tab"><i class="fa fa-bars" aria-hidden="true"></i></a></li>'
-                  + '<li id="t_report" class="tab" title="D&eacute;tail"><a href="#" role="tab"><i class="fa fa-gear" aria-hidden="true"></i></a></li>'
-                  + '<li id="t_create" class="tab" title="Cr&eacute;ation"><a href="#" role="tab"><i class="fa fa-plus" aria-hidden="true"></i></a></li>'
-                  + '<li id="t_settings" class="tab" title="Param&egrave;tres"><a href="#" role="tab"><i class="fa fa-info" aria-hidden="true"></i></a></li>'
+                  + '<li id="t_report" class="tab" title="Modifier"><a href="#" role="tab"><i class="fa fa-gear" aria-hidden="true"></i></a></li>'
+                  + '<li id="t_create" class="tab" title="Cr&eacute;er"><a href="#" role="tab"><i class="fa fa-plus" aria-hidden="true"></i></a></li>'
+                  + '<li id="t_settings" class="tab" title="Aide"><a href="#" role="tab"><i class="fa fa-info" aria-hidden="true"></i></a></li>'
                 + '</ul>'
                 + '<div class="sidebar-content feed-sidebar-content active">'
                   + '<div class="sidebar-pane feed-sidebar-content-home active" id="home">'
                     + '<h1>Liste des rapports</h1>'
                     + '<div class="feed-sidebar-content-home-box"></div>' 
-                    + '<button type="update" class="btn btn-primary btn-sm list-refresh">Rafraichir</button>'
-                    + '<a type="button" class="btn btn-primary btn-sm list-download">T&eacute;l&eacute;charger</a>'
+                    + '<div class="feed-sidebar-content-home-buttons">'
+                        + '<button type="update" class="btn btn-primary btn-sm list-refresh" title="mettre la liste &agrave; jour">Rafraichir</button>'
+                        + '<a type="button" class="btn btn-primary btn-sm list-download" title="T&eacute;l&eacute;charger la liste au format csv">T&eacute;l&eacute;charger</a>'
+                    + '</div>'
                   + '</div>'
                   + '<div class="sidebar-pane feed-sidebar-content-report" id="report">'
-                    + "<h1>D&eacute;tails</h1>"
+                    + "<h1>Rapport &agrave; modifier</h1>"
                     + '<h4 class="bg-danger is_selected">Veuillez sélectionner un rapport dans la liste</h4>'
                     + '<form class="feed-sidebar-content-report-form" id="form_modify">'
-                      + '<div class="form-group">'
-                        + '<label class="col-md-12 control-label feed-sidebar-content-report-form-id">ID</label>'
-                        + '<input type="text" class="form-control form-title feed-sidebar-content-report-form-title required" id="title" placeholder="Titre" data-validation="required" >'
-                        + '<!-- <p class="help-block">In addition to freeform text, any HTML5 text-based input appears like so.</p> -->'
-                      + '</div>'
-                      + '<div class="form-group">'
-                        + '<label class="col-md-12 control-label form-label-priority">Priorit&eacute;</label>'
-                        + '<select class="form-control feed-sidebar-content-report-form-priority">'
-                          + '<option value="INFO">Information</option>'
-                          + '<option value="UTIL">Utile</option>'
-                          + '<option value="URGE">Urgent</option>'
-                        + '</select>'
+                      + '<div class="form-group feed-sidebar-content-report-form-group-head">'
+                        + '<h5>'
+                          + '<label class="col-md-4 control-label">Rapport </label>'
+                          + '<label class="col-md-7 control-label feed-sidebar-content-report-form-id"> - </label>'
+                        + '</h5>'
+                        + '<label class="col-md-2 control-label">Création: </label>'
+                        + '<div class="col-md-4">'
+                            + '<p class="form-control-static feed-sidebar-content-report-form-datecreate"></p>'
+                        + '</div>'
+                        + '<label class="col-md-3 control-label">Modification: </label>'
+                        + '<div class="col-md-3">'
+                            + '<p class="form-control-static feed-sidebar-content-report-form-datemodif"></p>'
+                        + '</div>'
+                        + '<label class="col-md-2 control-label">Auteur: </label>'
+                        + '<div class="col-md-10">' 
+                            + '<p class="feed-sidebar-content-report-form-autor"></p>'
+                        + '</div>'
                       + '</div>'
                       + '<div class="form-group">'
                         + '<label class="col-md-12 control-label form-label-priority">Statut</label>'
                           + '<select class="form-control feed-sidebar-content-report-form-statu">'
-                          + '<option value="OUV">En attente</option>'
-                          + '<option value="COU">En cours</option>'
-                          + '<option value="VAL">Trait&eacute;</option>'
-                          + '<option value="FER">Rejet&eacute;</option>'
+                          + '<option value="ATTENTE">' + feed.util_b.toLiterary( "ATTENTE" ) + '</option>'
+                          + '<option value="COURS">' + feed.util_b.toLiterary( "COURS" ) + '</option>'
+                          + '<option value="TRAITE">' + feed.util_b.toLiterary( "TRAITE" ) + '</option>'
+                          + '<option value="REJETE">' + feed.util_b.toLiterary( "REJETE" ) + '</option>'
                         + '</select>'
                       + '</div>'
                       + '<div class="form-group">'
-                        + '<label class="col-md-2 control-label">Création: </label>'
-                        + '<div class="col-md-4">'
-                          + '<p class="form-control-static feed-sidebar-content-report-form-datecreate"></p>'
-                        + '</div>'
-                        + '<label class="col-md-2 control-label">Modifié: </label>'
-                        + '<div class="col-md-4">'
-                          + '<p class="form-control-static feed-sidebar-content-report-form-datemodif"></p>'
-                        + '</div>'
+                        + '<label class="col-md-12 control-label form-label-type_r">Type de rapport</label>'
+                        + '<select class="form-control feed-sidebar-content-report-form-type_r">'
+                          + '<option value="" disabled selected hidden>Vous souhaitez signalez ...</option>'
+                          + '<option value="PROBLEME">' + feed.util_b.toLiterary( "PROBLEME" ) + '</option>'
+                          + '<option value="ERREUR">' + feed.util_b.toLiterary( "ERREUR" ) + '</option>'
+                        + '</select>'
+                      + '</div>'
+                      + '<div class="form-group">'
+                        + '<label class="col-md-12 control-label form-label-type_e">Type d\'&eacute;quipement</label>'
+                        + '<input type="text" class="form-control form-type_e feed-sidebar-content-report-form-type_e required" id="type_e" placeholder="Ex: piste, citerne, PBI, route, b&acirc;timent, barri&egrave;re..." data-validation="required" >'
+                        + '<!-- <p class="help-block">In addition to freeform text, any HTML5 text-based input appears like so.</p> -->'
+                      + '</div>'
+                      + '<div class="form-group">'
+                        + '<label class="col-md-12 control-label form-label-id_equi">Identifiant de l\'&eacute;quipement</label>'
+                        + '<input type="text" class="form-control form-id_equi feed-sidebar-content-report-form-id_equi required" id="id_equi" placeholder="Ex: AL 123" data-validation="required" >'
+                      + '</div>'
+                      + '<div class="form-group">'
+                        + '<label for="report-textarea" class="col-md-12 control-label form-label-description">Description</label>'
+                        + '<textarea id="report-textarea" class="form-control feed-sidebar-content-report-form-textarea" rows="3"></textarea>'
                       + '</div>'
                       + '<div id="feed-sidebar-content-report-statusdiv">'
-                        + '<table id="feed-sidebar-content-report-statushistory" class="table table-condensed table-striped" style="width:inherit !important;">'
+                        + '<table id="feed-sidebar-content-report-statushistory" class="table table-condensed table-striped">'
                           + '<thead>'
                              + '<tr>'
                                 + '<th class="control-label"><b>Statut</b></th>'
@@ -129,16 +147,35 @@ feed.sidebar = (function () {
                             + '</tbody>'
                           + '</table>'
                         + '</div>'
-                      + '<div class="form-group">'
+                      + '<div class="form-group feed-sidebar-content-report-group-loc">'
                         + '<label class="col-md-12 control-label form-label-localisation">Localisation (Lambert 93)</label>'
                         + '<input type="text" class="col-md-5 feed-sidebar-content-report-form-x" id="x" placeholder="Longitude" readonly>'
                         + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-report-form-y" id="y" placeholder="Latitude" readonly>'
                       + '</div>'
-                      + '<div class="form-group">'
-                        + '<label for="report-textarea" class="col-md-12 control-label form-label-description">Description</label>'
-                        + '<textarea id="report-textarea" class="form-control feed-sidebar-content-report-form-textarea" rows="3"></textarea>'
+                      + '<div class="form-group form-group-action">'
+                        + '<label class="col-md-12 control-label form-label-action">Action</label>'
+                        + '<select class="form-control feed-sidebar-content-report-form-action">'
+                          + '<option value="INFO">' + feed.util_b.toLiterary( "INFO" ) + '</option>'
+                          + '<option value="CREATION">' + feed.util_b.toLiterary( "CREATION" ) + '</option>'
+                          + '<option value="MODIF">' + feed.util_b.toLiterary( "MODIF" ) + '</option>'
+                          + '<option value="DEPLACE">' + feed.util_b.toLiterary( "DEPLACE" ) + '</option>'
+                          + '<option value="SUPRIME">' + feed.util_b.toLiterary( "SUPRIME" ) + '</option>'
+                        + '</select>'
+                      + '</div>'
+                      + '<div class="form-group form-group-cible">'
+                        + '<label class="col-md-12 control-label form-label-cible">Cible</label>'
+                        + '<select class="form-control feed-sidebar-content-report-form-cible">'
+                          + '<option value="SDIS">' + feed.util_b.toLiterary( "SDIS" ) + '</option>'
+                          + '<option value="BMPM">' + feed.util_b.toLiterary( "BMPM" ) + '</option>'
+                          + '<option value="ONF">' + feed.util_b.toLiterary( "ONF" ) + '</option>'
+                          + '<option value="DDTM">' + feed.util_b.toLiterary( "DDTM" ) + '</option>'
+                          + '<option value="DFCI">' + feed.util_b.toLiterary( "DFCI" ) + '</option>'
+                          + '<option value="CD">' + feed.util_b.toLiterary( "CD" ) + '</option>'
+                          + '<option value="AUTRE">' + feed.util_b.toLiterary( "AUTRE" ) + '</option>'
+                        + '</select>'
                       + '</div>'
                       + '<div class="form-group">'
+                        + '<button class="btn btn-primary btn-sm report-send">Transmettre</button>'
                         + '<button class="btn btn-primary btn-sm report-modify">Modifier</button>'
                         + '<button class="btn btn-primary btn-sm report-cancel">Annuler</button>'
                       + '</div>'
@@ -165,38 +202,46 @@ feed.sidebar = (function () {
                   + '<div class="sidebar-pane feed-sidebar-content-create" id="create">'
                     + '<h1>Cr&eacute;er un rapport</h1>'
                     + '<form class="feed-sidebar-content-create-form" id="form_create" name="create_form">'
-                        + '<div class="form-group">'
-                          + '<!-- <label for="title" class="col-sm-2 control-label">Titre</label> -->'
-                          + '<input type="text" class="form-control form-title feed-sidebar-content-create-form-title required" id="titleCreate" placeholder="Titre" data-validation="required" >'
-                          + '<!-- <p class="help-block">In addition to freeform text, any HTML5 text-based input appears like so.</p> -->'
-                        + '</div>'
-                        + '<div class="form-group">'
-                          + '<label class="col-md-12 control-label form-label-priority">Priorit&eacute;</label>'
-                          + '<select class="form-control feed-sidebar-content-create-form-priority">'
-                            + '<option value="INFO">Information</option>'
-                            + '<option value="UTIL">Utile</option>'
-                            + '<option value="URGE">Urgent</option>'
-                          + '</select>'
-                        + '</div>'
-                        + '<div class="form-group">'
+                      + '<div class="form-group">'
+                        + '<label class="col-md-12 control-label form-label-type_r">Type de rapport</label>'
+                        + '<select class="form-control feed-sidebar-content-create-form-type_r">'
+                          + '<option value="" disabled selected hidden>Vous souhaitez signalez ...</option>'
+                          + '<option value="PROBLEME">Un dysfonctionnement concernant un &eacute;quipement</option>'
+                          + '<option value="ERREUR">Une erreur sur la cartographie</option>'
+                        + '</select>'
+                      + '</div>'
+                      + '<div class="form-group">'
+                        + '<label class="col-md-12 control-label form-label-type_e">Type d\'&eacute;quipement</label>'
+                        + '<input type="text" class="form-control form-type_e feed-sidebar-content-create-form-type_e required" id="type_e" placeholder="Ex: piste, citerne, PBI, route, b&acirc;timent, barri&egrave;re..." data-validation="required" >'
+                        + '<!-- <p class="help-block">In addition to freeform text, any HTML5 text-based input appears like so.</p> -->'
+                      + '</div>'
+                      + '<div class="form-group">'
+                        + '<label class="col-md-12 control-label form-label-id_equi">Identifiant de l\'&eacute;quipement</label>'
+                        + '<input type="text" class="form-control form-id_equi feed-sidebar-content-create-form-id_equi required" id="id_equi" placeholder="Ex: AL 123" data-validation="required" >'
+                      + '</div>'
+                      + '<div class="form-group">'
+                        + '<label for="create-textarea" class="col-md-12 control-label form-label-description">Description</label>'
+                        + '<textarea id="create-textarea" class="form-control feed-sidebar-content-create-form-textarea" rows="3"></textarea>'
+                      + '</div>'
+                      + '<div class="form-group feed-sidebar-content-create-group-locate">'
                           + '<label class="col-md-12 control-label form-label-localisation">Localisation (Lambert 93)</label>'
                           + '<input type="text" class="col-md-5 feed-sidebar-content-create-form-x" id="xCreate" placeholder="Longitude" readonly data-validation="required" >'
                           + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-create-form-y" id="yCreate" placeholder="Latitude" readonly data-validation="required" >'
-                        + '</div>'
-                        + '<div class="form-group">'
-                          + '<label for="textareaCreate" class="col-md-12 control-label form-label-description">Description</label>'
-                          + '<textarea id="textareaCreate" class="form-control feed-sidebar-content-create-form-textarea" rows="3"></textarea>'
-                        + '</div>'
-                        + '<div class="form-group">'
-                            + '<button class="btn btn-primary btn-sm report-create">Cr&eacute;er</button>'
-                            + '<button type="reset" class="btn btn-primary btn-sm reset">Annuler</button>'
-                        + '</div>'
+                      + '</div>'
+                      + '<div class="form-group">'
+                          + '<button class="btn btn-primary btn-sm report-create">Cr&eacute;er</button>'
+                          + '<button type="reset" class="btn btn-primary btn-sm reset">Annuler</button>'
+                      + '</div>'
                       + '</form>'
                   + '</div>'
                     + '<div class="sidebar-pane" id="settings">'
-                        + '<h1>Param&egrave;tres</h1>'
-                        + '<p>Welcome to the new sidebar which let you create and manage geolocated Information reports.<br/>'
-                        + 'Do not hesitate to contact us with questions or comment! <a href="mailto:#">webmaster@valabre.com</a></p>'
+                        + '<h1>L\'application en quelques mots...</h1>'
+                        + '<p>Chaque rapport cr&eacute;&eacute; est consultable par tous les autres utilisateurs de l\'application.</p>'
+                        + '<p>Un rapport est modifiable par son cr&eacute; tant que son statut est &laquo; en attente &raquo;.</p>'
+                        + '<p>L\'administrateur de l\'application consigne et signale aux gestionnaires concern&eacute;s l\'information contenue dans le rapport afin de proc&eacute;der aux correctifs &agrave; apporter.</p>'
+                        + '<p>L\'état d\'avancement du traitement de l\'information est actualis&eacute; en temps r&eacute;el par l\'administrateur au moyen d\'un jeu de couleurs:<ul style="list-style-type:none"><li>- rouge: en attente</li><li>- Jaune: en cours de traitement</li><li>- Vert: trait&eacute;</li><li>- Gris: rejet&eacute;</li></ul></p>'
+                        + '<p>Les &eacute;l&eacute;ments &laquo; trait&eacute;s &raquo; seront int&eacute;gr&eacute;s &agrave; la cartographie au moment de la mise &agrave; jour, pour le moment annuelle, du site.</p>'
+                        + '<p>L\'administrateur est &agrave; votre disposition &agrave; l\'adresse: <a href="mailto:#">contact.admin13@valabre.com</a></p>'
                     + '</div>'
                 + '</div>'
                 + '<div class="modal fade feed-sidebar-modal-img" id="modalImg" tabindex="-1" role="dialog" aria-labelledby="modal-img-title"> '
@@ -256,8 +301,9 @@ feed.sidebar = (function () {
         writeAlert,         clearSidebar,       clearCreateForm,
         clearList,          clearFormsError,    displayFileupload,
         onTapToggle,        onTapModifyReport,  onTapEditReport,
-        onTapDeleteReport,  onTapCancelReport,  onTapCreateReport,
-        onTapDeleteDoc,     onTapList,          onSelectStatu, onClickMarker,
+        onTapDeleteReport,  onTapDisplayInfo,   onTapCancelReport,  
+        onTapCreateReport,  onTapDeleteDoc,     onTapList,          
+        onSelectStatu,      onClickMarker,
         onTapRefreshList,   onSetReport,        onListchange,
         onHoverList,        onOutList,          onHoverMarker,
         onCoordChange,      onSetCoord,         onTapSubmitDoc,
@@ -306,12 +352,18 @@ feed.sidebar = (function () {
             $form_report        : $slider.find( '.feed-sidebar-content-report-form' ),
             $report_groups      : $slider.find( '.feed-sidebar-content-report-form .form-group' ),
             $report_id          : $slider.find( '.feed-sidebar-content-report-form-id' ),
-            $report_title       : $slider.find( '.feed-sidebar-content-report-form-title' ),
+            $report_id_equi     : $slider.find( '.feed-sidebar-content-report-form-id_equi' ),
             $report_textarea    : $slider.find( '.feed-sidebar-content-report-form-textarea' ),
             $report_statu       : $slider.find( '.feed-sidebar-content-report-form-statu' ),
-            $report_priority    : $slider.find( '.feed-sidebar-content-report-form-priority'),
+            $report_type_r      : $slider.find( '.feed-sidebar-content-report-form-type_r'),
+            $report_type_e      : $slider.find( '.feed-sidebar-content-report-form-type_e'),
+            $report_action      : $slider.find( '.feed-sidebar-content-report-form-action'),
+            $report_cible_grp   : $slider.find( '.form-group-cible'),
+            $report_action_grp  : $slider.find( '.form-group-action'),
+            $report_cible       : $slider.find( '.feed-sidebar-content-report-form-cible'),
             $report_datecreate  : $slider.find( '.feed-sidebar-content-report-form-datecreate' ),
             $report_datemodif   : $slider.find( '.feed-sidebar-content-report-form-datemodif' ),
+            $report_owner       : $slider.find( '.feed-sidebar-content-report-form-autor' ),
             $report_statusdiv   : $slider.find( '#feed-sidebar-content-report-statusdiv'),
             $report_statushistory : $slider.find( '#feed-sidebar-content-report-statushistory' ),
             $report_x           : $slider.find( '.feed-sidebar-content-report-form-x' ),
@@ -325,9 +377,10 @@ feed.sidebar = (function () {
             $progress_bar       : $slider.find( '#progress .bar'),
             $form_create        : $slider.find( '.feed-sidebar-content-create-form' ),
             $create_groups      : $slider.find( '.feed-sidebar-content-create-form .form-group' ),
-            $create_title       : $slider.find( '.feed-sidebar-content-create-form-title' ),
+            $create_id_equi     : $slider.find( '.feed-sidebar-content-create-form-id_equi' ),
             $create_textarea    : $slider.find( '.feed-sidebar-content-create-form-textarea' ),
-            $create_priority    : $slider.find( '.feed-sidebar-content-create-form-priority'),
+            $create_type_r      : $slider.find( '.feed-sidebar-content-create-form-type_r'),
+            $create_type_e      : $slider.find( '.feed-sidebar-content-create-form-type_e'),
             $create_doc_label   : $slider.find( '.feed-sidebar-content-create-form-doc-label' ),
             $create_doc_create  : $slider.find( '.feed-sidebar-content-create-form-group-doc-create' ),
             $create_doc_input   : $slider.find( '.feed-sidebar-content-create-form-file' ),
@@ -337,6 +390,7 @@ feed.sidebar = (function () {
             $is_selected        : $slider.find( '.is_selected' ),
             $butt_refresh       : $slider.find( '.list-refresh' ),
             $butt_download      : $slider.find( '.list-download' ),
+            $butt_send          : $slider.find( '.report-send' ),
             $butt_modify        : $slider.find( '.report-modify' ),
             $butt_cancel        : $slider.find( '.report-cancel' ),
             $butt_create        : $slider.find( '.report-create' ),
@@ -424,14 +478,17 @@ feed.sidebar = (function () {
     // Clear the sidebar 
     clearSidebar = function () {
         // report form
-        jqueryMap.$report_id.html('');
-        jqueryMap.$report_title.val('')
-            .attr("placeholder", 'titre' );
+        jqueryMap.$report_id.html(' - ');
+        jqueryMap.$report_id_equi.val('')
+            .attr("placeholder", 'Ex: AL 123' );
         jqueryMap.$report_textarea.val('');
-        jqueryMap.$report_statu.val('OUV');
-        jqueryMap.$report_priority.val('INFO');
+        jqueryMap.$report_statu.val('');
+        jqueryMap.$report_type_r.val('');
+        jqueryMap.$report_type_e.val('')
+            .attr("placeholder", 'Ex: piste, citerne, PBI, route, bâtiment, barrière...' );
         jqueryMap.$report_datecreate.html(' - ');
         jqueryMap.$report_datemodif.html(' - ');
+        jqueryMap.$report_owner.html('');
         jqueryMap.$report_x.val('')
             .attr("placeholder", 'Longitude' );
         jqueryMap.$report_y.val( '' )
@@ -453,10 +510,12 @@ feed.sidebar = (function () {
     };
 
     clearCreateForm = function () {
-        jqueryMap.$create_title.val('')
-            .attr("placeholder", 'titre' );
+        jqueryMap.$create_id_equi.val('')
+            .attr("placeholder", 'Ex: AL 123' );
         jqueryMap.$create_textarea.val('');
-        jqueryMap.$create_priority.val('INFO');
+        jqueryMap.$create_type_r.val('');
+        jqueryMap.$create_type_e.val('')
+            .attr("placeholder", 'Ex: piste, citerne, PBI, route, bâtiment, barrière...' );
         jqueryMap.$create_x.val('')
             .attr("placeholder", 'Longitude' );
         jqueryMap.$create_y.val('')
@@ -468,6 +527,7 @@ feed.sidebar = (function () {
     clearList = function () {
       jqueryMap.$list_box.html('No report to display');
     };
+
 
     clearFormsError = function () {
         jqueryMap.$form_report.get(0).reset();
@@ -539,7 +599,7 @@ feed.sidebar = (function () {
             return;
         }
 
-        if ( !jqueryMap.$report_x.val() || !jqueryMap.$report_title.val() ) {
+        if ( !jqueryMap.$report_x.val() || !jqueryMap.$report_id_equi.val() ) {
             return;
         }
 
@@ -549,10 +609,13 @@ feed.sidebar = (function () {
             configMap.reports_model.update_({
                 _id         : stateMap.active_report_id,
                 locate_map  : { x : point84.x.toFixed(0), y : point84.y.toFixed(0) },
-                title       : jqueryMap.$report_title.val(),
+                id_equi     : jqueryMap.$report_id_equi.val(),
                 textarea    : jqueryMap.$report_textarea.val(),
                 statu       : jqueryMap.$report_statu.val(),
-                priority    : jqueryMap.$report_priority.val()
+                type_r      : jqueryMap.$report_type_r.val(),
+                type_e      : jqueryMap.$report_type_e.val(),
+                action      : jqueryMap.$report_action.val(),
+                cible       : jqueryMap.$report_cible.val()
             });
         }
         else {
@@ -586,6 +649,17 @@ feed.sidebar = (function () {
         configMap.sidebar_model.update_list( [ data._response.result ] );
     };
 
+    onTapDisplayInfo = function ( event ) {
+        var report_id,
+            $tapped = $( event.target );
+        
+        if ( ! $tapped.hasClass( 'g-popup' ) ) { return false; }
+
+        report_id = $tapped.attr( 'gly-id' );
+
+        $.gevent.publish( 'feed-displayinfo', report_id );
+    }
+    
     onTapDeleteReport = function ( event ) {
         var report_id, 
             $tapped = $( event.target );
@@ -641,7 +715,7 @@ feed.sidebar = (function () {
     onTapCreateReport = function ( event ) {
         var point84;
 
-        if ( !jqueryMap.$create_x.val() || !jqueryMap.$create_title.val() )
+        if ( !jqueryMap.$create_x.val() || !jqueryMap.$create_id_equi.val() )
             return;
         
         point84 = feed.util_b.coordL93ToWgs84( jqueryMap.$create_x.val(), jqueryMap.$create_y.val() );
@@ -649,9 +723,10 @@ feed.sidebar = (function () {
         
         configMap.reports_model.create_({
             locate_map  : { x : point84.x.toFixed(0), y : point84.y.toFixed(0) },
-            title       : jqueryMap.$create_title.val(),
+            id_equi     : jqueryMap.$create_id_equi.val(),
             textarea    : jqueryMap.$create_textarea.val(),
-            priority    : jqueryMap.$create_priority.val()
+            type_r      : jqueryMap.$create_type_r.val(),
+            type_e      : jqueryMap.$create_type_e.val(),
             //doc         : jqueryMap.$create_doc_input[0].files[0]
         });
 
@@ -709,8 +784,8 @@ console.log("############################### onTapDeleteDoc " + stateMap.active_
 
         jqueryMap.$modal_img_title.html( id );
         report = configMap.reports_model.get_by_cid( id );
-        if ( report && (/\.(gif|jpg|jpeg|tiff|png)$/i).test(report.doc) ) {
-            jqueryMap.$modal_img_img.attr("src", report.doc );
+        if ( report && (/\.(gif|jpg|jpeg|tiff|png)$/i ).test( report.doc ) ) {
+            jqueryMap.$modal_img_img.attr( "src", report.doc );
         }
 
       return false;
@@ -763,12 +838,17 @@ console.log("############################### onTapDeleteDoc " + stateMap.active_
         jqueryMap.$is_selected.hide();
         stateMap.active_report_id = new_report.id;
         jqueryMap.$report_id.html( new_report.id );
-        jqueryMap.$report_title.val( new_report.title );
+        jqueryMap.$report_id_equi.val( new_report.id_equi );
+        console.log('new_report.id_equi: ' + new_report.id_equi);
         jqueryMap.$report_textarea.val( new_report.textarea );
         jqueryMap.$report_statu.val( new_report.statu );
-        jqueryMap.$report_priority.val( new_report.priority );
+        jqueryMap.$report_type_r.val( new_report.type_r );
+        jqueryMap.$report_type_e.val( new_report.type_e );
+        jqueryMap.$report_action.val( new_report.action );
+        jqueryMap.$report_cible.val( new_report.cible );
         jqueryMap.$report_datecreate.html( new_report.created );
         jqueryMap.$report_datemodif.html( new_report.modified );
+        jqueryMap.$report_owner.html( new_report.owner );
         //console.dir(new_report);
         if ( new_report.history_status && new_report.history_status.length > 0 ) {
             jqueryMap.$report_statushistory.DataTable({
@@ -779,12 +859,18 @@ console.log("############################### onTapDeleteDoc " + stateMap.active_
                 info            : false,
                 destroy         : true,
                 "createdRow"    : function(row, data, dataIndex) {
-                    if (data[0] == "FER") {
-                        $('td:eq(0)', row).html("Fermé");
-                    } else if (data[0] == "VAL") {
-                        $('td:eq(0)', row).html("Validé");
-                    } else {
-                        $('td:eq(0)', row).html("Ouvert");
+                    switch ( data[0] ) {
+                        case "REJETE":
+                            $('td:eq(0)', row).html( feed.util_b.toLiterary( "REJETE" ) );
+                            break;
+                        case "COURS":
+                            $('td:eq(0)', row).html( feed.util_b.toLiterary( "COURS" ) );
+                            break;
+                        case "TRAITE":
+                            $('td:eq(0)', row).html( feed.util_b.toLiterary( "TRAITE" ) );
+                            break;
+                        default:
+                            $('td:eq(0)', row).html( feed.util_b.toLiterary( "ATTENTE" ) );
                     }
                 },
                 "language": {
@@ -815,10 +901,12 @@ console.log("############################### 2 " + new_report.id );
             jqueryMap.$report_doc_create.show();
         }
         
-        // can modify a report only if admin or statu not at VAL or FER
-        if ( ! configMap.people_model.get_user().rules_map.update_ && jqueryMap.$report_statu.val() != 'OUV' ) {
+        // can modify a report only if admin or status is ATTENTE
+        if ( ! configMap.people_model.get_user().rules_map.update_ && jqueryMap.$report_statu.val() != 'ATTENTE' ) {
             jqueryMap.$butt_modify.prop( 'disabled', true );
             jqueryMap.$butt_modify.attr( 'title', 'Seul l\'administrateur a les droits de modification' );
+
+            // TODO : change delete icon color in the liste page, hide send column in the list tab
         }
         
         clearCreateForm();
@@ -835,21 +923,34 @@ console.log("############################### 2 " + new_report.id );
     onListchange = function( event ) {
   
         var 
-            table_reports,
-            is_reports = false,
-            reports_db = configMap.reports_model.get_db(),
-            list_html = String()
-              + '<div>'
-                + '<table id="tableReports" class="table table-hover" cellspacing="0" width="100%">'
+            table_reports, up_rule, columns,
+            user        = configMap.people_model.get_user(),
+            is_reports  = false,
+            reports_db  = configMap.reports_model.get_db(),
+            list_html   = String();
+
+        up_rule = user.rules_map.update_;
+
+        list_html +=     
+            '<div class="table-responsive">'
+                + '<table id="tableReports" class="table table-striped table-hover" cellspacing="0" width="100%" role="grid" style="width: 100%;">'
                     + '<thead>'
                         + '<tr>'
-                            + '<th>#</th>'
-                            + '<th>Titre</th>'
-                            + '<th>Priorité</th>'
+                            + '<th></th>'
+                            + '<th>Cr&eacute;ation</th>'
                             + '<th>Statut</th>'
+                            + '<th>Type</th>'
+                            + '<th>&Eacute;quip.</th>'
+                            + '<th></th>';
+            if ( up_rule ) { 
+                list_html +=
+                            '<th></th>'
                             + '<th></th>'
-                            + '<th></th>'
-                        + '</tr>'
+                            + '<th></th>';
+           }
+
+           list_html +=
+                        '</tr>'
                     + '</thead>'
                     + '<tbody>';
 
@@ -867,35 +968,48 @@ console.log("############################### 2 " + new_report.id );
             list_html
                 += '<tr class="feed-sidebar-content-list-name' + select_class + '" tr-id="' + report.id + '">'
                     + '<td data-id="' + report.id + '">'
-                        + feed.util_b.encodeHtml( report.id )
+                        + report.id
                     + '</td>'
                     + '<td scope="row">'
-                        + feed.util_b.encodeHtml( report.title ) 
-                    + '</td>'
-                    + '<td>'
-                        + jqueryMap.$create_priority.find( "option[value=" + report.priority + "]").html() 
+                        + feed.util_b.encodeHtml( report.created )
                     + '</td>'
                     + '<td class="feed-sidebar-content-list-td-statu-' + report.statu.toLowerCase() + '">'
-                        + '<strong>' + statu.html() + '</strong>'
+                        + '<strong>' + feed.util_b.encodeHtml( statu.val() ) + '</strong>'
                     + '</td>'
-                    //+ '<td class="text-center">'
-                    //    + '<a href="mailto:a.jean-charles@valabre.com" title="a.jean-charles@valabre.com" class="fa fa-envelope tltip" data-toggle="tooltip" data-placement="left"></a>'
-                    //+ '</td>'
                     + '<td>'
+                        + jqueryMap.$create_type_r.find( "option[value=" + report.type_r + "]").val() 
+                    + '</td>'
+                    + '<td>'
+                        + feed.util_b.encodeHtml( report.type_e )
+                    + '</td>'
+                    + '<td>'
+                        + '<span class="glyphicon glyphicon-list g-popup" gly-id="' + report.id + '" aria-hidden="true" title="afficher"></span>'
+                    + '</td>';
+            
+            // modify the sidebar considering the user is not admin and is not owner
+            if ( up_rule ) { // || user.email == report.owner
+                list_html += 
+                    '<td>'
                         + '<span class="glyphicon glyphicon-cog g-edit" gly-id="' + report.id + '" aria-hidden="true" title="modifier"></span>'
                     + '</td>'
                     + '<td>'
                         + '<span class="glyphicon glyphicon-remove g-remove" gly-id="' + report.id + '" aria-hidden="true" title="supprimer"></span>'
                     + '</td>'
-                + '</tr>';
-
+                    + '</td>'
+                    + '<td class="text-center feed-sidebar-content-list-td-mailto">'
+                        + '<a href="mailto:a.jean-charles@valabre.com" title="a.jean-charles@valabre.com" class="fa fa-envelope tltip" data-toggle="tooltip" data-placement="left"></a>';
+                    + '</td>'
+            }
+            list_html += 
+              '</tr>';
+            
             is_reports = true;
         });
 
         list_html
                 += '</tbody>'
             + '</table>'
-          + '</div>'
+        + '</div>'
 
         if ( ! is_reports ) {
             list_html = String()
@@ -907,21 +1021,28 @@ console.log("############################### 2 " + new_report.id );
 
         jqueryMap.$list_box.html( list_html );
 
+        jqueryMap.$slider.find( '.g-popup' ).bind( 'click', onTapDisplayInfo );
         jqueryMap.$slider.find( '.g-remove' ).bind( 'click', onTapDeleteReport );
         jqueryMap.$slider.find( '.g-edit' ).bind( 'click', onTapEditReport );
         jqueryMap.$list_box.find( 'tr' ).bind( 'mouseover', onHoverList );
         jqueryMap.$list_box.find( 'tr' ).bind( 'mouseout', onOutList );
+        
+        if ( up_rule ) {
+            columns = [{ "visible": false},null, null, null, null, { "orderable": false }, { "orderable": false }, { "orderable": false }, { "orderable": false }];
+        }
+        else {
+            columns = [{ "visible": false},null, null, null, null, { "orderable": false }];
+        }
 
         table_reports = $('#tableReports').DataTable({
             "dom"       : '<"top"f>rt<"bottom"ip><"clear">',
-            "scrollX"   : true,
-            "scrollY"   : true,
             "autoWidth" : true,
             "pageLength": 15,
             "language"  : {
                 "url"       : "//cdn.datatables.net/plug-ins/1.10.11/i18n/French.json"
             },
-            "columns"   : [null, null, null, null, { "orderable": false }, { "orderable": false }]
+            "order": [[ 0, "desc" ]],
+            "columns"   : columns 
         }).on( 'search.dt', function(e, settings) {
             // wait for 1s before the array rendered
             setTimeout( function() {
@@ -935,7 +1056,11 @@ console.log("############################### 2 " + new_report.id );
                 console.log('dt_length: ' + dt_length + ' / tab.length: ' + tab.length);
                 $.gevent.publish( 'feed-search', [tab] );                
             }, 1000);
-        });
+        })/*.on( 'draw.dt', function () {
+        table_reports.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+        })
+        })*/;
         
         clearCreateForm(); 
 
@@ -997,11 +1122,18 @@ console.log("############################### 2 " + new_report.id );
     };
 
     // Event handler for feed-login model event
+    // Modify the sidebar considering the user's rules
     //
     onLogin = function ( event, login_user ) {
          // can update statu value only if admin
          if ( ! configMap.people_model.get_user().rules_map.update_ ) {
+            // reports list
+
+            // report form
             jqueryMap.$report_statu.prop( 'disabled', true );
+            jqueryMap.$report_action_grp.hide();
+            jqueryMap.$report_cible_grp.hide();
+            jqueryMap.$butt_send.hide();
          }
     };
 

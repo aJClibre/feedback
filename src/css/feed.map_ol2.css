@@ -10,3 +10,45 @@ circle {
     cursor: hand;
 }
 
+/* popup */
+.olPopup {
+    color: #555;
+    font-size: 12px;
+}
+.feed-popup-content-head {
+    background-color: #eee;
+    margin-bottom: 10px;
+}
+.feed-popup-content-body {
+    margin-bottom: 0px;
+}
+.feed-popup-content-body-td-text {
+    padding-top: 0px !important;
+    padding-bottom: 10px !important;
+}
+.feed-popup-content-body-td-label {
+    /*padding-top: 0px !important;
+    padding-bottom: 0px !important;*/
+}
+.table-condensed > tbody > tr > td {
+    border-top: None;
+    line-height: 0.4;
+}
+.feed-popup-content-desc p {
+    width: 350px;
+}
+.feed-popup-content-statu-attente {
+    color: #d9534f; /* rouge */
+}
+.feed-popup-content-statu-cours {
+    color: #f0ad4e; /* orange */
+}
+.feed-popup-content-statu-traite {
+    color: #5cb85c; /* vert */
+}
+.feed-popup-content-statu-rejete {
+    color: #555; /* gris */
+}
+.feed-map-popup-img {
+    margin-bottom: 15px;
+}

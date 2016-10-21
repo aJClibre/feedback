@@ -65,19 +65,39 @@ feed.util_b = (function () {
     //---------------- BEGIN MODULE SCOPE VARIABLES --------------
     var
         configMap = {
-            regex_encode_html  : /[&"'><]/g,
-            regex_encode_noamp : /["'><]/g,
-            html_encode_map    : {
+            regex_encode_html   : /[&"'><]/g,
+            regex_encode_noamp  : /["'><]/g,
+            html_encode_map     : {
                 '&' : '&#38;',
                 '"' : '&#34;',
                 "'" : '&#39;',
                 '>' : '&#62;',
                 '<' : '&#60;'
+            },
+            literary_version_map : {
+                'ATTENTE'   : 'En attente',
+                'COURS'     : 'En cours',
+                'TRAITE'    : 'Trait&eacute;',
+                'REJETE'    : 'Rejet&eacute;',
+                'PROBLEME'  : 'Un dysfonctionnement concernant un &eacute;quipement',
+                'ERREUR'    : 'Une erreur sur la cartographie',
+                'INFO'      : 'Information',
+                'CREATION'  : 'Cr&eacute;ation',
+                'MODIF'     : 'Modification',
+                'DEPLACE'   : 'D&eacute;placement',
+                'SUPRIME'   : 'Suppression',
+                'SDIS'      : 'SDIS',
+                'BMPM'      : 'BMPM',
+                'ONF'       : 'ONF',
+                'DDTM'      : 'DDTM',
+                'DFCI'      : 'Commission DFCI',
+                'CD'        : 'CD',
+                'AUTRE'     : 'Autre...'
             }
         },
 
         decodeHtml,         encodeHtml, coordWgs84ToL93,
-        coordL93ToWgs84,    getEmSize;
+        coordL93ToWgs84,    toLiterary, getEmSize;
 
         configMap.encode_noamp_map = $.extend(
             {}, configMap.html_encode_map
@@ -145,6 +165,20 @@ feed.util_b = (function () {
         return point;
     };
     
+    // Begin toLiterary
+    // Convert a list value to the literary version
+    //
+    toLiterary = function ( input_arg_str ) {
+        var liter, cond,
+            input_str = String( input_arg_str );
+        
+        liter = configMap.literary_version_map[ input_str ];
+        cond = liter ? liter : input_str;
+
+        return cond;
+    };
+    // End toLiterary
+
     // Begin getEmSize
     // returns size of ems in pixels
     //
@@ -161,6 +195,7 @@ feed.util_b = (function () {
         encodeHtml      : encodeHtml,
         coordWgs84ToL93 : coordWgs84ToL93,
         coordL93ToWgs84 : coordL93ToWgs84,
+        toLiterary      : toLiterary,
         getEmSize       : getEmSize
     };
     //------------------- END PUBLIC METHODS ---------------------

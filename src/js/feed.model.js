@@ -77,9 +77,11 @@ feed.model = (function () {
             empty_title     : '',
             empty_textarea  : '',
             empty_statu     : '',
-            empty_priority  : '',
+            empty_type_r    : '',
+            empty_type_e    : '',
             empty_created   : '',
             empty_modified  : '',
+            empty_owner     : '',
             empty_history   : '',
             empty_locate_map: { x : 0, y : 0 }
         },
@@ -343,7 +345,6 @@ feed.model = (function () {
     //     if the report data is not synced with the backend.
     //   * id - the unique id. This may be undefined if the
     //     object is not synced with the backend.
-    //   * title - the string title of the report.
     //   * locate_map - a map of locate attributes used for localisation.
     //
     reportProto = {
@@ -377,13 +378,17 @@ feed.model = (function () {
         var report,
           cid           = report_map.cid,
           id            = report_map.id,
-          title         = report_map.title,
+          id_equi       = report_map.id_equi,
           textarea      = report_map.textarea,
           statu         = report_map.statu,
-          priority      = report_map.priority,
+          type_r        = report_map.type_r,
+          type_e        = report_map.type_e,
+          action        = report_map.action,
+          cible         = report_map.cible,
           history_status = report_map.history_status,
           created       = report_map.created,
           modified      = report_map.modified,
+          owner         = report_map.owner,
           locate_map    = report_map.locate_map,
           // img           = report_map.img,
           doc           = report_map.doc;
@@ -394,14 +399,18 @@ feed.model = (function () {
 
         report              = Object.create( reportProto );
         report.cid          = cid;
-        report.title        = title;
+        report.id_equi      = id_equi;
         report.textarea     = textarea;
         report.statu        = statu;
-        report.priority     = priority;
+        report.type_r       = type_r;
+        report.type_e       = type_e;
+        report.action       = action;
+        report.cible        = cible; 
         report.history_status = history_status;
         report.locate_map   = locate_map;
         report.created      = created;
         report.modified     = modified;
+        report.owner        = owner;
         report.doc          = doc;
 
         if ( id ) { report.id = id; }
@@ -462,14 +471,15 @@ feed.model = (function () {
             // call the completeCreate to put the new report in 
             // stateMap.report and call sidebar._update_reports_list
             // to update the reports list
+            console.log('createreport report_create_map.id_equi: ' + report_create_map.id_equi);
             sio.emit( 'createreport', {
                 cid         : makeReportCid(),
                 locate_map  : report_create_map.locate_map,
-                title       : report_create_map.title,
+                id_equi     : report_create_map.id_equi,
                 textarea    : report_create_map.textarea,
                 statu       : report_create_map.statu,
-                priority    : report_create_map.priority,
-                history_status : report_create_map.history_status,
+                type_r      : report_create_map.type_r,
+                type_e      : report_create_map.type_e,
                 doc         : report_create_map.doc
             });
         };
@@ -582,7 +592,8 @@ feed.model = (function () {
         // Begin internal methods
 
         // Refresh the reports object when a new
-        // list is received
+        // list is received and add new parameters to the user
+        // received from the server
         // answer : response from the server
         // answer.length > 1 only if it's a report creation
         //
@@ -592,12 +603,16 @@ feed.model = (function () {
               i, report_map, make_report_map,
               arg_list          = answer[0],
               reports_list      = answer[0].data ? answer[0].data : [],
+              data_user         = answer[0].user,
               error_mess        = answer[0].message ? answer[0].message : null,
               is_report_exist   = false,
               is_report_new     = false // true if answer.length > 1
             ;
+
+            // complete the user profile
+            stateMap.user.email = data_user.email;
+
             clearReportsDb();
-//console.dir(answer);
             
             if ( answer.length > 1 ) {
                 if ( ! error_mess ) {
@@ -605,12 +620,16 @@ feed.model = (function () {
                     delete stateMap.reports_cid_map[ report_map.cid ];
                     stateMap.report.cid         = report_map._id;
                     stateMap.report.id          = report_map._id;
-                    stateMap.report.title       = report_map.title;
+                    stateMap.report.id_equi     = report_map.id_equi;
                     stateMap.report.textarea    = report_map.textarea;
                     stateMap.report.statu       = report_map.statu;
-                    stateMap.report.priority    = report_map.priority;
+                    stateMap.report.type_r      = report_map.type_r;
+                    stateMap.report.type_e      = report_map.type_e;
+                    stateMap.report.action      = report_map.action;
+                    stateMap.report.cible       = report_map.cible;
                     stateMap.report.created     = report_map.created;
                     stateMap.report.modified    = report_map.modified;
+                    stateMap.report.owner       = report_map.owner;
                     stateMap.report.history_status = report_map.history_status;
                     stateMap.report.locate_map  = report_map.locate_map;
                     stateMap.report.doc         = report_map.doc;
@@ -636,12 +655,16 @@ feed.model = (function () {
                 if ( ! stateMap.report.get_is_empty() && stateMap.report.id === report_map._id ) {
                     if ( ! is_report_new && ! error_mess ) {
                         $.gevent.publish( 'feed-alert', { text: 'La mise à jour a été réalisée avec succès !'} );
-                        stateMap.report.title       = report_map.title;
+                        stateMap.report.id_equi     = report_map.id_equi;
                         stateMap.report.textarea    = report_map.textarea;
                         stateMap.report.statu       = report_map.statu;
-                        stateMap.report.priority    = report_map.priority;
+                        stateMap.report.type_r      = report_map.type_r;  
+                        stateMap.report.type_e      = report_map.type_e;
+                        stateMap.report.action      = report_map.action;
+                        stateMap.report.cible       = report_map.cible; 
                         stateMap.report.created     = report_map.created;
                         stateMap.report.modified    = report_map.modified;
+                        stateMap.report.owner       = report_map.owner;
                         stateMap.report.history_status = report_map.history_status;
                         stateMap.report.locate_map  = report_map.locate_map;
                         stateMap.report.doc         = report_map.doc;                        
@@ -654,7 +677,7 @@ feed.model = (function () {
                     // and new_report as data
                     //
                     // reports.cancel_( report_map._id );
-// console.log('feed-setreport : ' + stateMap.report.title );
+// console.log('feed-setreport : ' + stateMap.report._id );
                     $.gevent.publish( 'feed-setreport',
                         { old_report : stateMap.report, new_report : stateMap.report }
                     );
@@ -664,22 +687,26 @@ feed.model = (function () {
                 }
 
                 // TODO : see if it's interesting
-                if ( report_map && ! report_map.title ) { continue REPORT; }
+                if ( report_map && ! report_map._id ) { continue REPORT; }
 
                 make_report_map = {
                     cid         : report_map._id,
                     locate_map  : report_map.locate_map,
                     id          : report_map._id,
-                    title       : report_map.title,
+                    id_equi     : report_map.id_equi,
                     textarea    : report_map.textarea,
                     statu       : report_map.statu,
-                    priority    : report_map.priority,
+                    type_r      : report_map.type_r,
+                    type_e      : report_map.type_e,
+                    action      : report_map.action,
+                    cible       : report_map.cible, 
                     created     : report_map.created,
                     modified    : report_map.modified,
+                    owner       : report_map.owner,
                     history_status : report_map.history_status,
                     doc         : report_map.doc
                 };
-// console.log('makeReport: ' + make_report_map.title );
+// console.log('makeReport: ' + make_report_map._id );
                 makeReport( make_report_map );
             }
 
@@ -780,7 +807,7 @@ feed.model = (function () {
             var new_report;
 
             new_report = stateMap.reports_cid_map[ report_id ];
-// console.log('set_report : ' + new_report.title );            
+// console.log('set_report : ' + new_report.id );            
             if ( new_report ) {
 // console.log('set_report if new_report');
                 if ( stateMap.report && stateMap.report.id === new_report.id ) {
@@ -838,12 +865,16 @@ feed.model = (function () {
         stateMap.empty_report = makeReport({
             cid         : configMap.empty_id,
             id          : configMap.empty_id,
-            title       : configMap.empty_title,
+            id_equi     : configMap.empty_title,
             textarea    : configMap.empty_textarea,
             statu       : configMap.empty_statu,
-            priority    : configMap.empty_priority,
+            type_r      : configMap.empty_type_r,
+            type_e      : configMap.empty_type_e,
+            action      : configMap.empty_action,
+            cible       : configMap.empty_cible,
             created     : configMap.empty_created,
             modified    : configMap.empty_modified,
+            owner       : configMap.empty_owner,
             locate_map  : configMap.empty_locate,
             history_status : configMap.empty_history
         });

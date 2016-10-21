@@ -79,25 +79,25 @@ feed.fake = (function () {
 /*
     reportsList = [
         {
-            title : 'titre 11', _id : '150902_01',
+            id_equi : 'titre 11', _id : '150902_01',
             locate_map : { x: 5.501, y: 43.501 },
             doc : 'BonDeCommande2014.pdf'
         },{
-            title : 'titre 22', _id : '150902_02',
+            id_equi : 'titre 22', _id : '150902_02',
             locate_map : { x: 5.6, y: 43.39 },
             doc : 'countries_europe_mapjpg.jpeg'
         },{
-            title : 'titre 51', _id : '150808_05',
+            id_equi : 'titre 51', _id : '150808_05',
             locate_map : { x: 5.44, y: 43.47312 }
         },{
-            title : 'titre 12', _id : '150702_01',
+            id_equi : 'titre 12', _id : '150702_01',
             locate_map : { x: 5.48, y: 43.5 },
             doc : 'P1040319.JPG'
         },{
-            title : 'titre 24', _id : '150702_02',
+            id_equi : 'titre 24', _id : '150702_02',
             locate_map : { x: 5.55, y: 43.3 }
         },{
-            title : 'titre 51', _id : '150908_05',
+            id_equi : 'titre 51', _id : '150908_05',
             locate_map : { x: 5.43, y: 43.473 }
         }
     ];
