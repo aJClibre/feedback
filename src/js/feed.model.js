@@ -610,7 +610,8 @@ feed.model = (function () {
             ;
 
             // complete the user profile
-            stateMap.user.email = data_user.email;
+            stateMap.user.email     = data_user.email;
+            stateMap.user.admins    = data_user.admins;
 
             clearReportsDb();
             

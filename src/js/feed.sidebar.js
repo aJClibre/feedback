@@ -175,7 +175,7 @@ feed.sidebar = (function () {
                         + '</select>'
                       + '</div>'
                       + '<div class="form-group">'
-                        + '<button class="btn btn-primary btn-sm report-send">Transmettre</button>'
+                        + '<a class="btn btn-primary btn-sm report-send">Transmettre</a>'
                         + '<button class="btn btn-primary btn-sm report-modify">Modifier</button>'
                         + '<button class="btn btn-primary btn-sm report-cancel">Annuler</button>'
                       + '</div>'
@@ -241,7 +241,7 @@ feed.sidebar = (function () {
                         + '<p>L\'administrateur de l\'application consigne et signale aux gestionnaires concern&eacute;s l\'information contenue dans le rapport afin de proc&eacute;der aux correctifs &agrave; apporter.</p>'
                         + '<p>L\'état d\'avancement du traitement de l\'information est actualis&eacute; en temps r&eacute;el par l\'administrateur au moyen d\'un jeu de couleurs:<ul style="list-style-type:none"><li>- rouge: en attente</li><li>- Jaune: en cours de traitement</li><li>- Vert: trait&eacute;</li><li>- Gris: rejet&eacute;</li></ul></p>'
                         + '<p>Les &eacute;l&eacute;ments &laquo; trait&eacute;s &raquo; seront int&eacute;gr&eacute;s &agrave; la cartographie au moment de la mise &agrave; jour, pour le moment annuelle, du site.</p>'
-                        + '<p>L\'administrateur est &agrave; votre disposition &agrave; l\'adresse: <a href="mailto:#">contact.admin13@valabre.com</a></p>'
+                        + '<p>L\'administrateur est &agrave; votre disposition &agrave; l\'adresse: <a href="mailto:#" class="feed-sidebar-content-help-email">contact.admin13@valabre.com</a></p>'
                     + '</div>'
                 + '</div>'
                 + '<div class="modal fade feed-sidebar-modal-img" id="modalImg" tabindex="-1" role="dialog" aria-labelledby="modal-img-title"> '
@@ -388,6 +388,7 @@ feed.sidebar = (function () {
             $create_x           : $slider.find( '.feed-sidebar-content-create-form-x' ),
             $create_y           : $slider.find( '.feed-sidebar-content-create-form-y' ),
             $is_selected        : $slider.find( '.is_selected' ),
+            $help_email         : $slider.find( '.feed-sidebar-content-help-email' ),
             $butt_refresh       : $slider.find( '.list-refresh' ),
             $butt_download      : $slider.find( '.list-download' ),
             $butt_send          : $slider.find( '.report-send' ),
@@ -726,7 +727,7 @@ feed.sidebar = (function () {
             id_equi     : jqueryMap.$create_id_equi.val(),
             textarea    : jqueryMap.$create_textarea.val(),
             type_r      : jqueryMap.$create_type_r.val(),
-            type_e      : jqueryMap.$create_type_e.val(),
+            type_e      : jqueryMap.$create_type_e.val()
             //doc         : jqueryMap.$create_doc_input[0].files[0]
         });
 
@@ -908,6 +909,9 @@ console.log("############################### 2 " + new_report.id );
 
             // TODO : change delete icon color in the liste page, hide send column in the list tab
         }
+
+        // modify the send button
+        jqueryMap.$butt_send.attr( 'href', 'mailto:?subject=Remontée d\'informations - Rapport ' + new_report.id + ' à votre attention&body=Bonjour,%0D%0ALe rapport ' + new_report.id + ' rédigé dans l\'application Géo DFCI (http://www.sig-dfci.org) vous est destiné.%0D%0AMerci de prendre en compte cette information et de me faire part, par retour de mail, de l\'état d\'avancement de ce dossier.%0D%0A%0D%0AVous en remerciant par avance et restant à votre disposition.%0D%0ACordialement,' );
         
         clearCreateForm();
 
@@ -997,7 +1001,7 @@ console.log("############################### 2 " + new_report.id );
                     + '</td>'
                     + '</td>'
                     + '<td class="text-center feed-sidebar-content-list-td-mailto">'
-                        + '<a href="mailto:a.jean-charles@valabre.com" title="a.jean-charles@valabre.com" class="fa fa-envelope tltip" data-toggle="tooltip" data-placement="left"></a>';
+                        + '<a href="mailto:' + report.owner + '&subject=Remontée d\'informations - Rapport ' + report.id + '&body=Message de l\'administrateur" title="' + report.owner + '" class="fa fa-envelope tltip" data-toggle="tooltip" data-placement="left"></a>';
                     + '</td>'
             }
             list_html += 
@@ -1056,12 +1060,11 @@ console.log("############################### 2 " + new_report.id );
                 console.log('dt_length: ' + dt_length + ' / tab.length: ' + tab.length);
                 $.gevent.publish( 'feed-search', [tab] );                
             }, 1000);
-        })/*.on( 'draw.dt', function () {
-        table_reports.column(1, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-            cell.innerHTML = i+1;
-        })
-        })*/;
+        });
         
+        jqueryMap.$help_email.html( user.admins );
+        jqueryMap.$help_email.attr( 'href', 'mailto:' + user.admins );
+
         clearCreateForm(); 
 
         // stop handling of the event !
