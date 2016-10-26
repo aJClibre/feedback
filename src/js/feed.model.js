@@ -610,9 +610,11 @@ feed.model = (function () {
             ;
 
             // complete the user profile
-            stateMap.user.email     = data_user.email;
-            stateMap.user.admins    = data_user.admins;
-
+            if ( data_user ) {
+                stateMap.user.email     = data_user.email;
+                stateMap.user.admins    = data_user.admins;
+            }
+console.dir(answer);
             clearReportsDb();
             
             if ( answer.length > 1 ) {
@@ -639,11 +641,11 @@ feed.model = (function () {
                     is_report_exist = true;
 
                     console.log('_update_reports_list before publish');
-                    $.gevent.publish( 'feed-alert', { text: 'Le rapport a été créé avec succès !'} );
+                    $.gevent.publish( 'feed-alert', { text: 'Le rapport a été créé avec succès !', type: 'primary' } );
                     console.log('_update_reports_list after publish');
                 }
                 else {
-                    $.gevent.publish( 'feed-alert', { text: error_mess } );
+                    $.gevent.publish( 'feed-alert', { text: error_mess, type: 'danger' } );
                 }
             }
 
@@ -655,7 +657,7 @@ feed.model = (function () {
                 //
                 if ( ! stateMap.report.get_is_empty() && stateMap.report.id === report_map._id ) {
                     if ( ! is_report_new && ! error_mess ) {
-                        $.gevent.publish( 'feed-alert', { text: 'La mise à jour a été réalisée avec succès !'} );
+                        $.gevent.publish( 'feed-alert', { text: 'La mise à jour a été réalisée avec succès !', type: 'primary' } );
                         stateMap.report.id_equi     = report_map.id_equi;
                         stateMap.report.textarea    = report_map.textarea;
                         stateMap.report.statu       = report_map.statu;
@@ -671,7 +673,7 @@ feed.model = (function () {
                         stateMap.report.doc         = report_map.doc;                        
                     }
                     else {
-                        $.gevent.publish( 'feed-alert', { text: error_mess } );
+                        $.gevent.publish( 'feed-alert', { text: error_mess, type: 'danger' } );
                     }
 
                     // publish setreport event with a map of the old_report
@@ -718,12 +720,12 @@ feed.model = (function () {
             //
             if ( ! is_report_exist ) {
                 if ( ! stateMap.report.get_is_empty() ) {
-                    $.gevent.publish( 'feed-alert', { text: 'Le rapport a été supprimé avec succès !'} );
+                    $.gevent.publish( 'feed-alert', { text: 'Le rapport a été supprimé avec succès !', type: 'primary' } );
 // console.log('if set_report');                
                     set_report(''); 
                 }
                 else {
-                    $.gevent.publish( 'feed-alert', { text: 'La mise à jour a été réalisée avec succès !'} );
+                    $.gevent.publish( 'feed-alert', { text: 'La mise à jour a été réalisée avec succès !', type: 'primary' } );
                 }
             }
         };
@@ -765,7 +767,7 @@ feed.model = (function () {
 
             // Checks if the user is not anonymous
             if ( stateMap.user.get_is_anon() ) {
-                $.gevent.publish( 'feed-alert', { text: "Désolé, vous devez vous connecter avant !" } );
+                $.gevent.publish( 'feed-alert', { text: "Désolé, vous devez vous connecter avant !", type: 'warning' } );
                 return false;
             }
             
@@ -789,7 +791,7 @@ feed.model = (function () {
 
             // Checks if the user is not anonymous
             if ( stateMap.user.get_is_anon() ) {
-                $.gevent.publish( 'feed-alert', { text: "Désolé, vous devez vous connecter avant !" } );
+                $.gevent.publish( 'feed-alert', { text: "Désolé, vous devez vous connecter avant !", type: 'warning' } );
                 return false;
             }
 

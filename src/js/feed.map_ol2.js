@@ -515,7 +515,10 @@ layer_markers.addFeatures( [marker1, marker2] );
     if ( popup_map.doc ) {
 
       if ( (/\.(gif|jpg|jpeg|tiff|png)$/i).test(popup_map.doc) ) {
-        popup_html += '<a data-toggle="modal"><img class="feed-map-popup-img img-responsive img-thumbnail center-block" alt="No image" src="/media/' + popup_map.doc + '"></a>' // + configMap.doc_path
+        popup_html += 
+            '<a target="_blank" href="/media/' + popup_map.doc + '">' // data-toggle="modal" href="#modalImg"
+                + '<img class="feed-map-popup-img img-responsive img-thumbnail center-block" alt="No image" src="/media/' + popup_map.doc + '">'
+            +'</a>' // + configMap.doc_path
       }
       else {
         popup_html += '<div><a href="/media/' + popup_map.doc + '" target="_blank">' + popup_map.doc + '</a></div>'

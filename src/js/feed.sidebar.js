@@ -115,7 +115,7 @@ feed.sidebar = (function () {
                       + '</div>'
                       + '<div class="form-group">'
                         + '<label class="col-md-12 control-label form-label-type_r">Type de rapport</label>'
-                        + '<select class="form-control feed-sidebar-content-report-form-type_r">'
+                        + '<select class="form-control feed-sidebar-content-report-form-type_r" data-validation="required">'
                           + '<option value="" disabled selected hidden>Vous souhaitez signalez ...</option>'
                           + '<option value="PROBLEME">' + feed.util_b.toLiterary( "PROBLEME" ) + '</option>'
                           + '<option value="ERREUR">' + feed.util_b.toLiterary( "ERREUR" ) + '</option>'
@@ -135,7 +135,7 @@ feed.sidebar = (function () {
                         + '<textarea id="report-textarea" class="form-control feed-sidebar-content-report-form-textarea" rows="3"></textarea>'
                       + '</div>'
                       + '<div id="feed-sidebar-content-report-statusdiv">'
-                        + '<table id="feed-sidebar-content-report-statushistory" class="table table-condensed table-striped">'
+                        + '<table id="feed-sidebar-content-report-statushistory" class="table table-condensed table-striped" cellspacing="0" width="100%" role="grid" style="width: 100%;">'
                           + '<thead>'
                              + '<tr>'
                                 + '<th class="control-label"><b>Statut</b></th>'
@@ -204,10 +204,10 @@ feed.sidebar = (function () {
                     + '<form class="feed-sidebar-content-create-form" id="form_create" name="create_form">'
                       + '<div class="form-group">'
                         + '<label class="col-md-12 control-label form-label-type_r">Type de rapport</label>'
-                        + '<select class="form-control feed-sidebar-content-create-form-type_r">'
+                        + '<select class="form-control feed-sidebar-content-create-form-type_r required" data-validation="required">'
                           + '<option value="" disabled selected hidden>Vous souhaitez signalez ...</option>'
-                          + '<option value="PROBLEME">Un dysfonctionnement concernant un &eacute;quipement</option>'
-                          + '<option value="ERREUR">Une erreur sur la cartographie</option>'
+                          + '<option value="PROBLEME">' + feed.util_b.toLiterary( "PROBLEME" ) + '</option>'
+                          + '<option value="ERREUR">' + feed.util_b.toLiterary( "ERREUR" ) + '</option>'
                         + '</select>'
                       + '</div>'
                       + '<div class="form-group">'
@@ -221,10 +221,11 @@ feed.sidebar = (function () {
                       + '</div>'
                       + '<div class="form-group">'
                         + '<label for="create-textarea" class="col-md-12 control-label form-label-description">Description</label>'
-                        + '<textarea id="create-textarea" class="form-control feed-sidebar-content-create-form-textarea" rows="3"></textarea>'
+                        + '<textarea id="create-textarea" class="form-control feed-sidebar-content-create-form-textarea" rows="3" placeholder="Veuillez préciser l\'anomalie rencontrée"></textarea>'
                       + '</div>'
                       + '<div class="form-group feed-sidebar-content-create-group-locate">'
                           + '<label class="col-md-12 control-label form-label-localisation">Localisation (Lambert 93)</label>'
+                          + '<p class="help-block">Déplacez la carte pour modifier la localisation du rapport.</p>'
                           + '<input type="text" class="col-md-5 feed-sidebar-content-create-form-x" id="xCreate" placeholder="Longitude" readonly data-validation="required" >'
                           + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-create-form-y" id="yCreate" placeholder="Latitude" readonly data-validation="required" >'
                       + '</div>'
@@ -239,7 +240,7 @@ feed.sidebar = (function () {
                         + '<p>Chaque rapport cr&eacute;&eacute; est consultable par tous les autres utilisateurs de l\'application.</p>'
                         + '<p>Un rapport est modifiable par son cr&eacute; tant que son statut est &laquo; en attente &raquo;.</p>'
                         + '<p>L\'administrateur de l\'application consigne et signale aux gestionnaires concern&eacute;s l\'information contenue dans le rapport afin de proc&eacute;der aux correctifs &agrave; apporter.</p>'
-                        + '<p>L\'état d\'avancement du traitement de l\'information est actualis&eacute; en temps r&eacute;el par l\'administrateur au moyen d\'un jeu de couleurs:<ul style="list-style-type:none"><li>- rouge: en attente</li><li>- Jaune: en cours de traitement</li><li>- Vert: trait&eacute;</li><li>- Gris: rejet&eacute;</li></ul></p>'
+                        + '<p>L\'état d\'avancement du traitement de l\'information est actualis&eacute; en temps r&eacute;el par l\'administrateur au moyen d\'un jeu de couleurs:<ul style="list-style-type:none"><li>- <span class="feed-sidebar-content-list-td-statu-attente"><b>rouge</b></span>: en attente</li><li>- <span class="feed-sidebar-content-list-td-statu-cours"><b>Jaune</b></span>: en cours de traitement</li><li>- <span class="feed-sidebar-content-list-td-statu-traite"><b>Vert</b></span>: trait&eacute;</li><li>- <span class="feed-sidebar-content-list-td-statu-rejete"><b>Gris</b></span>: rejet&eacute;</li></ul></p>'
                         + '<p>Les &eacute;l&eacute;ments &laquo; trait&eacute;s &raquo; seront int&eacute;gr&eacute;s &agrave; la cartographie au moment de la mise &agrave; jour, pour le moment annuelle, du site.</p>'
                         + '<p>L\'administrateur est &agrave; votre disposition &agrave; l\'adresse: <a href="mailto:#" class="feed-sidebar-content-help-email">contact.admin13@valabre.com</a></p>'
                     + '</div>'
@@ -258,10 +259,10 @@ feed.sidebar = (function () {
                 + '<div class="modal fade feed-sidebar-modal-message" id="modalMess" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="modal-img-title"> '
                 + ' <div class="modal-dialog" role="document">'
                 + '   <div class="modal-content">'
-                + '     <div class="modal-header bg-primary">'
+                + '     <div class="modal-header feed-sidebar-modal-message-header bg-primary">'
                 + '         <h4 class="feed-sidebar-modal-message-title" id="modalMessTitle">Message</h4>'
                 + '     </div>'
-                + '     <div class="bg-warning modal-body">'
+                + '     <div class="bg-default modal-body">'
                 + '         <strong><p class="feed-sidebar-modal-message-body-p"></p></strong>'
                 + '     </div>'
                 + '   </div>'
@@ -293,7 +294,8 @@ feed.sidebar = (function () {
             $append_target      : null,
             position_type       : 'closed',
             active_tab_id       : null,
-            active_report_id    : null
+            active_report_id    : null,
+            mess_modal_bg       : 'bg-primary'
         },
         jqueryMap   = {},
 
@@ -398,6 +400,7 @@ feed.sidebar = (function () {
             $modal_img_title    : $slider.find( '.feed-sidebar-modal-img-title' ),
             $modal_img_img      : $slider.find( '.feed-sidebar-modal-img-body-img' ),
             $modal_mess         : $slider.find( '.feed-sidebar-modal-message' ),
+            $modal_mess_header  : $slider.find( '.feed-sidebar-modal-message-header' ),
             $modal_mess_title   : $slider.find( '.feed-sidebar-modal-message-title' ),
             $modal_mess_p       : $slider.find( '.feed-sidebar-modal-message-body-p' )
         };
@@ -468,6 +471,12 @@ feed.sidebar = (function () {
     //
     writeAlert = function ( event, alert_map ) {
 
+        var bg_class = 'bg-' + alert_map.type;
+//console.log( 'jqueryMap.$modal_mess_header.attr("class").split(" "): ' + jqueryMap.$modal_mess_header.attr("class").split(' ') );
+        if ( bg_class != stateMap.mess_modal_bg ) {
+            jqueryMap.$modal_mess_header.toggleClass( stateMap.mess_modal_bg + ' ' + bg_class );
+            stateMap.mess_modal_bg = bg_class;
+        }
         jqueryMap.$modal_mess_p.html( feed.util_b.encodeHtml( alert_map.text ) );
         jqueryMap.$modal_mess.modal('show');
 
@@ -588,14 +597,14 @@ feed.sidebar = (function () {
         var point84;
 
         if ( configMap.people_model.get_user().get_is_anon() ) {
-            writeAlert( null, { text: 'Veuillez vous logger !' } );
+            writeAlert( null, { text: 'Veuillez vous logger !', type: 'warning' } );
             clearSidebar();
             clearList();
             return;
         }
 
         if ( jqueryMap.$report_groups.children(".has-error").length ) {
-            writeAlert( null, { text: 'Veuillez compléter le formulaire !' } );
+            writeAlert( null, { text: 'Veuillez compléter le formulaire !', type: 'warning' } );
             event.preventDefault();
             return;
         }
@@ -620,7 +629,7 @@ feed.sidebar = (function () {
             });
         }
         else {
-            writeAlert( null, { text: 'Veuillez sélectionner un rapport dans la liste !' } );
+            writeAlert( null, { text: 'Veuillez sélectionner un rapport dans la liste !', type: 'warning' } );
             event.preventDefault();
             return;
         }
@@ -820,7 +829,8 @@ console.log("############################### onTapDeleteDoc " + stateMap.active_
             point93, 
             form_html   = String(),
             new_report  = arg_map.new_report,
-            old_report  = arg_map.old_report;
+            old_report  = arg_map.old_report,
+            user_up     = configMap.people_model.get_user().rules_map.update_;
 
         if ( new_report.get_is_empty() ) {
             clearSidebar();
@@ -886,11 +896,23 @@ console.log("############################### onTapDeleteDoc " + stateMap.active_
         point93 = feed.util_b.coordWgs84ToL93( new_report.locate_map.x, new_report.locate_map.y );
         jqueryMap.$report_x.val( point93.x.toFixed(0) );
         jqueryMap.$report_y.val( point93.y.toFixed(0) );
+        console.log("user_up: " + user_up + " / jqueryMap.$report_statu.val(): " + jqueryMap.$report_statu.val());
+        // can modify a report only if admin or status is ATTENTE
+        if ( ! user_up && jqueryMap.$report_statu.val() != 'ATTENTE' ) {
+            jqueryMap.$butt_modify.prop( 'disabled', true );
+            jqueryMap.$butt_modify.attr( 'title', 'Seul l\'administrateur a les droits de modification' );
+        }
+        else {
+            jqueryMap.$butt_modify.prop( 'disabled', false );
+            jqueryMap.$butt_modify.attr( 'title', 'Envoyer la modification' );
+        }
         
         if ( new_report.doc ) {
             jqueryMap.$report_doc_label.html( '<a href="/media/' + new_report.doc + '" target="_blank">' + new_report.doc + '</a>' );
             jqueryMap.$report_doc_create.hide();
-            jqueryMap.$report_doc_delete.show();
+            if ( user_up || jqueryMap.$report_statu.val() == 'ATTENTE' ) {
+                jqueryMap.$report_doc_delete.show();
+            }
 console.log("############################### 1 " + new_report.id );
             displayFileupload( null );
         }
@@ -899,17 +921,11 @@ console.log("############################### 1 " + new_report.id );
             jqueryMap.$report_doc_delete.hide();
 console.log("############################### 2 " + new_report.id );
             displayFileupload( new_report.id ); 
-            jqueryMap.$report_doc_create.show();
+            if ( user_up || jqueryMap.$report_statu.val() == 'ATTENTE' ) {
+                jqueryMap.$report_doc_create.show();
+            }
         }
         
-        // can modify a report only if admin or status is ATTENTE
-        if ( ! configMap.people_model.get_user().rules_map.update_ && jqueryMap.$report_statu.val() != 'ATTENTE' ) {
-            jqueryMap.$butt_modify.prop( 'disabled', true );
-            jqueryMap.$butt_modify.attr( 'title', 'Seul l\'administrateur a les droits de modification' );
-
-            // TODO : change delete icon color in the liste page, hide send column in the list tab
-        }
-
         // modify the send button
         jqueryMap.$butt_send.attr( 'href', 'mailto:?subject=Remontée d\'informations - Rapport ' + new_report.id + ' à votre attention&body=Bonjour,%0D%0ALe rapport ' + new_report.id + ' rédigé dans l\'application Géo DFCI (http://www.sig-dfci.org) vous est destiné.%0D%0AMerci de prendre en compte cette information et de me faire part, par retour de mail, de l\'état d\'avancement de ce dossier.%0D%0A%0D%0AVous en remerciant par avance et restant à votre disposition.%0D%0ACordialement,' );
         
@@ -960,8 +976,17 @@ console.log("############################### 2 " + new_report.id );
 
         reports_db().each( function ( report, idx ) {
 // console.log('reports_db.each : ' + report.id );            
-            var select_class = '',
-                statu = jqueryMap.$report_statu.find( "option[value=" + report.statu + "]");
+            var select_class    = '',
+                statu           = '',
+                type_r          = '';
+
+            if ( report.statu ) {
+                statu = feed.util_b.encodeHtml( jqueryMap.$report_statu.find( "option[value=" + report.statu + "]").val() );
+            }
+
+            if ( report.type_r ) {
+                type_r = feed.util_b.encodeHtml( jqueryMap.$create_type_r.find( "option[value=" + report.type_r + "]").val() );
+            }
 
             if ( report.get_is_empty() ) { // || report.get_is_report()
                 return true;
@@ -978,10 +1003,10 @@ console.log("############################### 2 " + new_report.id );
                         + feed.util_b.encodeHtml( report.created )
                     + '</td>'
                     + '<td class="feed-sidebar-content-list-td-statu-' + report.statu.toLowerCase() + '">'
-                        + '<strong>' + feed.util_b.encodeHtml( statu.val() ) + '</strong>'
+                        + '<strong>' + statu + '</strong>'
                     + '</td>'
                     + '<td>'
-                        + jqueryMap.$create_type_r.find( "option[value=" + report.type_r + "]").val() 
+                        + type_r 
                     + '</td>'
                     + '<td>'
                         + feed.util_b.encodeHtml( report.type_e )
