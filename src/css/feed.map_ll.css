@@ -2,38 +2,33 @@
  * feed.map.css
  * map feature style
  */
-
 *::-moz-selection {
-    background: #b3d4fc none repeat scroll 0 0;
-    text-shadow: none;
-}
+  background: #b3d4fc none repeat scroll 0 0;
+  text-shadow: none; }
 
 .tiny-popup {
-    background: white none repeat scroll 0 0;
-    border: 1px solid grey;
-    border-radius: 4px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);
-    box-sizing: border-box;
-    color: black;
-    display: none;
-    font: 1.1em/14px Arial,Helvetica,sans-serif;
-    opacity: 0.8;
-    padding: 2px;
-    z-index: 2000;
-}
+  background: white none repeat scroll 0 0;
+  border: 1px solid grey;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.65);
+  box-sizing: border-box;
+  color: black;
+  display: none;
+  font: 1.1em/14px Arial,Helvetica,sans-serif;
+  opacity: 0.8;
+  padding: 2px;
+  z-index: 2000; }
 
 .tiny-popup.visible {
-	display: inline-block;
-}
+  display: inline-block; }
 
 .awesome-marker-icon-red:hover {
-	top: -5px;
-}
+  top: -5px; }
 
 .marker-selected {
-	top: -5px;
-}
+  top: -5px; }
 
 .feed-map-popup-img {
-    width: 140px;
-}
+  width: 140px; }
+
+/*# sourceMappingURL=feed.map_ll.css.map */
