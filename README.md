@@ -9,8 +9,6 @@ It is based on [sidebar-v2](http://turbo87.github.io/sidebar-v2/examples/) and u
 
 It uses fake server side so it's possible to test it localy with an explorator.
 
-Actually it is based on a Leaflet map but the goal is to deploy it on OpenLayers too.
-
 It's possible to manage user login.
 
 It requires :
@@ -22,6 +20,14 @@ It requires :
 * jquery-ue
 * bootstrap-3.3.5 (css + modal.js)
 * bootstrap-filestyle-1.2.1
+* bootstrap_modal
+* jQuery-Form-Validator-master
+* jqueryDropDown.js
+* https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js
+* https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js
+* jQuery-File-Upload-master/js/vendor/jquery.ui.widget.js
+* jQuery-File-Upload-master/js/jquery.iframe-transport.js
+* jQuery-File-Upload-master/js/jquery.fileupload.js
 * sidebar-v2
 * Leaflet.awesome-markers-2.0
 
@@ -38,7 +44,8 @@ It requires :
 ####0.1.2 (2016-01-06)
 * OL2 version
 * extract the libs folder from src/
+####0.2.0 (2016-11-14)
+* Full version ready to production
 
 ##License
-
 feedback is free software and may be redistributed under the [MIT licence](http://www.opensource.org/licenses/mit-license.php)

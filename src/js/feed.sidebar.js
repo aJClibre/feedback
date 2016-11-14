@@ -1026,7 +1026,7 @@ console.log("############################### 2 " + new_report.id );
                     + '</td>'
                     + '</td>'
                     + '<td class="text-center feed-sidebar-content-list-td-mailto">'
-                        + '<a href="mailto:' + report.owner + '&subject=Remontée d\'informations - Rapport ' + report.id + '&body=Message de l\'administrateur" title="' + report.owner + '" class="fa fa-envelope tltip" data-toggle="tooltip" data-placement="left"></a>';
+                        + '<a href="mailto:' + report.owner + '&subject=Remontée d\'informations - Rapport ' + report.id + '&body=Message de l\'administrateur" title="' + report.owner + '" class="fa fa-envelope tltip" data-toggle="tooltip" data-placement="left"></a>'
                     + '</td>'
             }
             list_html += 
