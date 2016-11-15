@@ -116,7 +116,7 @@ feed.sidebar = (function () {
                       + '<div class="form-group">'
                         + '<label class="col-md-12 control-label form-label-type_r">Type de rapport</label>'
                         + '<select class="form-control feed-sidebar-content-report-form-type_r" data-validation="required">'
-                          + '<option value="" disabled selected hidden>Vous souhaitez signalez ...</option>'
+                          + '<option value="" disabled selected hidden>Vous souhaitez signaler ...</option>'
                           + '<option value="PROBLEME">' + feed.util_b.toLiterary( "PROBLEME" ) + '</option>'
                           + '<option value="ERREUR">' + feed.util_b.toLiterary( "ERREUR" ) + '</option>'
                         + '</select>'
