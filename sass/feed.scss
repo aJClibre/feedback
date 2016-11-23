@@ -1,0 +1,19 @@
+/*
+ * sass declaration part
+ *
+ */
+
+$feed-color-attente: #A94442; /* rouge */
+$feed-color-cours: #C4873B; /* orange */
+$feed-color-traite: #3C763D; /* vert */
+$feed-color-rejete: #555555; /* gris */
+$feed-color-bg-grey: #eee;
+$boots-color-blue: #337ab7;
+$boots-color-red: #b73338;
+
+/*
+ * sass action
+ */
+@import 'feed.shell';
+@import 'feed.sidebar';
+@import 'feed.map_ol2';

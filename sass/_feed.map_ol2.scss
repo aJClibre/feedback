@@ -1,0 +1,54 @@
+/* featureover layer_new */
+.olAlphaImg {
+    cursor: pointer;
+    cursor: hand;
+}
+
+/* featureover layer_markers */
+circle {
+    cursor: pointer;
+    cursor: hand;
+}
+
+/* popup */
+.olPopup {
+    color: #555;
+    font-size: 12px;
+}
+.feed-popup-content-head {
+    background-color: $feed-color-bg-grey;
+    margin-bottom: 10px;
+}
+.feed-popup-content-body {
+    margin-bottom: 0px;
+}
+.feed-popup-content-body-td-text {
+    padding-top: 0px !important;
+    padding-bottom: 10px !important;
+}
+.feed-popup-content-body-td-label {
+    /*padding-top: 0px !important;
+    padding-bottom: 0px !important;*/
+}
+.table-condensed > tbody > tr > td {
+    border-top: None;
+    line-height: 0.4;
+}
+.feed-popup-content-desc p {
+    width: 350px;
+}
+.feed-popup-content-statu-attente {
+    color: $feed-color-attente;
+}
+.feed-popup-content-statu-cours {
+    color: $feed-color-cours;
+}
+.feed-popup-content-statu-traite {
+    color: $feed-color-traite;
+}
+.feed-popup-content-statu-rejete {
+    color: $feed-color-rejete;
+}
+.feed-map-popup-img {
+    margin-bottom: 15px;
+}
