@@ -6,6 +6,7 @@
 * install: sudo apt-get install ruby / sudo gem install sass
 
 ## Modus operandi:
+These operations can only be executed in the VBox Debian because of the installation of Saas
 $ cd feedback/
 $ sass --watch --style compact sass:src/css css
 => chaque enregistrement de fichiers scss va générer le fichier css correspondant à la volée

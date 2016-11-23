@@ -59,6 +59,8 @@ h5 { display: table; }
 
 .feed-sidebar-content-report-form-img-label { padding-right: 5px; }
 
+.form-coord { background-color: #eee; }
+
 .form-control { font-size: 12px; height: 26px; padding-top: 4px; }
 
 .form-control-static { padding-top: 0px; }
