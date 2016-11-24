@@ -88,7 +88,7 @@ feed.sidebar = (function () {
                     + '<form class="feed-sidebar-content-report-form" id="form_modify">'
                       + '<div class="form-group feed-sidebar-content-report-form-group-head">'
                         + '<h5>'
-                          + '<label class="col-md-4 control-label">Rapport </label>'
+                          + '<label class="col-md-4 control-label">Rapport&nbsp;&nbsp;&nbsp;</label>'
                           + '<label class="col-md-7 control-label feed-sidebar-content-report-form-id"> - </label>'
                         + '</h5>'
                         + '<label class="col-md-2 control-label">Création: </label>'
@@ -135,6 +135,7 @@ feed.sidebar = (function () {
                         + '<textarea id="report-textarea" class="form-control feed-sidebar-content-report-form-textarea" rows="3"></textarea>'
                       + '</div>'
                       + '<div id="feed-sidebar-content-report-statusdiv">'
+                        + '<label class="col-md-12 control-label form-label-id_equi">Historique du Statut</label>'
                         + '<table id="feed-sidebar-content-report-statushistory" class="table table-condensed table-striped" cellspacing="0" width="100%" role="grid" style="width: 100%;">'
                           + '<thead>'
                              + '<tr>'
@@ -148,9 +149,10 @@ feed.sidebar = (function () {
                           + '</table>'
                         + '</div>'
                       + '<div class="form-group feed-sidebar-content-report-group-loc">'
-                        + '<label class="col-md-12 control-label form-label-localisation">Localisation (Lambert 93)</label>'
-                        + '<input type="text" class="col-md-5 feed-sidebar-content-report-form-x" id="x" placeholder="Longitude" readonly>'
-                        + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-report-form-y" id="y" placeholder="Latitude" readonly>'
+                        + '<label class="col-md-12 control-label form-label-localisation">Localisation</label>'
+                        + '<p class="help-block">Déplacez l\icône pour modifier la localisation du rapport.</p>'
+                        + '<input type="text" class="col-md-5 feed-sidebar-content-report-form-x form-coord" id="x" placeholder="Longitude" readonly>'
+                        + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-report-form-y form-coord" id="y" placeholder="Latitude" readonly>'
                       + '</div>'
                       + '<div class="form-group form-group-action">'
                         + '<label class="col-md-12 control-label form-label-action">Action</label>'
@@ -224,14 +226,29 @@ feed.sidebar = (function () {
                         + '<textarea id="create-textarea" class="form-control feed-sidebar-content-create-form-textarea" rows="3" placeholder="Veuillez préciser l\'anomalie rencontrée"></textarea>'
                       + '</div>'
                       + '<div class="form-group feed-sidebar-content-create-group-locate">'
-                          + '<label class="col-md-12 control-label form-label-localisation">Localisation (Lambert 93)</label>'
+                          + '<label class="col-md-12 control-label form-label-localisation">Localisation</label>'
                           + '<p class="help-block">Déplacez la carte pour modifier la localisation du rapport.</p>'
-                          + '<input type="text" class="col-md-5 feed-sidebar-content-create-form-x" id="xCreate" placeholder="Longitude" readonly data-validation="required" >'
-                          + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-create-form-y" id="yCreate" placeholder="Latitude" readonly data-validation="required" >'
+                          + '<input type="text" class="col-md-5 feed-sidebar-content-create-form-x form-coord" id="xCreate" placeholder="Longitude" readonly data-validation="required" >'
+                          + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-create-form-y form-coord" id="yCreate" placeholder="Latitude" readonly data-validation="required" >'
                       + '</div>'
++ '<div class="form-group feed-sidebar-content-create-form-group-doc-create">'
++ '<p class="help-block">Ajouter un fichier: </p>'
++ '<span class="btn btn-primary btn-sm fileinput-button">'
++ '<i class="glyphicon glyphicon-plus">'
++ '</i>'
++ '<span>S&eacute;lectionnez un fichier...</span>'
++ '<input id="fileupload" type="file" name="files[]" data-url="../feed/"></input>'
++ '</span>'
++ '<div id="result"></div>'
++ '<button class="btn btn-primary btn-sm fileinput-upload" />'
++ '<div id="progress">'
++ '<div class="bar" style="width: 0%;"></div>'
++ '</div>'
++ '</div>'
                       + '<div class="form-group">'
                           + '<button class="btn btn-primary btn-sm report-create">Cr&eacute;er</button>'
                           + '<button type="reset" class="btn btn-primary btn-sm reset">Annuler</button>'
+                          + '<p class="help-block"><b>*</b> champs obligatoires</p>'
                       + '</div>'
                       + '</form>'
                   + '</div>'
@@ -241,8 +258,8 @@ feed.sidebar = (function () {
                         + '<p>Un rapport est modifiable par son cr&eacute; tant que son statut est &laquo; en attente &raquo;.</p>'
                         + '<p>L\'administrateur de l\'application consigne et signale aux gestionnaires concern&eacute;s l\'information contenue dans le rapport afin de proc&eacute;der aux correctifs &agrave; apporter.</p>'
                         + '<p>L\'état d\'avancement du traitement de l\'information est actualis&eacute; en temps r&eacute;el par l\'administrateur au moyen d\'un jeu de couleurs:<ul style="list-style-type:none"><li>- <span class="feed-sidebar-content-list-td-statu-attente"><b>rouge</b></span>: en attente</li><li>- <span class="feed-sidebar-content-list-td-statu-cours"><b>Jaune</b></span>: en cours de traitement</li><li>- <span class="feed-sidebar-content-list-td-statu-traite"><b>Vert</b></span>: trait&eacute;</li><li>- <span class="feed-sidebar-content-list-td-statu-rejete"><b>Gris</b></span>: rejet&eacute;</li></ul></p>'
-                        + '<p>Les &eacute;l&eacute;ments &laquo; trait&eacute;s &raquo; seront int&eacute;gr&eacute;s &agrave; la cartographie au moment de la mise &agrave; jour, pour le moment annuelle, du site.</p>'
-                        + '<p>L\'administrateur est &agrave; votre disposition &agrave; l\'adresse: <a href="mailto:#" class="feed-sidebar-content-help-email">contact.admin13@valabre.com</a></p>'
+                        + '<p>Les &eacute;l&eacute;ments &laquo; trait&eacute;s &raquo; seront int&eacute;gr&eacute;s &agrave; la cartographie au moment de la mise &agrave; jour du site:<br>- annuelle pour les données DFCI<br>- hebdomadaire pour les donnnées urbaines</p>'
+                        + '<p>Le ou les administrateurs sont &agrave; votre disposition &agrave; l\'adresse: <a href="mailto:#" class="feed-sidebar-content-help-email">contact.admin13@valabre.com</a></p>'
                     + '</div>'
                 + '</div>'
                 + '<div class="modal fade feed-sidebar-modal-img" id="modalImg" tabindex="-1" role="dialog" aria-labelledby="modal-img-title"> '
@@ -723,7 +740,7 @@ feed.sidebar = (function () {
     };
 
     onTapCreateReport = function ( event ) {
-        var point84;
+        var point84, file;
 
         if ( !jqueryMap.$create_x.val() || !jqueryMap.$create_id_equi.val() )
             return;
@@ -731,13 +748,15 @@ feed.sidebar = (function () {
         point84 = feed.util_b.coordL93ToWgs84( jqueryMap.$create_x.val(), jqueryMap.$create_y.val() );
         //console.log("point84.x: " + point84.x + " / point84.y: " + point84.y);
         
+        file = jqueryMap.$create_doc_input[0].files[0];
+        
         configMap.reports_model.create_({
             locate_map  : { x : point84.x.toFixed(0), y : point84.y.toFixed(0) },
             id_equi     : jqueryMap.$create_id_equi.val(),
             textarea    : jqueryMap.$create_textarea.val(),
             type_r      : jqueryMap.$create_type_r.val(),
-            type_e      : jqueryMap.$create_type_e.val()
-            //doc         : jqueryMap.$create_doc_input[0].files[0]
+            type_e      : jqueryMap.$create_type_e.val(),
+            doc         : file
         });
 
         // return to the list reports
@@ -927,7 +946,7 @@ console.log("############################### 2 " + new_report.id );
         }
         
         // modify the send button
-        jqueryMap.$butt_send.attr( 'href', 'mailto:?subject=Remontée d\'informations - Rapport ' + new_report.id + ' à votre attention&body=Bonjour,%0D%0ALe rapport ' + new_report.id + ' rédigé dans l\'application Géo DFCI (http://www.sig-dfci.org) vous est destiné.%0D%0AMerci de prendre en compte cette information et de me faire part, par retour de mail, de l\'état d\'avancement de ce dossier.%0D%0A%0D%0AVous en remerciant par avance et restant à votre disposition.%0D%0ACordialement,' );
+        jqueryMap.$butt_send.attr( 'href', 'mailto:?subject=Remontée d\'informations - Rapport ' + new_report.id + ' à votre attention&body=Bonjour,%0D%0ALe rapport ' + new_report.id + ' rédigé dans l\'application Géo DFCI (http://www.sig-dfci.org) vous est destiné.%0D%0AMerci de prendre en compte cette information et de me faire part, par retour de mail, de l\'état d\'avancement de ce dossier.%0D%0A%0D%0AVous en remerciant par avance et restant à votre disposition.%0D%0ACordialement,%0D%0A%0D%0AL\'administrateur SIG-DFCI' );
         
         clearCreateForm();
 
@@ -956,11 +975,12 @@ console.log("############################### 2 " + new_report.id );
                 + '<table id="tableReports" class="table table-striped table-hover" cellspacing="0" width="100%" role="grid" style="width: 100%;">'
                     + '<thead>'
                         + '<tr>'
-                            + '<th></th>'
-                            + '<th>Cr&eacute;ation</th>'
+                            + '<th>ID</th>'
                             + '<th>Statut</th>'
-                            + '<th>Type</th>'
+                            + '<th>Modif.</th>'
+                         //   + '<th>Type</th>'
                             + '<th>&Eacute;quip.</th>'
+                            + '<th></th>'
                             + '<th></th>';
             if ( up_rule ) { 
                 list_html +=
@@ -999,20 +1019,23 @@ console.log("############################### 2 " + new_report.id );
                     + '<td data-id="' + report.id + '">'
                         + report.id
                     + '</td>'
-                    + '<td scope="row">'
-                        + feed.util_b.encodeHtml( report.created )
-                    + '</td>'
                     + '<td class="feed-sidebar-content-list-td-statu-' + report.statu.toLowerCase() + '">'
                         + '<strong>' + statu + '</strong>'
                     + '</td>'
-                    + '<td>'
+                    + '<td scope="row">'
+                        + feed.util_b.encodeHtml( report.modified )
+                    + '</td>'
+                 /*   + '<td>'
                         + type_r 
                     + '</td>'
-                    + '<td>'
+                 */   + '<td>'
                         + feed.util_b.encodeHtml( report.type_e )
                     + '</td>'
                     + '<td>'
                         + '<span class="glyphicon glyphicon-list g-popup" gly-id="' + report.id + '" aria-hidden="true" title="afficher"></span>'
+                    + '</td>'
+                    + '<td>'
+                        + report.owner
                     + '</td>';
             
             // modify the sidebar considering the user is not admin and is not owner
@@ -1057,10 +1080,10 @@ console.log("############################### 2 " + new_report.id );
         jqueryMap.$list_box.find( 'tr' ).bind( 'mouseout', onOutList );
         
         if ( up_rule ) {
-            columns = [{ "visible": false},null, null, null, null, { "orderable": false }, { "orderable": false }, { "orderable": false }, { "orderable": false }];
+            columns = [null, null, null, null, { "orderable": false }, { "visible": false}, { "orderable": false }, { "orderable": false }, { "orderable": false }];
         }
         else {
-            columns = [{ "visible": false},null, null, null, null, { "orderable": false }];
+            columns = [null, null, null, null, { "orderable": false }, { "visible": false}];
         }
 
         table_reports = $('#tableReports').DataTable({
@@ -1162,6 +1185,7 @@ console.log("############################### 2 " + new_report.id );
             jqueryMap.$report_action_grp.hide();
             jqueryMap.$report_cible_grp.hide();
             jqueryMap.$butt_send.hide();
+            jqueryMap.$butt_download.hide();
          }
     };
 
