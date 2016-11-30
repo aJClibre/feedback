@@ -231,13 +231,17 @@ feed.sidebar = (function () {
                           + '<input type="text" class="col-md-5 feed-sidebar-content-create-form-x form-coord" id="xCreate" placeholder="Longitude" readonly data-validation="required" >'
                           + '<input type="text" class="col-md-5 col-md-offset-2 feed-sidebar-content-create-form-y form-coord" id="yCreate" placeholder="Latitude" readonly data-validation="required" >'
                       + '</div>'
++ '<div class="form-group">'
++ '<label class="control-label feed-sidebar-content-create-form-doc-label"></label>'
++ '<span class="glyphicon glyphicon-remove g-delete feed-sidebar-content-create-form-group-doc-delete" aria-hidden="true"></span>'
++ '</div>'
 + '<div class="form-group feed-sidebar-content-create-form-group-doc-create">'
 + '<p class="help-block">Ajouter un fichier: </p>'
 + '<span class="btn btn-primary btn-sm fileinput-button">'
 + '<i class="glyphicon glyphicon-plus">'
 + '</i>'
 + '<span>S&eacute;lectionnez un fichier...</span>'
-+ '<input id="fileupload" type="file" name="files[]" data-url="../feed/"></input>'
++ '<input id="fileuploadCreate" type="file"></input>'
 + '</span>'
 + '<div id="result"></div>'
 + '<button class="btn btn-primary btn-sm fileinput-upload" />'
@@ -309,20 +313,22 @@ feed.sidebar = (function () {
         },
         stateMap    = { 
             $append_target      : null,
+            $create_data        : null,
             position_type       : 'closed',
             active_tab_id       : null,
             active_report_id    : null,
-            mess_modal_bg       : 'bg-primary'
+            mess_modal_bg       : 'bg-primary',
         },
         jqueryMap   = {},
 
         getIdReportsSelected,setJqueryMap,      setSliderPosition,
         writeAlert,         clearSidebar,       clearCreateForm,
         clearList,          clearFormsError,    displayFileupload,
-        onTapToggle,        onTapModifyReport,  onTapEditReport,
-        onTapDeleteReport,  onTapDisplayInfo,   onTapCancelReport,  
-        onTapCreateReport,  onTapDeleteDoc,     onTapList,          
-        onSelectStatu,      onClickMarker,
+        displayFileuploadCreate,                onTapToggle,
+        onTapModifyReport,  onTapEditReport,    onTapDeleteReport,  
+        onTapDeleteCreateDoc,                   onTapDisplayInfo,
+        onTapCancelReport,  onTapCreateReport,  onTapDeleteDoc,
+        onTapList,          onSelectStatu,      onClickMarker,
         onTapRefreshList,   onSetReport,        onListchange,
         onHoverList,        onOutList,          onHoverMarker,
         onCoordChange,      onSetCoord,         onTapSubmitDoc,
@@ -392,6 +398,7 @@ feed.sidebar = (function () {
             $report_doc_input   : $slider.find( '.feed-sidebar-content-report-form-file' ),
             $report_doc_delete  : $slider.find( '.feed-sidebar-content-report-form-group-doc-delete' ),
             $fileupload         : $slider.find( '#fileupload'),
+            $create_fileupload  : $slider.find( '#fileuploadCreate'),
             $button_upload      : $slider.find( '.fileinput-upload'),
             $progress_bar       : $slider.find( '#progress .bar'),
             $form_create        : $slider.find( '.feed-sidebar-content-create-form' ),
@@ -549,6 +556,8 @@ feed.sidebar = (function () {
             .attr("placeholder", 'Latitude' );
         jqueryMap.$create_doc_input.val('')
             .attr("placeholder", 'No file' );
+        stateMap.$create_data = null;
+        displayFileuploadCreate();
     };
 
     clearList = function () {
@@ -577,6 +586,34 @@ feed.sidebar = (function () {
                 );
             },
             done        : onSubmitDocEnd
+        });
+    };
+
+    displayFileuploadCreate = function ( report_id ) {
+        //$create_fileupload
+        jqueryMap.$button_upload.hide();
+
+        jqueryMap.$create_fileupload.fileupload({
+            url                     : "../feed/",
+            dataType                : 'json',
+            loadImageFileTypes      : '/^image\/(gif|jpeg|png)$/',
+            loadImageMaxFileSize    : 1000, // 10000000
+            add                     : function (e, data) {
+                console.log(data.files[0].name);
+                stateMap.$create_data = data;
+                jqueryMap.$create_doc_label.html( data.files[0].name );
+                jqueryMap.$create_doc_create.hide();
+                jqueryMap.$create_doc_delete.show();
+            },
+            progress    : function ( e, data ) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                jqueryMap.$progress_bar.css( 'width', progress + '%' );
+            },
+            done                     : function (e, data) {
+                jqueryMap.$progress_bar.css( 'width', '0%' );
+                configMap.sidebar_model.update_list( [ data._response.result ] );
+                onTapDeleteCreateDoc();
+            } 
         });
     };
 
@@ -748,7 +785,7 @@ feed.sidebar = (function () {
         point84 = feed.util_b.coordL93ToWgs84( jqueryMap.$create_x.val(), jqueryMap.$create_y.val() );
         //console.log("point84.x: " + point84.x + " / point84.y: " + point84.y);
         
-        file = jqueryMap.$create_doc_input[0].files[0];
+        file = stateMap.$create_data;
         
         configMap.reports_model.create_({
             locate_map  : { x : point84.x.toFixed(0), y : point84.y.toFixed(0) },
@@ -776,6 +813,14 @@ feed.sidebar = (function () {
 console.log("############################### onTapDeleteDoc " + stateMap.active_report_id );            
             displayFileupload( stateMap.active_report_id );
         }
+    };
+
+    onTapDeleteCreateDoc = function ( event ) {
+        jqueryMap.$create_doc_label.html( '' );
+        jqueryMap.$create_doc_delete.hide();
+        jqueryMap.$create_doc_create.show();
+        stateMap.$create_data = null;
+        displayFileuploadCreate();
     };
 
     onSelectStatu = function ( event ) {
@@ -1089,7 +1134,7 @@ console.log("############################### 2 " + new_report.id );
         table_reports = $('#tableReports').DataTable({
             "dom"       : '<"top"f>rt<"bottom"ip><"clear">',
             "autoWidth" : true,
-            "pageLength": 15,
+            "pageLength": 14,
             "language"  : {
                 "url"       : "//cdn.datatables.net/plug-ins/1.10.11/i18n/French.json"
             },
@@ -1314,6 +1359,7 @@ console.log("############################### 2 " + new_report.id );
         jqueryMap.$butt_cancel.bind( 'click', onTapCancelReport );
         jqueryMap.$butt_create.bind( 'click', onTapCreateReport );
         jqueryMap.$report_doc_delete.bind( 'click', onTapDeleteDoc );
+        jqueryMap.$create_doc_delete.bind( 'click', onTapDeleteCreateDoc );
         
         // the element use jqueryDropDown.js file to detect the value 
         // selected in the dropdown list

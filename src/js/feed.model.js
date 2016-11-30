@@ -457,7 +457,7 @@ feed.model = (function () {
 
         // have to receipt data from the form to send data to backend
         create_ = function ( report_create_map ) {
-            var sio;
+            var sio, objectToSend;
             
             // Checks if the user is not anonymous
             if ( stateMap.user.get_is_anon() ) {
@@ -471,17 +471,39 @@ feed.model = (function () {
             // call the completeCreate to put the new report in 
             // stateMap.report and call sidebar._update_reports_list
             // to update the reports list
+            // if a doc it uses jquery-file-upload method
             console.log('createreport report_create_map.id_equi: ' + report_create_map.id_equi);
-            sio.emit( 'createreport', {
-                cid         : makeReportCid(),
-                locate_map  : report_create_map.locate_map,
-                id_equi     : report_create_map.id_equi,
-                textarea    : report_create_map.textarea,
-                statu       : report_create_map.statu,
-                type_r      : report_create_map.type_r,
-                type_e      : report_create_map.type_e,
-                doc         : report_create_map.doc
-            });
+            if ( report_create_map.doc ) {
+                console.log('doc');
+                var obj = [
+                    { name: 'cid', value: makeReportCid()},
+                    { name: 'y', value: report_create_map.locate_map.y },
+                    { name: 'x', value: report_create_map.locate_map.x },
+                    { name: 'id_equi', value: report_create_map.id_equi },
+                    { name: 'textarea', value: report_create_map.textarea },
+                    { name: 'statu', value: report_create_map.statu },
+                    { name: 'type_r', value: report_create_map.type_r },
+                    { name: 'type_e', value: report_create_map.type_e },
+
+                ];
+                report_create_map.doc.formData = obj;
+                objectToSend = report_create_map.doc;
+            }
+            else {
+                console.log('NO doc');
+                objectToSend = {
+                    cid         : makeReportCid(),
+                    locate_map  : report_create_map.locate_map,
+                    id_equi     : report_create_map.id_equi,
+                    textarea    : report_create_map.textarea,
+                    statu       : report_create_map.statu,
+                    type_r      : report_create_map.type_r,
+                    type_e      : report_create_map.type_e,
+                    doc         : report_create_map.doc
+                };
+            }
+
+            sio.emit( 'createreport', objectToSend );
         };
 
         // report_update_map = the new map of the report

@@ -160,13 +160,21 @@ feed.fake = (function () {
             var report_map, i;
             
             // respond to 'addreport' event with 'reportupdate'
-            // callback after a 3s delay
             //
             if ( msg_type === 'createreport' && callback_map.listchange ) {
                 console.dir(data);
-                $.post('../feed/', data, function(result) {
-                    callback_map.listchange([ result, data ]);
-                }, "json");
+                // to make the difference between a report created with jquery-file-upload or
+                // with the form
+                if ( data.cid ) {
+                    $.post('../feed/', data, function(result) {
+                        callback_map.listchange([ result, data ]);
+                    }, "json");
+                }
+                else {
+                    // {fileInput: Object, form: Object, files: Array[1], fileInputClone: Object, 
+                    // originalFiles: Array[1], paramName: "files[]",  submit: ._addConvenienceMethods/data.submit(), 6 de plus…}
+                    data.submit();
+                }
             }
 
             // simulate send 'updatereport' message and data to the server
