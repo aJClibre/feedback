@@ -105,8 +105,8 @@ feed.map = (function () {
   setOl2Map = function () {
     var
         styleMarker, styleMap, styleNew, styleOver, styleSelected, styleSelect, 
-        layer_markers, layer_new, layer_select, layerListeners, dragMarkers, 
-        dragNew, clickFeature,
+        layer_markers, layer_new, layer_select, layerListeners, layerNewListeners,
+        dragMarkers, dragNew, clickFeature,
         $map        = stateMap.map,
         $map_div    = stateMap.$mapdiv,
         size        = new OpenLayers.Size(21,25),
@@ -135,13 +135,17 @@ feed.map = (function () {
         graphicWidth    : 24,
         graphicHeight   : 24,
         pointRadius     : 10,
-        graphicZIndex   : 100,
+        zIndex          : 100,
         title           : '${tooltip}'
     });
 
     styleSelected = new OpenLayers.Style(
-        OpenLayers.Util.applyDefaults(
-            { pointRadius     : 5, graphicZIndex   : 50 },
+        OpenLayers.Util.applyDefaults({ 
+                pointRadius     : 5, 
+                zIndex          : 50,
+                graphicWidth    : 14,
+                graphicHeight   : 14
+            },
             OpenLayers.Feature.Vector.style.default
         )
     );
@@ -163,17 +167,27 @@ feed.map = (function () {
     
     // red point 
     styleNew        = new OpenLayers.StyleMap({
-        'default'   : OpenLayers.Util.applyDefaults(
-            { fillColor : '#ff0000', fillOpacity : 1, graphicZIndex : 2000 },
-            OpenLayers.Feature.Vector.style.default
-        )
+        'default'   : { 
+            graphicName : 'cross',
+            strokeColor : 'red', 
+            fillColor : 'yellow', 
+            fillOpacity : 0.8, 
+            zIndex      : 2000, 
+            pointRadius : 12,
+            rotation    : 45
+        },
+        'over'     : {
+            fillOpacity : 1,
+            cursor      : 'grab',
+            rotation    : 0
+        }
     });
 
     // red point with a blue line around
     styleSelect     = new OpenLayers.StyleMap({
         'default'   : OpenLayers.Util.applyDefaults(
-            { fillColor : '#ff0000', fillOpacity : 1, pointRadius : 8, graphicZIndex : 2000 },
-            OpenLayers.Feature.Vector.style.select
+            { fillColor : '#ff0000', fillOpacity : 1, pointRadius : 11, graphicZIndex : 2000 },
+            OpenLayers.Feature.Vector.style.select // OL style
         )
     });
 
@@ -238,7 +252,16 @@ console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.
             }
             $.gevent.publish( 'feed-hover', '' );
         }
-    };
+    }; // eo layerListeners
+
+    layerNewListeners = {
+        featureover     : function( e ) {
+            dragNew.activate();
+        },
+        featureout      : function( e ) {
+            dragNew.deactivate();
+        }
+    }; // eo layerNewListeners
 
     layer_markers   = new OpenLayers.Layer.Vector("layer_markers", {
         renderers       : renderer,
@@ -246,7 +269,8 @@ console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.
     });
     layer_new       = new OpenLayers.Layer.Vector("layer_new", { 
         renderers       : renderer,
-        styleMap        : styleNew
+        styleMap        : styleNew,
+        eventListeners  : layerNewListeners
     });
     layer_select    =  new OpenLayers.Layer.Vector("layer_select", {
         renderers       : renderer,
@@ -305,21 +329,24 @@ console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.
     });
     stateMap.map.addControl( dragMarkers );
 
-    stateMap.map.events.register( 'moveend', stateMap.map, function(evt){
+/* 
+   // Move the map to move the point
+     stateMap.map.events.register( 'moveend', stateMap.map, function(evt){
         if( stateMap.new_marker ) {
             stateMap.new_marker.move( this.getCenter() ); 
             $.gevent.publish( 'feed-coord', { x: stateMap.new_marker.geometry.x.toFixed(0), y: stateMap.new_marker.geometry.y.toFixed(0) } );
         }
     });
-/*    
+*/    
+    
     dragNew         = new OpenLayers.Control.DragFeature( layer_new, {
         onDrag      : function( feat, pix ) {
-            $.gevent.publish( 'feed-coord', { x: feat.geometry.x.toFixed(1), y: feat.geometry.y.toFixed(1) } );
+            $.gevent.publish( 'feed-coord', { x: feat.geometry.x.toFixed(0), y: feat.geometry.y.toFixed(0) } );
         }
     });
     stateMap.map.addControl( dragNew );
-    dragNew.activate();
-*/
+    //dragNew.activate();
+
 
     clickFeature   = new OpenLayers.Control.SelectFeature( layer_markers, {
         renderIntent: 'over',
@@ -367,17 +394,21 @@ layer_markers.addFeatures( [marker1, marker2] );
     switch ( position_type ) {
         case 'opened' :
             if ( tab_name === 'create' ) {
+                
+                // Create the new marker at the center of the map 
                 center = stateMap.map.getCenter();
             
                 stateMap.new_marker = new OpenLayers.Feature.Vector( new OpenLayers.Geometry.Point( center.lon, center.lat ) );
                 ol2Map.$layer_new.addFeatures( [ stateMap.new_marker ] );
                 
-                
                 $.gevent.publish( 'feed-coord', { x: stateMap.new_marker.geometry.x.toFixed(0), y: stateMap.new_marker.geometry.y.toFixed(0) } );
             }
             else {
+                
+                // Move the map to move the point
                 ol2Map.$layer_new.removeAllFeatures();
                 stateMap.new_marker = null;
+                
             }
             if ( tab_name === 'report' ) {
                 stateMap.drag_enable = true;
@@ -518,7 +549,7 @@ layer_markers.addFeatures( [marker1, marker2] );
         popup_html += 
             '<a target="_blank" href="/media/' + popup_map.doc + '">' // data-toggle="modal" href="#modalImg"
                 + '<img class="feed-map-popup-img img-responsive img-thumbnail center-block" alt="No image" src="/media/' + popup_map.doc + '">'
-            +'</a>' // + configMap.doc_path
+            + '</a>' // + configMap.doc_path
       }
       else {
         popup_html += '<div><a href="/media/' + popup_map.doc + '" target="_blank">' + popup_map.doc + '</a></div>'
