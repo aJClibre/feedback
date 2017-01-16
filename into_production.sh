@@ -18,7 +18,7 @@ java -jar ./compiler/closure-compiler-v20161201.jar --compilation_level SIMPLE_O
 
 echo "Fin de close-compiler! "
 
-git add feed.compiled.js
+#git add feed.compiled.js
 
 echo "#### Tags list :"
 git tag 
@@ -45,12 +45,6 @@ git push origin stable$num
 
 echo "#### branchs list :"
 git branch
-
-read -p "???? Name of the old branch to delete because unused (Enter if nothing to delete): " old
-
-if [ -z "$old" ]
-then
-    git branch -d stable$old
 
 read -p "#### All is good, return to dd_django repo" tmp
 git checkout $repo
