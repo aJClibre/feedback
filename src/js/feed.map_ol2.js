@@ -195,9 +195,9 @@ feed.map = (function () {
         featureclick    : function(e) {
             var mark_sel = e.feature
             ;
-            console.log("featureclick e.feature.popup.id: " + e.feature.popup.id);
+            //console.log("featureclick e.feature.popup.id: " + e.feature.popup.id);
             if ( stateMap.current_popup ) {
-console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.id);            
+//console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.id);            
                 if ( stateMap.current_popup.id !== e.feature.popup.id ) {
                     hideCurrentPopup();
                 }
@@ -227,11 +227,11 @@ console.log("featureclick stateMap.current_popup.id: " + stateMap.current_popup.
             }
 
             if ( stateMap.drag_enable && stateMap.current_marker && stateMap.current_marker.attributes.id === id ) {
-                console.log("feed.map_ol2 featureover dragMarkers.activate()");
+                //console.log("feed.map_ol2 featureover dragMarkers.activate()");
                 dragMarkers.activate();
             }
             else {
-                console.log("feed.map_ol2 featureover dragMarkers.deactivate()");
+                //console.log("feed.map_ol2 featureover dragMarkers.deactivate()");
                 dragMarkers.deactivate();
             }
             $.gevent.publish( 'feed-hover', id );
@@ -606,7 +606,7 @@ layer_markers.addFeatures( [marker1, marker2] );
   //
   hideFeatures = function ( list_ids ) {
     var feats = ol2Map.$layer_markers.features;
-    console.dir(feats);
+    //console.dir(feats);
     
     for (var i = 0; i < feats.length; i++) {
         var feat = feats[i];
@@ -645,7 +645,7 @@ layer_markers.addFeatures( [marker1, marker2] );
 
     clearMarkers();
     
-    console.log("feed.map_ol2 onSetReport dragMarkers.deactivate()");
+    //console.log("feed.map_ol2 onSetReport dragMarkers.deactivate()");
     stateMap.map.getControl( 'dragmarkers' ).deactivate();
 
     if ( arg_map.new_report ) {
@@ -678,7 +678,7 @@ layer_markers.addFeatures( [marker1, marker2] );
 
         ol2Map.$layer_markers.removeAllFeatures();
         
-        console.log("feed.map_ol2 onListchange dragMarkers.deactivate()");
+        //console.log("feed.map_ol2 onListchange dragMarkers.deactivate()");
         stateMap.map.getControl( 'dragmarkers' ).deactivate();
 
         reports_db().each( function ( report, idx ) {

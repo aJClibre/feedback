@@ -599,7 +599,7 @@ feed.sidebar = (function () {
             loadImageFileTypes      : '/^image\/(gif|jpeg|png)$/',
             loadImageMaxFileSize    : 1000, // 10000000
             add                     : function (e, data) {
-                console.log(data.files[0].name);
+                //console.log(data.files[0].name);
                 stateMap.$create_data = data;
                 jqueryMap.$create_doc_label.html( data.files[0].name );
                 jqueryMap.$create_doc_create.hide();
@@ -695,13 +695,13 @@ feed.sidebar = (function () {
         //    .replaceAll('#result')
         //    .click(function () {
                 data.formData = { report_id: stateMap.active_report_id };
-                console.dir(data);
+                //console.dir(data);
                 configMap.reports_model.upload_(data);
         //    });
     };
 
     onSubmitDocEnd = function (e, data) {
-        console.dir(data);
+        //console.dir(data);
         jqueryMap.$button_upload.hide();
         //data.context.text('Upload finished.');
         //$.gevent.publish( 'feed-alert', { text: 'Le fichier a été téléchargé avec succès !'} );
@@ -810,7 +810,7 @@ feed.sidebar = (function () {
             jqueryMap.$report_doc_label.html( '' );
             jqueryMap.$report_doc_delete.hide();
             jqueryMap.$report_doc_create.show();
-console.log("############################### onTapDeleteDoc " + stateMap.active_report_id );            
+//console.log("############################### onTapDeleteDoc " + stateMap.active_report_id );            
             displayFileupload( stateMap.active_report_id );
         }
     };
@@ -914,7 +914,7 @@ console.log("############################### onTapDeleteDoc " + stateMap.active_
         stateMap.active_report_id = new_report.id;
         jqueryMap.$report_id.html( new_report.id );
         jqueryMap.$report_id_equi.val( new_report.id_equi );
-        console.log('new_report.id_equi: ' + new_report.id_equi);
+        //console.log('new_report.id_equi: ' + new_report.id_equi);
         jqueryMap.$report_textarea.val( new_report.textarea );
         jqueryMap.$report_statu.val( new_report.statu );
         jqueryMap.$report_type_r.val( new_report.type_r );
@@ -960,7 +960,7 @@ console.log("############################### onTapDeleteDoc " + stateMap.active_
         point93 = feed.util_b.coordWgs84ToL93( new_report.locate_map.x, new_report.locate_map.y );
         jqueryMap.$report_x.val( point93.x.toFixed(0) );
         jqueryMap.$report_y.val( point93.y.toFixed(0) );
-        console.log("user_up: " + user_up + " / jqueryMap.$report_statu.val(): " + jqueryMap.$report_statu.val());
+        //console.log("user_up: " + user_up + " / jqueryMap.$report_statu.val(): " + jqueryMap.$report_statu.val());
         // can modify a report only if admin or status is ATTENTE
         if ( ! user_up && jqueryMap.$report_statu.val() != 'ATTENTE' ) {
             jqueryMap.$butt_modify.prop( 'disabled', true );
@@ -977,13 +977,13 @@ console.log("############################### onTapDeleteDoc " + stateMap.active_
             if ( user_up || jqueryMap.$report_statu.val() == 'ATTENTE' ) {
                 jqueryMap.$report_doc_delete.show();
             }
-console.log("############################### 1 " + new_report.id );
+//console.log("############################### 1 " + new_report.id );
             displayFileupload( null );
         }
         else {
             jqueryMap.$report_doc_label.html( '' );
             jqueryMap.$report_doc_delete.hide();
-console.log("############################### 2 " + new_report.id );
+//console.log("############################### 2 " + new_report.id );
             displayFileupload( new_report.id ); 
             if ( user_up || jqueryMap.$report_statu.val() == 'ATTENTE' ) {
                 jqueryMap.$report_doc_create.show();
@@ -1150,7 +1150,7 @@ console.log("############################### 2 " + new_report.id );
                 if ( ( dt_length === tab.length ) ) {
                     tab = [];
                 }
-                console.log('dt_length: ' + dt_length + ' / tab.length: ' + tab.length);
+                //console.log('dt_length: ' + dt_length + ' / tab.length: ' + tab.length);
                 $.gevent.publish( 'feed-search', [tab] );                
             }, 1000);
         });

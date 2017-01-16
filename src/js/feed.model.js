@@ -472,9 +472,9 @@ feed.model = (function () {
             // stateMap.report and call sidebar._update_reports_list
             // to update the reports list
             // if a doc it uses jquery-file-upload method
-            console.log('createreport report_create_map.id_equi: ' + report_create_map.id_equi);
+            //console.log('createreport report_create_map.id_equi: ' + report_create_map.id_equi);
             if ( report_create_map.doc ) {
-                console.log('doc');
+                //console.log('doc');
                 var obj = [
                     { name: 'cid', value: makeReportCid()},
                     { name: 'y', value: report_create_map.locate_map.y },
@@ -490,7 +490,7 @@ feed.model = (function () {
                 objectToSend = report_create_map.doc;
             }
             else {
-                console.log('NO doc');
+                //console.log('NO doc');
                 objectToSend = {
                     cid         : makeReportCid(),
                     locate_map  : report_create_map.locate_map,
@@ -636,7 +636,7 @@ feed.model = (function () {
                 stateMap.user.email     = data_user.email;
                 stateMap.user.admins    = data_user.admins;
             }
-console.dir(answer);
+//console.dir(answer);
             clearReportsDb();
             
             if ( answer.length > 1 ) {
@@ -662,9 +662,9 @@ console.dir(answer);
                     is_report_new   = true;
                     is_report_exist = true;
 
-                    console.log('_update_reports_list before publish');
+                    //console.log('_update_reports_list before publish');
                     $.gevent.publish( 'feed-alert', { text: 'Le rapport a été créé avec succès !', type: 'primary' } );
-                    console.log('_update_reports_list after publish');
+                    //console.log('_update_reports_list after publish');
                 }
                 else {
                     $.gevent.publish( 'feed-alert', { text: error_mess, type: 'danger' } );

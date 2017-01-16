@@ -162,7 +162,7 @@ feed.fake = (function () {
             // respond to 'addreport' event with 'reportupdate'
             //
             if ( msg_type === 'createreport' && callback_map.listchange ) {
-                console.dir(data);
+                //console.dir(data);
                 // to make the difference between a report created with jquery-file-upload or
                 // with the form
                 if ( data.cid ) {
@@ -180,7 +180,7 @@ feed.fake = (function () {
             // simulate send 'updatereport' message and data to the server
             else if ( msg_type === 'updatereport' && callback_map.listchange ) {
 
-                console.dir(data);
+                //console.dir(data);
                 $.post('../feed/', data)
                     .done(function(result) {
                     callback_map.listchange([ result ]);
@@ -207,7 +207,7 @@ feed.fake = (function () {
                 //console.dir(data);
                 $.get( '../feed/', { id: data })
                     .done( function( result ) {
-                        console.dir( result );
+                        //console.dir( result );
                         callback_map.listchange([ result ]);
                     }, "json");
             }
@@ -216,7 +216,7 @@ feed.fake = (function () {
             else if ( msg_type === 'getreports' && callback_map.listchange ) {
                 // http://api.jquery.com/jQuery.get/
                 $.get( '../feed/', function( result ) {
-                    console.dir( result );
+                    //console.dir( result );
                     // execute callback for the 'listchange' message
                     callback_map.listchange([ result ]);
                 }, "json"); //callListchange(data));

@@ -391,7 +391,7 @@ feed.shell = (function () {
             .text( 'Please sign-in')
             .bind( 'utap', onTapAcct );
 
-        console.log('Direct login into the application!');
+        ////console.log('Direct login into the application!');
         if ( rule ) {
             feed.model.people.login( rule );
         }

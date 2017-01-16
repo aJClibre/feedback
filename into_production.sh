@@ -2,6 +2,7 @@
 #
 # ./into_production.sh
 # Realase operations to create a git branch ready for production with a compressed js file
+# Run it only on Entente2
 # Close-compile js files, ask for a tag number, create a tag and a branch
 # rm all unused js files, commit and push, return to the default repo
 #
@@ -13,7 +14,7 @@ git checkout $repo
  
 echo "Lancement de close-compiler! "
 
-java -jar ~/host/PRODUCTION/Sauvegardes/closure-compiler/closure-compiler-v20161024.jar --compilation_level SIMPLE_OPTIMIZATIONS --js_output_file=feed.compiled.js feed.js feed.util.js feed.data.js feed.request_django.js feed.model.js feed.util_b.js feed.shell.js feed.sidebar.js feed.map_ol2.js
+java -jar ./compiler/closure-compiler-v20161201.jar --compilation_level SIMPLE_OPTIMIZATIONS --js_output_file=./src/js/feed.compiled.js ./src/js/feed.js ./src/js/feed.util.js ./src/js/feed.data.js ./src/js/feed.request_django.js ./src/js/feed.model.js ./src/js/feed.util_b.js ./src/js/feed.shell.js ./src/js/feed.sidebar.js ./src/js/feed.map_ol2.js
 
 echo "Fin de close-compiler! "
 
