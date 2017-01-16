@@ -8,46 +8,46 @@
 #
 
 echo "######################### START into_production.sh ##############################"
-repo = "dd_django"
+repo="dd_django"
 
 git checkout $repo
  
-echo "Lancement de close-compiler! "
+read -p "### Lancement de close-compiler! " tmp
 
 java -jar ./compiler/closure-compiler-v20161201.jar --compilation_level SIMPLE_OPTIMIZATIONS --js_output_file=./src/js/feed.compiled.js ./src/js/feed.js ./src/js/feed.util.js ./src/js/feed.data.js ./src/js/feed.request_django.js ./src/js/feed.model.js ./src/js/feed.util_b.js ./src/js/feed.shell.js ./src/js/feed.sidebar.js ./src/js/feed.map_ol2.js
 
 echo "Fin de close-compiler! "
 
-#git add feed.compiled.js
+git add feed.compiled.js
 
-#git commit -m "close-compiler commit"
+git commit -m "close-compiler commit"
 
 #git push origin dd_django
 
 echo "#### Tags list :"
 git tag 
 
-read -p "???? Tag number to commit: " num
+read -p "???? Tag number to commit (ex: 1.0.1): " num
 
-echo "#### Creation de la branche"
+read -p "#### Creation de la branche" tmp
 git checkout -b stable$num
 
-echo "#### Effacement de tous les fichiers "
+read -p "#### Effacement de tous les fichiers " tmp
 git rm src/js/*
 
-echo "#### Desindexation du fichier issu de la compilation"
+read -p "#### Desindexation du fichier issu de la compilation" tmp
 git reset HEAD -- src/js/feed.compiled.js
 
-echo "#### Commit : Cleaning of folders "
+read -p "#### Commit : Cleaning of folders " tmp
 git commit -m "Cleaning of folders"
 
-echo "#### Annule les modifications pour le fichier compile"
+read -p "#### Annule les modifications pour le fichier compile" tmp
 git checkout -- src/js/feed.compiled.js
 
-echo "#### Tag the version"
+read -p "#### Tag the version" tmp
 git tag $num -m "production version tag"
 
-echo "#### Publication sur Github"
+read -p "#### Publication sur Github" tmp
 git push origin stable$num
 
 echo "#### branchs list :"
@@ -59,7 +59,7 @@ if [ -z "$old" ]
 then
     git branch -d stable$old
 
-echo "#### All is good, return to dd_django repo"
+read -p "#### All is good, return to dd_django repo" tmp
 git checkout $repo
 
 echo "######################### END into_production.sh ##############################"
