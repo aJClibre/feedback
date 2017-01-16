@@ -18,7 +18,7 @@ java -jar ./compiler/closure-compiler-v20161201.jar --compilation_level SIMPLE_O
 
 echo "Fin de close-compiler! "
 
-git add feed.compiled.js
+#git add feed.compiled.js
 
 echo "#### Tags list :"
 git tag 
