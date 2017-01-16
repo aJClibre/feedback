@@ -17,8 +17,7 @@ read -p "### Lancement de close-compiler! " tmp
 java -jar ./compiler/closure-compiler-v20161201.jar --compilation_level SIMPLE_OPTIMIZATIONS --js_output_file=./src/js/feed.compiled.js ./src/js/feed.js ./src/js/feed.util.js ./src/js/feed.data.js ./src/js/feed.request_django.js ./src/js/feed.model.js ./src/js/feed.util_b.js ./src/js/feed.shell.js ./src/js/feed.sidebar.js ./src/js/feed.map_ol2.js
 
 echo "Fin de close-compiler! "
-
-#git add feed.compiled.js
+git add feed.compiled.js
 
 echo "#### Tags list :"
 git tag 
