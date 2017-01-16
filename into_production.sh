@@ -20,10 +20,6 @@ echo "Fin de close-compiler! "
 
 git add feed.compiled.js
 
-git commit -m "close-compiler commit"
-
-#git push origin dd_django
-
 echo "#### Tags list :"
 git tag 
 
@@ -33,16 +29,13 @@ read -p "#### Creation de la branche" tmp
 git checkout -b stable$num
 
 read -p "#### Effacement de tous les fichiers " tmp
-git rm src/js/*
+rm -f src/js/*
 
 read -p "#### Desindexation du fichier issu de la compilation" tmp
-git reset HEAD -- src/js/feed.compiled.js
+git checkout -- src/js/feed.compiled.js
 
 read -p "#### Commit : Cleaning of folders " tmp
-git commit -m "Cleaning of folders"
-
-read -p "#### Annule les modifications pour le fichier compile" tmp
-git checkout -- src/js/feed.compiled.js
+git commit -am "Cleaning of folders"
 
 read -p "#### Tag the version" tmp
 git tag $num -m "production version tag"
