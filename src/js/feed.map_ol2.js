@@ -222,6 +222,7 @@ feed.map = (function () {
                 id      = feat.attributes.id;
 
             if ( feat.renderIntent == "default" ) {
+//console.log('over');            
                 e.feature.renderIntent = "over";
                 e.feature.layer.drawFeature( e.feature );
             }
@@ -598,7 +599,7 @@ layer_markers.addFeatures( [marker1, marker2] );
   };
 
   // Example    : hideFeatures(["1607083", "1607081", "1607211"])
-  // Purpose    : Hide layer_markers features depending list size
+  // Purpose    : Hide layer_markers features not in the list size
   // Arguments  : 
   //    * list_ids - ids list of features to show, hide the others
   // Returns    : None
@@ -610,7 +611,9 @@ layer_markers.addFeatures( [marker1, marker2] );
     
     for (var i = 0; i < feats.length; i++) {
         var feat = feats[i];
+        feat.style = null;
         if ( list_ids.indexOf( feat.attributes.id ) === -1 ) {
+//console.log(feat.attributes.id);
             feat.style = { visibility : 'hidden' };
         }
     }

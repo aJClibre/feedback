@@ -1153,6 +1153,19 @@ feed.sidebar = (function () {
                 //console.log('dt_length: ' + dt_length + ' / tab.length: ' + tab.length);
                 $.gevent.publish( 'feed-search', [tab] );                
             }, 1000);
+        }).on( 'page.dt', function () {
+// wait for 1s before the array rendered
+            setTimeout( function() {
+                var
+                    tab = getIdReportsSelected(),
+                    dt_length = $( '#tableReports' ).DataTable().rows().ids().length;
+
+                //if ( ( dt_length === tab.length ) ) {
+                //    tab = [];
+                //}
+                //console.log('dt_length: ' + dt_length + ' / tab.length: ' + tab.length);
+                $.gevent.publish( 'feed-search', [tab] );
+            }, 1000);
         });
         
         jqueryMap.$help_email.html( user.admins );
