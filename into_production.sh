@@ -27,7 +27,7 @@ read -p "???? Tag number to commit (ex: 1.0.1): " num
 read -p "#### Creation de la branche" tmp
 git checkout -b stable$num
 
-read -p "#### Effacement de tous les fichiers " tmp
+read -p "#### Effacement de tous les fichiers inutiles" tmp
 rm -f src/js/*
 
 read -p "#### Desindexation du fichier issu de la compilation" tmp
@@ -49,3 +49,7 @@ read -p "#### All is good, return to dd_django repo" tmp
 git checkout $repo
 
 echo "######################### END into_production.sh ##############################"
+echo "sur entente1 : "
+echo "cd www/static/libs/feedback"
+echo "git pull"
+echo "git checkout stable$num"
